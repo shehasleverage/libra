@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Save your spot · Libra × She Has Leverage LP Community Series</title>
+<meta name="description" content="Register for the Libra × She Has Leverage LP Community series." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMic+PHJlY3Qgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJyByeD0nNycgZmlsbD0nIzJBMjEzMycvPjx0ZXh0IHg9JzE2JyB5PScyMi41JyBmb250LWZhbWlseT0iR2VvcmdpYSwnVGltZXMgTmV3IFJvbWFuJyxzZXJpZiIgZm9udC1zaXplPScyMScgZm9udC13ZWlnaHQ9JzYwMCcgZmlsbD0nI0ZBRjdGMicgdGV4dC1hbmNob3I9J21pZGRsZSc+UzwvdGV4dD48L3N2Zz4=" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#2A2133; --violet:#5B3A8C; --lavender:#B9A3D9; --mauve:#9E7FA8;
+    --cream:#FAF7F2; --lilac:#F3EFF8; --paper:#FCFAFE;
+    --display:"Fraunces",Georgia,serif; --body:"Instrument Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--plum);color:var(--plum);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  body{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .wrap{width:100%;max-width:460px}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--lavender);text-align:center;margin-bottom:14px}
+  h1{font-family:var(--display);font-weight:600;color:var(--cream);text-align:center;font-size:38px;line-height:1.05;letter-spacing:-.01em}
+  .lede{color:var(--lavender);text-align:center;font-size:16px;line-height:1.4;margin:12px 6px 22px}
+  .card{background:var(--cream);border-radius:22px;padding:24px 22px 22px;box-shadow:0 18px 50px rgba(0,0,0,.28)}
+  label{display:block;font-size:13px;font-weight:600;color:var(--plum);margin:0 0 6px 2px}
+  .field{margin-bottom:16px}
+  input,select{width:100%;font-family:var(--body);font-size:16px;color:var(--plum);background:var(--paper);
+    border:1.5px solid #E3DAF0;border-radius:12px;padding:14px 14px;outline:none;transition:border-color .15s,box-shadow .15s}
+  input::placeholder{color:#B4A9C0}
+  input:focus,select:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(91,58,140,.14)}
+  select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235B3A8C' stroke-width='2.5' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+  button{width:100%;font-family:var(--body);font-size:17px;font-weight:600;color:var(--cream);background:var(--violet);
+    border:none;border-radius:12px;padding:15px;margin-top:4px;cursor:pointer;transition:transform .06s,background .15s}
+  button:hover{background:#4c2f79}
+  button:active{transform:translateY(1px)}
+  button:disabled{opacity:.6;cursor:default}
+  .fine{color:var(--mauve);font-size:12px;text-align:center;margin-top:14px;font-style:italic}
+  .foot{color:var(--mauve);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-align:center;margin-top:20px}
+  .err{color:#B23A48;font-size:13px;margin:-6px 2px 12px;display:none}
+  .done{display:none;text-align:center;padding:8px 4px 6px}
+  .check{width:56px;height:56px;border-radius:50%;background:var(--violet);display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .done h2{font-family:var(--display);font-weight:600;color:var(--plum);font-size:26px;margin-bottom:10px}
+  .done p{color:var(--plum);font-size:15px;line-height:1.5}
+  .hp{display:none !important}
+  @media (max-width:380px){h1{font-size:32px}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Libra × She Has Leverage</div>
+    <h1>Save your spot</h1>
+    <p class="lede">Four weeks of LP fluency and connection with a circle of women who invest.</p>
+
+    <div class="card">
+      <form id="f" novalidate>
+        <!-- Web3Forms hidden fields -->
+        <input type="hidden" name="access_key" value="PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE" />
+        <input type="hidden" name="subject" value="New Libra Sept 10 signup" />
+        <input type="hidden" name="from_name" value="Libra signup page" />
+        <input type="hidden" name="source" value="libra-sept10" />
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+
+        <div class="field">
+          <label for="first">First name</label>
+          <input id="first" name="name" type="text" autocomplete="given-name" placeholder="Your first name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required />
+        </div>
+        <div class="field">
+          <label for="role">Which best describes you?</label>
+          <select id="role" name="role">
+            <option value="" selected disabled>Choose one</option>
+            <option>Healthcare or life sciences</option>
+            <option>Investor or LP</option>
+            <option>Founder or operator</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="err" id="err">Something went wrong. Please try again, or find me at the event.</div>
+        <button id="btn" type="submit">Count me in</button>
+      </form>
+
+      <div class="done" id="done">
+        <div class="check">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FAF7F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2>You're on the list.</h2>
+        <p>I'll email you the four-week schedule and a calendar hold before October 19.</p>
+      </div>
+
+      <p class="fine">Education, not investment advice.</p>
+    </div>
+
+    <div class="foot">She Has Leverage</div>
+  </div>
+
+<script>
+  /* ===================== CONFIG: EDIT THIS ONE LINE ===================== */
+  /* Create a free key at web3forms.com (it's emailed to you) and paste it above
+     in the access_key hidden field. Signups then arrive in that inbox.        */
+  /* ===================================================================== */
+
+  const form = document.getElementById('f');
+  const btn  = document.getElementById('btn');
+  const err  = document.getElementById('err');
+  const done = document.getElementById('done');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    err.style.display = 'none';
+    const first = document.getElementById('first').value.trim();
+    const email = document.getElementById('email').value.trim();
+    if (!first || !email) { err.textContent = 'Please add your name and email.'; err.style.display = 'block'; return; }
+
+    btn.disabled = true; btn.textContent = 'One moment...';
+
+    const payload = Object.fromEntries(new FormData(form));
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'failed');
+      form.style.display = 'none';
+      done.style.display = 'block';
+    } catch (_) {
+      btn.disabled = false; btn.textContent = 'Count me in';
+      err.textContent = 'Something went wrong. Please try again, or find me at the event.';
+      err.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>
