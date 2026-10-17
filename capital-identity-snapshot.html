@@ -208,6 +208,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 .strength-option[aria-pressed="true"] .strength-option__mark { border-color: var(--color-violet); background: var(--color-violet); color: var(--color-white); }
 
 /* Step 4: statement */
+.wrap--result { max-width: 1280px; }
+.result-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
 .statement { padding: 28px 22px; border-radius: var(--radius-card); background: var(--color-white); box-shadow: var(--card-shadow); border: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 22px; }
 @media (min-width: 720px) { .statement { padding: 40px 44px; } }
 .statement__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; padding-bottom: 18px; border-bottom: 1px solid var(--rule-soft); }
@@ -217,6 +219,26 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 .sentence textarea { border: 1px solid var(--color-line); border-radius: var(--radius-control); background: var(--color-paper); padding: 14px 16px; font-size: 18px; min-height: 0; }
 .sentence textarea:focus { border-color: var(--color-violet); box-shadow: 0 0 0 3px var(--color-focus-ring); outline: none; }
 .sentence__edited { font-weight: 400; color: var(--color-mauve-ink); }
+@media (min-width: 1100px) {
+  .result-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .result-layout > .statement { padding: 28px; }
+  .result-layout .sentence textarea { font-size: 16px; line-height: 1.55; }
+}
+.result-layout > * { min-width: 0; }
+.summary-card { border-color: var(--input-border); }
+.summary-card .sentence textarea { font-size: 17px; line-height: 1.6; }
+.summary-card .statement__head { align-items: center; }
+.summary-card .statement__title { font-size: 28px; }
+.summary-card .actions { margin-top: 0; gap: 12px 20px; }
+.summary-card .btn { padding-inline: 22px; }
+.summary-card .status { margin-top: 0; }
+.summary-card .status:empty { display: none; }
+.summary-how { border-top: 1px solid var(--rule-soft); padding-top: 24px; }
+.summary-how h4 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 1.2; letter-spacing: -0.022em; }
+.summary-how ol { margin: 16px 0 0; padding-left: 22px; display: flex; flex-direction: column; gap: 16px; }
+.summary-how li { padding-left: 4px; font-size: 14px; line-height: 1.6; color: var(--color-mauve-ink); }
+.summary-how strong { display: block; color: var(--color-plum); font-size: 15px; font-weight: 600; }
+.summary-question { margin-top: 10px; padding: 12px 14px; border-radius: 8px; background: var(--color-lilac); color: var(--color-violet); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 32px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 30px; border: 0; border-radius: var(--radius-control); background: var(--color-violet); color: var(--color-white); font-size: 16px; font-weight: 600; line-height: 1.2; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
 .btn:hover { background: var(--color-plum); }
@@ -279,7 +301,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       <li><span>Step 1: Where your capital comes from</span><span>2 min</span></li>
       <li><span>Step 2: Your money scripts</span><span>3 min</span></li>
       <li><span>Step 3: The role venture could play</span><span>3 min</span></li>
-      <li><span>Step 4: Your three sentences</span><span>3 min</span></li>
+      <li><span>Step 4: Your Capital Identity Statement</span><span>3 min</span></li>
       <li class="plan__optional"><span>Optional: share one sentence in the chat</span><span>1 min</span></li>
     </ol>
   </div>
@@ -356,13 +378,14 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 </section>
 
 <section class="band band--lilac" aria-labelledby="s4-title">
-  <div class="wrap">
+  <div class="wrap wrap--result">
     <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 4</span></div>
-    <h2 class="title" id="s4-title">Your three sentences</h2>
-    <p class="lede">Your answers fill these in as you go. Edit any sentence until it sounds like you.</p>
-    <div class="statement to-content">
+    <h2 class="title" id="s4-title">Your Capital Identity Statement</h2>
+    <p class="lede">Refine each part, then read them together as a statement about how you approach putting your money to work.</p>
+    <div class="result-layout to-content">
+    <div class="statement" aria-labelledby="building-blocks-title">
       <div class="statement__head">
-        <h3 class="statement__title">My capital identity</h3>
+        <h3 class="statement__title" id="building-blocks-title">Your building blocks</h3>
         <span class="statement__date" id="today"></span>
       </div>
       <div class="sentence">
@@ -378,22 +401,54 @@ textarea::placeholder { color: var(--color-mauve-ink); }
         <textarea id="s3" rows="2" placeholder="I'm exploring venture because I want my capital to [what I hope it could add]; before deciding whether it fits, I need to understand [my learning topics]."></textarea>
       </div>
     </div>
+    <div class="statement summary-card" aria-labelledby="summary-title">
+      <div class="statement__head">
+        <h3 class="statement__title" id="summary-title">My Capital Identity Statement</h3>
+        <span class="sentence__edited" id="summary-edited" hidden>(edited)</span>
+      </div>
+      <p class="quiet" id="summary-help">A paragraph drawn from your answers about how you approach putting your money to work. Edit it until it sounds like you.</p>
+      <div class="sentence">
+        <label class="sr" for="identity-summary">My Capital Identity Statement</label>
+        <textarea id="identity-summary" rows="6" aria-describedby="summary-help" placeholder="Your statement will bring together your capital background, strengths, money patterns, and what you want to understand about venture."></textarea>
+      </div>
+      <p class="notice" id="summary-edit-note" hidden>Your paragraph has been edited. To bring in later changes from your responses, choose Update from my building blocks.</p>
+      <button class="link" type="button" id="summary-update" hidden>Update from my building blocks</button>
+      <div class="confirm" id="summary-update-confirm" hidden>
+        <p>Replace your paragraph with one built from your current responses?</p>
+        <div class="confirm__row">
+          <button class="btn btn--small" type="button" id="summary-update-yes">Update my statement</button>
+          <button class="link" type="button" id="summary-update-no">Keep my paragraph</button>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" id="copy-all">Copy my statement</button>
+        <button class="link" type="button" id="save-file">Save as a file</button>
+      </div>
+      <p class="quiet">Your download includes your statement, building blocks, and the guidance below.</p>
+      <p class="status" id="status-all" role="status" aria-live="polite"></p>
+      <div class="fallback" id="fallback-all" hidden>
+        <label class="field__label" for="fallback-all-text">Copying isn't available here. Your statement is selected below; press Ctrl+C or Cmd+C.</label>
+        <textarea id="fallback-all-text" readonly></textarea>
+      </div>
+      <div class="summary-how">
+        <h4>How to use it</h4>
+        <ol>
+          <li><strong>Put your strengths to work.</strong>Use the strengths you named as you research and ask questions. Notice when the patterns you want to watch begin to influence a decision.</li>
+          <li><strong>Take one question forward.</strong>Bring a question from your statement to the next education session or a conversation with a fund manager.<p class="summary-question" id="summary-next-question">Choose one question you'd like to explore next.</p></li>
+          <li><strong>Revisit it as you learn.</strong>Update your statement after the next session or when your priorities change. Let it guide the questions you ask as you decide whether venture fits your financial life.</li>
+        </ol>
+      </div>
+    </div>
+    </div>
     <div class="actions">
-      <button class="btn" type="button" id="copy-all">Copy my statement</button>
-      <button class="link" type="button" id="save-file">Save as a file</button>
       <button class="link" type="button" id="rebuild" hidden>Rebuild from my answers</button>
     </div>
     <div class="confirm" id="rebuild-confirm" hidden>
-      <p>Replace your edits with sentences rebuilt from your answers?</p>
+      <p>Replace your edited responses and statement with versions rebuilt from your answers?</p>
       <div class="confirm__row">
         <button class="btn btn--small" type="button" id="rebuild-yes">Rebuild</button>
         <button class="link" type="button" id="rebuild-no">Keep my edits</button>
       </div>
-    </div>
-    <p class="status" id="status-all" role="status" aria-live="polite"></p>
-    <div class="fallback" id="fallback-all" hidden>
-      <label class="field__label" for="fallback-all-text">Copying isn't available here. Your statement is selected below; press Ctrl+C or Cmd+C.</label>
-      <textarea id="fallback-all-text" readonly></textarea>
     </div>
   </div>
 </section>
@@ -420,7 +475,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   <div class="wrap">
     <h2 class="title" id="about-title">About this exercise</h2>
     <div class="prose" style="margin-top: 20px">
-      <p>This is the Week 1 exercise of the She Has Leverage x Libra Leaders LP Community Education Series. Your three sentences become the first page of your Aligned LP Profile.</p>
+      <p>This is the Week 1 exercise of the She Has Leverage x Libra Leaders LP Community Education Series. Your Capital Identity Statement becomes the first page of your Aligned LP Profile.</p>
       <p>It's a short version of the Capital Identity Statement Builder from my Aligned Capital Program. The four money scripts come from research by Brad Klontz and colleagues. The descriptions on this page are my own summaries. The strength suggestions are reflection prompts created for this exercise.</p>
       <p>Nothing here asks for amounts, account details or net worth, and nothing you type leaves this browser unless you copy or save it yourself.</p>
     </div>
@@ -565,7 +620,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   var STORE_KEY = "libra-shl-capital-identity-snapshot-v1";
 
   function blank() {
-    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", strengthPicks: [], want: "", learningTopics: [], learningCustom: "", edits: { s1: null, s2: null, s3: null } };
+    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", strengthPicks: [], want: "", learningTopics: [], learningCustom: "", summaryEdit: null, edits: { s1: null, s2: null, s3: null } };
   }
   var S = blank();
   try {
@@ -583,6 +638,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
         S.want = typeof saved.want === "string" ? saved.want : "";
         S.learningTopics = LEARNING_KEYS.filter(function (k) { return Array.isArray(saved.learningTopics) && saved.learningTopics.indexOf(k) !== -1; });
         S.learningCustom = typeof saved.learningCustom === "string" ? saved.learningCustom : "";
+        S.summaryEdit = typeof saved.summaryEdit === "string" ? saved.summaryEdit : null;
         ["s1", "s2", "s3"].forEach(function (k) {
           S.edits[k] = (saved.edits && typeof saved.edits[k] === "string") ? saved.edits[k] : null;
         });
@@ -880,6 +936,42 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     };
   }
 
+  function summaryDraft() {
+    var c = current();
+    var money = c.s2.trim();
+    if (S.edits.s2 === null) {
+      var keys = matchingScripts();
+      var strength = strengthText();
+      if (keys.length === SCRIPT_KEYS.length) {
+        money = (strength ? "I bring " + strength + " to my decisions, and " : "") + "I'm exploring how different money patterns show up in my decisions.";
+      } else if (keys.length) {
+        var watches = keys.map(function (k) { return SCRIPTS[k].watch; });
+        var patterns = watches.length === 2 ? watches[0] + ", as well as " + watches[1] : joinItems(watches);
+        money = strength ? "I bring " + strength + " to my decisions, while staying mindful of " + patterns + "." : "In my decisions, I'm mindful of " + patterns + ".";
+      } else {
+        money = strength ? "I bring " + strength + " to my approach to money." : "";
+      }
+    }
+    return [c.s1.trim(), money, c.s3.trim()].filter(Boolean).join(" ");
+  }
+
+  function currentSummary() {
+    return S.summaryEdit !== null ? S.summaryEdit : summaryDraft();
+  }
+
+  function hasEdits() {
+    return S.summaryEdit !== null || ["s1", "s2", "s3"].some(function (k) { return S.edits[k] !== null; });
+  }
+
+  function nextLearningPrompt() {
+    var fallback = "Choose one question from your statement to explore at the next session.";
+    if (S.edits.s3 !== null || S.summaryEdit !== null) return fallback;
+    var selected = LEARNING_KEYS.filter(function (k) { return S.learningTopics.indexOf(k) !== -1; });
+    if (selected.length) return "One question you could bring: " + LEARNING_TOPICS[selected[0]].desc;
+    var own = cleanLearning(S.learningCustom);
+    return own ? "A topic you named: " + own + "." : fallback;
+  }
+
   ["s1", "s2", "s3"].forEach(function (k) {
     var ta = $(k);
     ta.addEventListener("input", function () {
@@ -889,6 +981,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       $("rebuild").hidden = false;
       if (k === "s2") { renderResult(); renderStrength(); }
       if (k === "s3") renderLearning();
+      renderSummary();
       renderShare();
       grow(ta);
     });
@@ -902,7 +995,25 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       $(k + "-edited").hidden = S.edits[k] === null;
       grow(ta);
     });
-    $("rebuild").hidden = !(S.edits.s1 !== null || S.edits.s2 !== null || S.edits.s3 !== null);
+    $("rebuild").hidden = !hasEdits();
+  }
+
+  var summaryEl = $("identity-summary");
+  summaryEl.addEventListener("input", function () {
+    S.summaryEdit = summaryEl.value;
+    persist();
+    renderSentences();
+    renderSummary();
+  });
+
+  function renderSummary() {
+    var text = currentSummary();
+    if (document.activeElement !== summaryEl && summaryEl.value !== text) summaryEl.value = text;
+    $("summary-edited").hidden = S.summaryEdit === null;
+    $("summary-edit-note").hidden = S.summaryEdit === null;
+    $("summary-update").hidden = S.summaryEdit === null;
+    $("summary-next-question").textContent = nextLearningPrompt();
+    grow(summaryEl);
   }
 
   function renderShare() {
@@ -922,22 +1033,39 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     renderStrength();
     renderLearning();
     renderSentences();
+    renderSummary();
     renderShare();
   }
 
   /* ---------- copy, save, rebuild, clear ---------- */
   function statementText() {
+    return currentSummary().trim();
+  }
+
+  function snapshotText() {
     var c = current();
-    var lines = [c.s1, c.s2, c.s3].map(function (s) { return s.trim(); }).filter(Boolean);
+    var paragraph = statementText();
+    var labels = { s1: "Where my capital comes from", s2: "How I relate to money", s3: "The role I'm exploring for venture" };
+    var blocks = ["s1", "s2", "s3"].filter(function (k) { return c[k].trim(); }).map(function (k) { return labels[k] + "\n" + c[k].trim(); });
+    if (!paragraph && !blocks.length) return "";
+    var sections = [];
+    if (paragraph) sections.push("My Capital Identity Statement\n" + paragraph);
+    if (blocks.length) sections.push("My building blocks\n\n" + blocks.join("\n\n"));
+    var notes = [];
     var strength = strengthText();
-    if (strength && S.edits.s2 !== null) lines.push("Strengths I bring: " + strength + ".");
+    if (strength && S.edits.s2 !== null) notes.push("Strengths I bring: " + strength + ".");
     if (S.edits.s3 !== null) {
       var want = cleanWant(S.want);
       var learning = joinItems(learningAnswers());
-      if (want) lines.push("What I hope venture could add: I want my capital to " + want + ".");
-      if (learning) lines.push("Before deciding whether venture fits, I need to understand " + learning + ".");
+      if (want) notes.push("What I hope venture could add: I want my capital to " + want + ".");
+      if (learning) notes.push("Before deciding whether venture fits, I need to understand " + learning + ".");
     }
-    return lines.join("\n");
+    if (notes.length) sections.push("Additional reflections\n" + notes.join("\n"));
+    sections.push("How to use it\n" +
+      "1. Put your strengths to work as you research and ask questions, and notice the patterns you want to watch.\n" +
+      "2. Take one question to the next education session or a conversation with a fund manager. " + nextLearningPrompt() + "\n" +
+      "3. Revisit your statement after the next session or when your priorities change.");
+    return sections.join("\n\n");
   }
   function setStatus(id, msg) {
     var el = $(id);
@@ -965,7 +1093,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 
   $("copy-all").addEventListener("click", function () {
     var text = statementText();
-    if (!text) { setStatus("status-all", "Finish at least one step to build your statement."); return; }
+    if (!text) { setStatus("status-all", S.summaryEdit !== null ? "Write your statement or choose Update from my building blocks before copying." : "Complete at least one step to build your statement."); return; }
     copyWithFallback(text, "status-all", "fallback-all");
   });
   $("copy-s3").addEventListener("click", function () {
@@ -975,9 +1103,9 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   });
 
   $("save-file").addEventListener("click", function () {
-    var text = statementText();
+    var text = snapshotText();
     if (!text) { setStatus("status-all", "Finish at least one step to build your statement."); return; }
-    var body = "My capital identity\n" + $("today").textContent + "\n\n" + text +
+    var body = "My Capital Identity Snapshot\n" + $("today").textContent + "\n\n" + text +
       "\n\nCapital Identity Snapshot, She Has Leverage × Libra Leaders LP Community Education Series\n" +
       "For educational and informational purposes only. She Has Leverage does not provide investment advice or recommend securities or investment strategies.\n";
     var url = null;
@@ -1000,13 +1128,28 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     }
   });
 
+  $("summary-update").addEventListener("click", function () { $("summary-update-confirm").hidden = false; $("summary-update-yes").focus(); });
+  $("summary-update-no").addEventListener("click", function () { $("summary-update-confirm").hidden = true; $("summary-update").focus(); });
+  $("summary-update-yes").addEventListener("click", function () {
+    S.summaryEdit = null;
+    persist();
+    summaryEl.value = "";
+    $("summary-update-confirm").hidden = true;
+    refresh();
+    setStatus("status-all", "Statement updated from your building blocks.");
+    $("copy-all").focus();
+  });
+
   $("rebuild").addEventListener("click", function () { $("rebuild-confirm").hidden = false; $("rebuild-yes").focus(); });
   $("rebuild-no").addEventListener("click", function () { $("rebuild-confirm").hidden = true; $("rebuild").focus(); });
   $("rebuild-yes").addEventListener("click", function () {
     S.edits = { s1: null, s2: null, s3: null };
+    S.summaryEdit = null;
     persist();
     $("rebuild-confirm").hidden = true;
     ["s1", "s2", "s3"].forEach(function (k) { $(k).value = ""; });
+    summaryEl.value = "";
+    $("summary-update-confirm").hidden = true;
     refresh();
     setStatus("status-all", "Rebuilt from your answers.");
     $("copy-all").focus();
@@ -1021,10 +1164,13 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     wantEl.value = "";
     strengthEl.value = "";
     learningCustomEl.value = "";
+    summaryEl.value = "";
     ["s1", "s2", "s3"].forEach(function (k) { $(k).value = ""; });
     $("clear-confirm").hidden = true;
     $("fallback-all").hidden = true;
     $("fallback-s3").hidden = true;
+    $("summary-update-confirm").hidden = true;
+    $("rebuild-confirm").hidden = true;
     refresh();
     grow(wantEl);
     grow(strengthEl);
@@ -1041,7 +1187,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   grow(wantEl);
   grow(strengthEl);
   grow(learningCustomEl);
-  window.addEventListener("resize", function () { ["want", "strength", "learning-custom", "s1", "s2", "s3"].forEach(function (k) { grow($(k)); }); });
+  window.addEventListener("resize", function () { ["want", "strength", "learning-custom", "s1", "s2", "s3", "identity-summary"].forEach(function (k) { grow($(k)); }); });
 })();
 </script>
 </body>
