@@ -198,6 +198,12 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 .learning-option__name { font-size: 16px; font-weight: 600; line-height: 1.35; }
 .learning-option__desc { font-size: 14px; line-height: 1.5; color: var(--color-mauve-ink); }
 .learning-custom { margin-top: 4px; }
+.strength-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.strength-option { display: inline-flex; align-items: center; gap: 9px; min-height: var(--touch); padding: 10px 14px; border: 1px solid var(--input-border); border-radius: var(--radius-control); background: var(--color-paper); color: var(--color-plum); font-size: 15px; font-weight: 600; line-height: 1.4; text-align: left; cursor: pointer; }
+.strength-option:hover { background: var(--color-lilac); }
+.strength-option[aria-pressed="true"] { border-color: var(--color-violet); box-shadow: inset 0 0 0 1px var(--color-violet); background: var(--color-lilac); }
+.strength-option__mark { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 20px; height: 20px; border: 1px solid var(--input-border); border-radius: 5px; background: var(--color-white); color: var(--color-violet); font-size: 16px; line-height: 1; }
+.strength-option[aria-pressed="true"] .strength-option__mark { border-color: var(--color-violet); background: var(--color-violet); color: var(--color-white); }
 
 /* Step 4: statement */
 .statement { padding: 28px 22px; border-radius: var(--radius-card); background: var(--color-white); box-shadow: var(--card-shadow); border: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 22px; }
@@ -297,16 +303,20 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     <div class="scripts to-content" id="scripts"></div>
     <div class="result" id="result" aria-live="polite"></div>
     <div class="strength-reflection">
-      <p class="label__text">A strength to carry forward <span class="strength__optional">(optional)</span></p>
+      <p class="label__text">Strengths to carry forward <span class="strength__optional">(optional)</span></p>
+      <h3 class="strength__prompt" id="strength-prompt">What has this pattern helped me do well?</h3>
+      <p class="quiet" id="strength-examples">Rate all four scripts to see strength ideas based on your strongest matches, or add your own answer below.</p>
+      <div class="strength-options" id="strength-options" role="group" aria-labelledby="strength-prompt" aria-describedby="strength-examples" hidden></div>
+      <p class="quiet" id="strength-retained-note" hidden>Your earlier strength selections are still included. You can keep or remove them as you refine your ratings.</p>
       <div class="field">
-        <label class="strength__prompt" id="strength-prompt" for="strength">What has this pattern helped me do well?</label>
-        <p class="quiet" id="strength-examples">Examples might include patience, thoughtful questions, ambition, or independence. Choose a strength that feels true to you.</p>
+        <label class="field__label" for="strength">Add your own strength <span class="strength__optional">(optional)</span></label>
         <div class="prefixed">
           <span class="prefixed__lead" aria-hidden="true">I bring</span>
           <textarea id="strength" rows="1" aria-describedby="strength-examples" placeholder="patience and thoughtful questions"></textarea>
         </div>
       </div>
-      <p class="notice" id="strength-edit-note" hidden>Your statement has been edited. Use Rebuild from my answers to include this reflection automatically.</p>
+      <p class="quiet" id="strength-selection-status" role="status" aria-live="polite" hidden></p>
+      <p class="notice" id="strength-edit-note" hidden>Your statement has been edited. Use Rebuild from my answers to include these strengths automatically. Your strengths will also be included separately when you copy or save your full statement.</p>
     </div>
   </div>
 </section>
@@ -409,7 +419,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     <h2 class="title" id="about-title">About this exercise</h2>
     <div class="prose" style="margin-top: 20px">
       <p>This is the Week 1 exercise of the She Has Leverage x Libra Leaders LP Community Education Series. Your three sentences become the first page of your Aligned LP Profile.</p>
-      <p>It's a short version of the Capital Identity Statement Builder from my Aligned Capital Program. The four money scripts come from research by Brad Klontz and colleagues. The descriptions on this page are my own summaries.</p>
+      <p>It's a short version of the Capital Identity Statement Builder from my Aligned Capital Program. The four money scripts come from research by Brad Klontz and colleagues. The descriptions on this page are my own summaries. The strength suggestions are reflection prompts created for this exercise.</p>
       <p>Nothing here asks for amounts, account details or net worth, and nothing you type leaves this browser unless you copy or save it yourself.</p>
     </div>
     <div class="sources">
@@ -477,28 +487,46 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       name: "Money avoidance",
       desc: "Money is corrupting. I don't deserve wealth. Wealth creates problems. Often shows up as hesitance to invest and leaving money in cash.",
       behavior: "undercommitting, avoiding private markets, or pulling back at the first sign of underperformance",
-      watch: "avoiding commitments or pulling back when uncertainty rises"
+      watch: "avoiding commitments or pulling back when uncertainty rises",
+      strengths: ["values", "generosity", "perspective"]
     },
     worship: {
       name: "Money worship",
       desc: "There's never enough. More money will solve my problems. Often shows up as overcommitting or putting work ahead of relationships.",
       behavior: "overcommitting, chasing returns, or taking outsized risks looking for the home run",
-      watch: "overcommitting or chasing outsized returns"
+      watch: "overcommitting or chasing outsized returns",
+      strengths: ["ambition", "initiative", "openness"]
     },
     status: {
       name: "Money status",
       desc: "Net worth equals self-worth. I make decisions to impress others. Often shows up as status investments or trophy allocations.",
       behavior: "investing for prestige rather than fit, or choosing a fund for its brand name",
-      watch: "choosing investments for prestige rather than personal fit"
+      watch: "choosing investments for prestige rather than personal fit",
+      strengths: ["ambition", "standards", "relationships"]
     },
     vigilance: {
       name: "Money vigilance",
       desc: "Money is private. Be very careful. Save, save, save. Healthy in small doses; in excess it becomes anxiety and never feeling secure.",
       behavior: "overanalyzing, demanding impossible certainty, or never deciding at all",
-      watch: "overanalyzing or seeking complete certainty"
+      watch: "overanalyzing or seeking complete certainty",
+      strengths: ["questions", "patience", "planning"]
     }
   };
   var SCRIPT_KEYS = ["vigilance", "avoidance", "worship", "status"];
+  var STRENGTHS = {
+    questions: { name: "Thoughtful questions", phrase: "thoughtful questions" },
+    patience: { name: "Patience", phrase: "patience" },
+    planning: { name: "Careful planning", phrase: "careful planning" },
+    values: { name: "Clarity about my values", phrase: "clarity about my values" },
+    generosity: { name: "Generosity", phrase: "generosity" },
+    perspective: { name: "Perspective beyond money", phrase: "perspective beyond money" },
+    ambition: { name: "Ambition", phrase: "ambition" },
+    initiative: { name: "Initiative", phrase: "initiative" },
+    openness: { name: "Openness to opportunity", phrase: "openness to opportunity" },
+    standards: { name: "High standards", phrase: "high standards" },
+    relationships: { name: "Building relationships", phrase: "an ability to build relationships" }
+  };
+  var STRENGTH_KEYS = Object.keys(STRENGTHS);
   var LEARNING_TOPICS = {
     risk: {
       name: "Risk and potential losses",
@@ -535,7 +563,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   var STORE_KEY = "libra-shl-capital-identity-snapshot-v1";
 
   function blank() {
-    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", want: "", learningTopics: [], learningCustom: "", edits: { s1: null, s2: null, s3: null } };
+    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", strengthPicks: [], want: "", learningTopics: [], learningCustom: "", edits: { s1: null, s2: null, s3: null } };
   }
   var S = blank();
   try {
@@ -549,6 +577,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
           S.scores[k] = (v >= 1 && v <= 5) ? v : null;
         });
         S.strength = typeof saved.strength === "string" ? saved.strength : "";
+        S.strengthPicks = STRENGTH_KEYS.filter(function (k) { return Array.isArray(saved.strengthPicks) && saved.strengthPicks.indexOf(k) !== -1; });
         S.want = typeof saved.want === "string" ? saved.want : "";
         S.learningTopics = LEARNING_KEYS.filter(function (k) { return Array.isArray(saved.learningTopics) && saved.learningTopics.indexOf(k) !== -1; });
         S.learningCustom = typeof saved.learningCustom === "string" ? saved.learningCustom : "";
@@ -643,7 +672,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 
   function moneyStatement() {
     var keys = matchingScripts();
-    var strength = cleanStrength(S.strength);
+    var strength = strengthText();
     if (!keys.length) return strength ? "I bring " + strength + " to my approach to money." : "";
     var names = joinItems(keys.map(function (k) { return SCRIPTS[k].name.toLowerCase(); }));
     var positive = strength ? "I bring " + strength + ", and " : "";
@@ -699,10 +728,60 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   strengthEl.value = S.strength;
   strengthEl.addEventListener("input", function () { S.strength = strengthEl.value; persist(); refresh(); grow(strengthEl); });
 
+  STRENGTH_KEYS.forEach(function (k) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "strength-option";
+    button.id = "strength-" + k;
+    button.setAttribute("aria-pressed", "false");
+    button.innerHTML = '<span class="strength-option__mark" aria-hidden="true">+</span><span class="strength-option__name"></span>';
+    button.querySelector(".strength-option__name").textContent = STRENGTHS[k].name;
+    button.addEventListener("click", function () {
+      if (S.strengthPicks.indexOf(k) === -1) S.strengthPicks.push(k);
+      else S.strengthPicks = S.strengthPicks.filter(function (key) { return key !== k; });
+      persist();
+      refresh();
+      if (button.hidden) {
+        var next = $("strength-options").querySelector("button:not([hidden])");
+        (next || strengthEl).focus();
+      }
+    });
+    $("strength-options").appendChild(button);
+  });
+
+  function suggestedStrengths() {
+    var scripts = matchingScripts();
+    return STRENGTH_KEYS.filter(function (k) { return scripts.some(function (script) { return SCRIPTS[script].strengths.indexOf(k) !== -1; }); });
+  }
+
+  function strengthText() {
+    var selected = STRENGTH_KEYS.filter(function (k) { return S.strengthPicks.indexOf(k) !== -1; });
+    var answers = selected.map(function (k) { return STRENGTHS[k].phrase; });
+    var own = cleanStrength(S.strength);
+    var duplicate = selected.some(function (k) { return STRENGTHS[k].phrase.toLowerCase() === own.toLowerCase() || STRENGTHS[k].name.toLowerCase() === own.toLowerCase(); });
+    if (own && !duplicate) answers.push(own);
+    return joinItems(answers);
+  }
+
   function renderStrength() {
     var keys = matchingScripts();
+    var suggestions = suggestedStrengths();
     $("strength-prompt").textContent = keys.length > 1 ? "What have these patterns helped me do well?" : "What has this pattern helped me do well?";
-    $("strength-edit-note").hidden = !(cleanStrength(S.strength) && S.edits.s2 !== null);
+    $("strength-examples").textContent = keys.length ? "Ideas to consider from " + joinItems(keys.map(function (k) { return SCRIPTS[k].name.toLowerCase(); })) + ". Select any strengths that reflect your experience, and add your own if you wish." : "Rate all four scripts to see strength ideas based on your strongest matches, or add your own answer below.";
+    STRENGTH_KEYS.forEach(function (k) {
+      var selected = S.strengthPicks.indexOf(k) !== -1;
+      var button = $("strength-" + k);
+      button.hidden = suggestions.indexOf(k) === -1 && !selected;
+      button.setAttribute("aria-pressed", selected ? "true" : "false");
+      button.querySelector(".strength-option__mark").textContent = selected ? "✓" : "+";
+    });
+    $("strength-options").hidden = !(suggestions.length || S.strengthPicks.length);
+    $("strength-retained-note").hidden = !S.strengthPicks.some(function (k) { return suggestions.indexOf(k) === -1; });
+    var count = S.strengthPicks.length;
+    var own = !!cleanStrength(S.strength);
+    $("strength-selection-status").hidden = !(count || own);
+    $("strength-selection-status").textContent = count ? count + (count === 1 ? " strength selected" : " strengths selected") + (own ? ", plus your own answer." : ".") : "Your own strength will be included in your statement.";
+    $("strength-edit-note").hidden = !(strengthText() && S.edits.s2 !== null);
   }
 
   /* ---------- step 3 ---------- */
@@ -845,8 +924,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   function statementText() {
     var c = current();
     var lines = [c.s1, c.s2, c.s3].map(function (s) { return s.trim(); }).filter(Boolean);
-    var strength = cleanStrength(S.strength);
-    if (strength && S.edits.s2 !== null) lines.push("A strength I bring: " + strength + ".");
+    var strength = strengthText();
+    if (strength && S.edits.s2 !== null) lines.push("Strengths I bring: " + strength + ".");
     if (S.edits.s3 !== null) {
       var want = cleanWant(S.want);
       var learning = joinItems(learningAnswers());
