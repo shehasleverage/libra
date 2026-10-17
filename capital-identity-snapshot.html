@@ -169,6 +169,8 @@ button { font-family: inherit; }
 .pill input:focus-visible + span { outline: 2px solid var(--color-violet); outline-offset: 2px; }
 
 /* Step 3 */
+#s3-title { font-size: clamp(24px, 3.4vw, 36px); text-wrap: normal; }
+@media (min-width: 720px) { #s3-title { white-space: nowrap; } }
 .field { display: flex; flex-direction: column; gap: 8px; }
 .field__label { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--color-plum); }
 .prefixed { display: flex; flex-direction: column; border: 1px solid var(--input-border); border-radius: var(--radius-control); background: var(--color-paper); transition: box-shadow 0.15s, border-color 0.15s; }
@@ -531,32 +533,32 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     risk: {
       name: "Risk and potential losses",
       desc: "What could I lose, and what drives the risk?",
-      phrase: "the risks and potential losses"
+      phrases: ["the risks and potential losses"]
     },
     liquidity: {
       name: "Time horizon and access to my money",
       desc: "How long could my money be committed?",
-      phrase: "how long my money could be committed and when I could access it"
+      phrases: ["how long my money could be committed", "when I could access it"]
     },
     calls: {
       name: "Capital calls",
       desc: "When might I need to contribute capital?",
-      phrase: "how capital calls work and when I may need to contribute"
+      phrases: ["how capital calls work", "when I may need to contribute"]
     },
     manager: {
       name: "Choosing a fund manager",
       desc: "How would I evaluate the team and its strategy?",
-      phrase: "how to evaluate a fund manager and strategy"
+      phrases: ["how to evaluate a fund manager and strategy"]
     },
     fees: {
       name: "Fees and returns",
       desc: "What fees apply, and how do they affect what I receive?",
-      phrase: "how fees affect what I receive"
+      phrases: ["how fees affect what I receive"]
     },
     fit: {
       name: "Fit with my overall portfolio",
       desc: "What size commitment could fit my goals and other needs?",
-      phrase: "how a commitment could fit my broader portfolio and cash needs"
+      phrases: ["how a commitment could fit my broader portfolio and cash needs"]
     }
   };
   var LEARNING_KEYS = ["risk", "liquidity", "calls", "manager", "fees", "fit"];
@@ -824,9 +826,12 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   }
 
   function learningAnswers() {
-    var answers = LEARNING_KEYS.filter(function (k) { return S.learningTopics.indexOf(k) !== -1; }).map(function (k) { return LEARNING_TOPICS[k].phrase; });
+    var selected = LEARNING_KEYS.filter(function (k) { return S.learningTopics.indexOf(k) !== -1; });
+    var answers = [];
+    selected.forEach(function (k) { answers = answers.concat(LEARNING_TOPICS[k].phrases); });
     var own = cleanLearning(S.learningCustom);
-    if (own && !answers.some(function (answer) { return answer.toLowerCase() === own.toLowerCase(); })) answers.push(own);
+    var duplicate = answers.some(function (answer) { return answer.toLowerCase() === own.toLowerCase(); }) || selected.some(function (k) { return joinItems(LEARNING_TOPICS[k].phrases).toLowerCase() === own.toLowerCase(); });
+    if (own && !duplicate) answers.push(own);
     return answers;
   }
 
