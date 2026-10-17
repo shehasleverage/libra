@@ -184,6 +184,20 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 .strength-reflection { margin-top: 24px; padding: 24px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-white); display: flex; flex-direction: column; gap: 16px; }
 .strength__optional { font-weight: 400; color: var(--color-mauve-ink); }
 .strength__prompt { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 1.25; letter-spacing: -0.022em; }
+.venture-prompts { display: flex; flex-direction: column; gap: 32px; }
+.venture__question { font-family: var(--font-display); font-size: clamp(24px, 3vw, 28px); font-weight: 600; line-height: 1.25; letter-spacing: -0.022em; }
+.learning { display: flex; flex-direction: column; gap: 16px; padding-top: 32px; border-top: 1px solid var(--rule-soft); }
+.learning-options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 720px) { .learning-options { grid-template-columns: 1fr 1fr; } }
+.learning-option { display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: start; gap: 12px; width: 100%; min-height: var(--touch); padding: 18px; border: 1px solid var(--input-border); border-radius: var(--radius-control); background: var(--color-paper); color: var(--color-plum); text-align: left; cursor: pointer; transition: background-color 0.15s, border-color 0.15s; }
+.learning-option:hover { background: var(--color-lilac); }
+.learning-option[aria-pressed="true"] { border-color: var(--color-violet); box-shadow: inset 0 0 0 1px var(--color-violet); background: var(--color-lilac); }
+.learning-option__mark { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; margin-top: 1px; border: 1px solid var(--input-border); border-radius: 5px; background: var(--color-white); color: var(--color-violet); font-size: 17px; font-weight: 600; line-height: 1; }
+.learning-option[aria-pressed="true"] .learning-option__mark { background: var(--color-violet); border-color: var(--color-violet); color: var(--color-white); }
+.learning-option__body { display: flex; flex-direction: column; gap: 5px; }
+.learning-option__name { font-size: 16px; font-weight: 600; line-height: 1.35; }
+.learning-option__desc { font-size: 14px; line-height: 1.5; color: var(--color-mauve-ink); }
+.learning-custom { margin-top: 4px; }
 
 /* Step 4: statement */
 .statement { padding: 28px 22px; border-radius: var(--radius-card); background: var(--color-white); box-shadow: var(--card-shadow); border: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 22px; }
@@ -251,12 +265,12 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   <div class="wrap">
     <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Capital Identity Snapshot, Week 1</span></div>
     <h1 id="hero-title">Your capital identity, <em>in three sentences.</em></h1>
-    <p class="lede">In four short steps you'll finish with three sentences about how you relate to money and why venture might belong in your portfolio.</p>
+    <p class="lede">In four short steps you'll finish with three sentences about how you relate to money, what interests you about venture, and what you need to understand before deciding whether it fits your portfolio.</p>
     <p class="hero__private">Your answers save only in this browser, on this device. Nothing is sent to me or to Libra.</p>
     <ol class="plan" aria-label="Exercise steps and timing">
       <li><span>Step 1: Where your capital comes from</span><span>2 min</span></li>
       <li><span>Step 2: Your money scripts</span><span>3 min</span></li>
-      <li><span>Step 3: What you want your capital to do</span><span>3 min</span></li>
+      <li><span>Step 3: The role venture could play</span><span>3 min</span></li>
       <li><span>Step 4: Your three sentences</span><span>3 min</span></li>
       <li class="plan__optional"><span>Optional: share one sentence in the chat</span><span>1 min</span></li>
     </ol>
@@ -300,15 +314,31 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 <section class="band band--white" aria-labelledby="s3-title">
   <div class="wrap">
     <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 3</span></div>
-    <h2 class="title" id="s3-title">What you want your capital to do</h2>
-    <p class="lede">What do I want my capital to do that my stock portfolio doesn't?</p>
-    <div class="field to-content">
-      <label class="field__label" for="want">Finish the sentence</label>
-      <div class="prefixed">
-        <span class="prefixed__lead" aria-hidden="true">I want my capital to</span>
-        <textarea id="want" rows="1" aria-describedby="want-examples" placeholder="own a stake in companies before they go public"></textarea>
+    <h2 class="title" id="s3-title">What role could venture play in my financial life?</h2>
+    <p class="lede">Your money patterns help you notice how you approach a decision. Now name what interests you about venture and what you need to learn before deciding whether it belongs in your portfolio. It's fine to still be exploring.</p>
+    <div class="venture-prompts to-content">
+      <div class="field">
+        <label class="venture__question" for="want">What am I hoping venture could add?</label>
+        <p class="quiet" id="want-examples">For example: gain exposure to privately held companies, support innovation in an area I care about, or invest through a fund focused on women founders.</p>
+        <div class="prefixed">
+          <span class="prefixed__lead" aria-hidden="true">I want my capital to</span>
+          <textarea id="want" rows="1" aria-describedby="want-examples" placeholder="support innovation in healthcare"></textarea>
+        </div>
       </div>
-      <p class="quiet examples" id="want-examples">For example: own a stake in companies before they go public, back women building in healthcare, or put money behind the kind of founders I want to see more of.</p>
+      <div class="learning">
+        <h3 class="venture__question" id="learning-title">What do I need to understand before deciding whether it fits?</h3>
+        <p class="quiet" id="learning-help">Select any topics you want to explore. You can choose more than one, add your own answer, or do both.</p>
+        <div class="learning-options" id="learning-options" role="group" aria-labelledby="learning-title" aria-describedby="learning-help"></div>
+        <div class="field learning-custom">
+          <label class="field__label" for="learning-custom">Add your own answer <span class="strength__optional">(optional)</span></label>
+          <div class="prefixed">
+            <span class="prefixed__lead" aria-hidden="true">I need to understand</span>
+            <textarea id="learning-custom" rows="1" placeholder="how venture could fit alongside my other long-term commitments"></textarea>
+          </div>
+        </div>
+        <p class="quiet" id="learning-status" role="status" aria-live="polite">Your selections and your own answer will become part of your third sentence.</p>
+        <p class="notice" id="venture-edit-note" hidden>Your third sentence has been edited. Use Rebuild from my answers to include your latest Step 3 answers automatically. Your answers will also be included separately when you copy or save your full statement.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -332,8 +362,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
         <textarea id="s2" rows="2" placeholder="I relate most to [money script or scripts]; in a long-term investment, I'm watching for [patterns to notice]."></textarea>
       </div>
       <div class="sentence">
-        <label class="field__label" for="s3">Why venture <span class="sentence__edited" id="s3-edited" hidden>(edited)</span></label>
-        <textarea id="s3" rows="2" placeholder="I'm exploring venture because I want my capital to [your answer from step 3]."></textarea>
+        <label class="field__label" for="s3">The role I'm exploring for venture <span class="sentence__edited" id="s3-edited" hidden>(edited)</span></label>
+        <textarea id="s3" rows="2" placeholder="I'm exploring venture because I want my capital to [what I hope it could add]; before deciding whether it fits, I need to understand [my learning topics]."></textarea>
       </div>
     </div>
     <div class="actions">
@@ -378,7 +408,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   <div class="wrap">
     <h2 class="title" id="about-title">About this exercise</h2>
     <div class="prose" style="margin-top: 20px">
-      <p>This is the Week 1 exercise of the Aligned LP Community Series from Libra Leaders and She Has Leverage. Your three sentences become the first page of your Aligned LP Profile.</p>
+      <p>This is the Week 1 exercise of the She Has Leverage x Libra Leaders LP Community Education Series. Your three sentences become the first page of your Aligned LP Profile.</p>
       <p>It's a short version of the Capital Identity Statement Builder from my Aligned Capital Program. The four money scripts come from research by Brad Klontz and colleagues. The descriptions on this page are my own summaries.</p>
       <p>Nothing here asks for amounts, account details or net worth, and nothing you type leaves this browser unless you copy or save it yourself.</p>
     </div>
@@ -404,7 +434,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   <div class="wrap">
     <p class="footer__wordmark">She Has Leverage</p>
     <div class="footer__small">
-      <p>Libra Leaders × She Has Leverage, Aligned LP Community Series</p>
+      <p>She Has Leverage × Libra Leaders LP Community Education Series</p>
       <p>For educational and informational purposes only. She Has Leverage does not provide investment advice or recommend securities or investment strategies.</p>
       <p>© 2026 She Has Leverage LLC. All rights reserved.</p>
     </div>
@@ -469,10 +499,43 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     }
   };
   var SCRIPT_KEYS = ["vigilance", "avoidance", "worship", "status"];
+  var LEARNING_TOPICS = {
+    risk: {
+      name: "Risk and potential losses",
+      desc: "What could I lose, and what drives the risk?",
+      phrase: "the risks and potential losses"
+    },
+    liquidity: {
+      name: "Time horizon and access to my money",
+      desc: "How long could my money be committed?",
+      phrase: "how long my money could be committed and when I could access it"
+    },
+    calls: {
+      name: "Capital calls",
+      desc: "When might I need to contribute capital?",
+      phrase: "how capital calls work and when I may need to contribute"
+    },
+    manager: {
+      name: "Choosing a fund manager",
+      desc: "How would I evaluate the team and its strategy?",
+      phrase: "how to evaluate a fund manager and strategy"
+    },
+    fees: {
+      name: "Fees and returns",
+      desc: "What fees apply, and how do they affect what I receive?",
+      phrase: "how fees affect what I receive"
+    },
+    fit: {
+      name: "Fit with my overall portfolio",
+      desc: "What size commitment could fit my goals and other needs?",
+      phrase: "how a commitment could fit my broader portfolio and cash needs"
+    }
+  };
+  var LEARNING_KEYS = ["risk", "liquidity", "calls", "manager", "fees", "fit"];
   var STORE_KEY = "libra-shl-capital-identity-snapshot-v1";
 
   function blank() {
-    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", want: "", edits: { s1: null, s2: null, s3: null } };
+    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", want: "", learningTopics: [], learningCustom: "", edits: { s1: null, s2: null, s3: null } };
   }
   var S = blank();
   try {
@@ -487,6 +550,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
         });
         S.strength = typeof saved.strength === "string" ? saved.strength : "";
         S.want = typeof saved.want === "string" ? saved.want : "";
+        S.learningTopics = LEARNING_KEYS.filter(function (k) { return Array.isArray(saved.learningTopics) && saved.learningTopics.indexOf(k) !== -1; });
+        S.learningCustom = typeof saved.learningCustom === "string" ? saved.learningCustom : "";
         ["s1", "s2", "s3"].forEach(function (k) {
           S.edits[k] = (saved.edits && typeof saved.edits[k] === "string") ? saved.edits[k] : null;
         });
@@ -644,6 +709,60 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   var wantEl = $("want");
   wantEl.value = S.want;
   wantEl.addEventListener("input", function () { S.want = wantEl.value; persist(); refresh(); grow(wantEl); });
+  var learningCustomEl = $("learning-custom");
+  learningCustomEl.value = S.learningCustom;
+  learningCustomEl.addEventListener("input", function () { S.learningCustom = learningCustomEl.value; persist(); refresh(); grow(learningCustomEl); });
+
+  LEARNING_KEYS.forEach(function (k) {
+    var topic = LEARNING_TOPICS[k];
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "learning-option";
+    button.id = "learn-" + k;
+    button.setAttribute("aria-pressed", "false");
+    button.setAttribute("aria-labelledby", "learn-name-" + k);
+    button.setAttribute("aria-describedby", "learn-desc-" + k);
+    button.innerHTML = '<span class="learning-option__mark" aria-hidden="true">+</span>' +
+      '<span class="learning-option__body"><span class="learning-option__name" id="learn-name-' + k + '"></span>' +
+      '<span class="learning-option__desc" id="learn-desc-' + k + '"></span></span>';
+    button.querySelector(".learning-option__name").textContent = topic.name;
+    button.querySelector(".learning-option__desc").textContent = topic.desc;
+    button.addEventListener("click", function () {
+      if (S.learningTopics.indexOf(k) === -1) S.learningTopics.push(k);
+      else S.learningTopics = S.learningTopics.filter(function (key) { return key !== k; });
+      persist();
+      refresh();
+    });
+    $("learning-options").appendChild(button);
+  });
+
+  function cleanLearning(v) {
+    var t = (v || "").replace(/\s+/g, " ").trim();
+    t = t.replace(/^i\s+(?:also\s+)?(?:need|want|would like)\s+to\s+understand\s*/i, "");
+    t = t.replace(/[.!?\s]+$/, "");
+    if (t.length > 1 && /^[A-Z][a-z]/.test(t)) t = t.charAt(0).toLowerCase() + t.slice(1);
+    return t;
+  }
+
+  function learningAnswers() {
+    var answers = LEARNING_KEYS.filter(function (k) { return S.learningTopics.indexOf(k) !== -1; }).map(function (k) { return LEARNING_TOPICS[k].phrase; });
+    var own = cleanLearning(S.learningCustom);
+    if (own && !answers.some(function (answer) { return answer.toLowerCase() === own.toLowerCase(); })) answers.push(own);
+    return answers;
+  }
+
+  function renderLearning() {
+    LEARNING_KEYS.forEach(function (k) {
+      var selected = S.learningTopics.indexOf(k) !== -1;
+      var button = $("learn-" + k);
+      button.setAttribute("aria-pressed", selected ? "true" : "false");
+      button.querySelector(".learning-option__mark").textContent = selected ? "✓" : "+";
+    });
+    var count = S.learningTopics.length;
+    var own = !!cleanLearning(S.learningCustom);
+    $("learning-status").textContent = count ? count + (count === 1 ? " topic selected" : " topics selected") + (own ? ", plus your own answer." : ".") : own ? "Your own answer will be included in your third sentence." : "Your selections and your own answer will become part of your third sentence.";
+    $("venture-edit-note").hidden = !(S.edits.s3 !== null && (cleanWant(S.want) || learningAnswers().length));
+  }
 
   function cleanWant(v) {
     var t = (v || "").replace(/\s+/g, " ").trim();
@@ -656,10 +775,16 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   /* ---------- sentences ---------- */
   function built() {
     var want = cleanWant(S.want);
+    var learning = joinItems(learningAnswers());
+    var venture = "";
+    if (want || learning) {
+      venture = want ? "I'm exploring venture because I want my capital to " + want : "I'm still exploring what role venture could play in my portfolio";
+      venture += learning ? "; before deciding whether it fits, I need to understand " + learning + "." : "; my next step is to identify what I need to understand before deciding whether it fits.";
+    }
     return {
       s1: S.origin ? "My capital is " + ORIGINS[S.origin].phrase + ", so I'm watching for " + ORIGINS[S.origin].watch + "." : "",
       s2: moneyStatement(),
-      s3: want ? "I'm exploring venture because I want my capital to " + want + "." : ""
+      s3: venture
     };
   }
   function current() {
@@ -679,6 +804,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       $(k + "-edited").hidden = false;
       $("rebuild").hidden = false;
       if (k === "s2") { renderResult(); renderStrength(); }
+      if (k === "s3") renderLearning();
       renderShare();
       grow(ta);
     });
@@ -710,6 +836,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   function refresh() {
     renderResult();
     renderStrength();
+    renderLearning();
     renderSentences();
     renderShare();
   }
@@ -720,6 +847,12 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     var lines = [c.s1, c.s2, c.s3].map(function (s) { return s.trim(); }).filter(Boolean);
     var strength = cleanStrength(S.strength);
     if (strength && S.edits.s2 !== null) lines.push("A strength I bring: " + strength + ".");
+    if (S.edits.s3 !== null) {
+      var want = cleanWant(S.want);
+      var learning = joinItems(learningAnswers());
+      if (want) lines.push("What I hope venture could add: I want my capital to " + want + ".");
+      if (learning) lines.push("Before deciding whether venture fits, I need to understand " + learning + ".");
+    }
     return lines.join("\n");
   }
   function setStatus(id, msg) {
@@ -761,7 +894,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     var text = statementText();
     if (!text) { setStatus("status-all", "Finish at least one step to build your statement."); return; }
     var body = "My capital identity\n" + $("today").textContent + "\n\n" + text +
-      "\n\nCapital Identity Snapshot, Aligned LP Community Series (Libra Leaders × She Has Leverage)\n" +
+      "\n\nCapital Identity Snapshot, She Has Leverage × Libra Leaders LP Community Education Series\n" +
       "For educational and informational purposes only. She Has Leverage does not provide investment advice or recommend securities or investment strategies.\n";
     var url = null;
     var link = null;
@@ -803,6 +936,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.checked = false; });
     wantEl.value = "";
     strengthEl.value = "";
+    learningCustomEl.value = "";
     ["s1", "s2", "s3"].forEach(function (k) { $(k).value = ""; });
     $("clear-confirm").hidden = true;
     $("fallback-all").hidden = true;
@@ -810,6 +944,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     refresh();
     grow(wantEl);
     grow(strengthEl);
+    grow(learningCustomEl);
     setStatus("status-clear", "Cleared.");
     $("clear").focus();
   });
@@ -821,7 +956,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   refresh();
   grow(wantEl);
   grow(strengthEl);
-  window.addEventListener("resize", function () { ["want", "strength", "s1", "s2", "s3"].forEach(function (k) { grow($(k)); }); });
+  grow(learningCustomEl);
+  window.addEventListener("resize", function () { ["want", "strength", "learning-custom", "s1", "s2", "s3"].forEach(function (k) { grow($(k)); }); });
 })();
 </script>
 </body>
