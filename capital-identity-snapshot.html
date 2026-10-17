@@ -181,6 +181,9 @@ textarea {
 }
 textarea::placeholder { color: var(--color-mauve-ink); }
 .examples { margin-top: 14px; }
+.strength-reflection { margin-top: 24px; padding: 24px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-white); display: flex; flex-direction: column; gap: 16px; }
+.strength__optional { font-weight: 400; color: var(--color-mauve-ink); }
+.strength__prompt { font-family: var(--font-display); font-size: 24px; font-weight: 600; line-height: 1.25; letter-spacing: -0.022em; }
 
 /* Step 4: statement */
 .statement { padding: 28px 22px; border-radius: var(--radius-card); background: var(--color-white); box-shadow: var(--card-shadow); border: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 22px; }
@@ -279,6 +282,18 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     <p class="lede">Rate how much each of the four money scripts resonates with you, from 1 (not me at all) to 5 (very much me). There are no right answers.</p>
     <div class="scripts to-content" id="scripts"></div>
     <div class="result" id="result" aria-live="polite"></div>
+    <div class="strength-reflection">
+      <p class="label__text">A strength to carry forward <span class="strength__optional">(optional)</span></p>
+      <div class="field">
+        <label class="strength__prompt" id="strength-prompt" for="strength">What has this pattern helped me do well?</label>
+        <p class="quiet" id="strength-examples">Examples might include patience, thoughtful questions, ambition, or independence. Choose a strength that feels true to you.</p>
+        <div class="prefixed">
+          <span class="prefixed__lead" aria-hidden="true">I bring</span>
+          <textarea id="strength" rows="1" aria-describedby="strength-examples" placeholder="patience and thoughtful questions"></textarea>
+        </div>
+      </div>
+      <p class="notice" id="strength-edit-note" hidden>Your statement has been edited. Use Rebuild from my answers to include this reflection automatically.</p>
+    </div>
   </div>
 </section>
 
@@ -457,7 +472,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   var STORE_KEY = "libra-shl-capital-identity-snapshot-v1";
 
   function blank() {
-    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, want: "", edits: { s1: null, s2: null, s3: null } };
+    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, strength: "", want: "", edits: { s1: null, s2: null, s3: null } };
   }
   var S = blank();
   try {
@@ -470,6 +485,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
           var v = saved.scores && saved.scores[k];
           S.scores[k] = (v >= 1 && v <= 5) ? v : null;
         });
+        S.strength = typeof saved.strength === "string" ? saved.strength : "";
         S.want = typeof saved.want === "string" ? saved.want : "";
         ["s1", "s2", "s3"].forEach(function (k) {
           S.edits[k] = (saved.edits && typeof saved.edits[k] === "string") ? saved.edits[k] : null;
@@ -552,16 +568,26 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     return items.slice(0, -1).join(", ") + ", and " + items[items.length - 1];
   }
 
+  function cleanStrength(v) {
+    var t = (v || "").replace(/\s+/g, " ").trim();
+    t = t.replace(/^(?:(?:a|one) strength i bring is|i bring)\s+/i, "");
+    t = t.replace(/[.!\s]+$/, "");
+    if (t.length > 1 && /^[A-Z][a-z]/.test(t)) t = t.charAt(0).toLowerCase() + t.slice(1);
+    return t;
+  }
+
   function moneyStatement() {
     var keys = matchingScripts();
-    if (!keys.length) return "";
+    var strength = cleanStrength(S.strength);
+    if (!keys.length) return strength ? "I bring " + strength + " to my approach to money." : "";
     var names = joinItems(keys.map(function (k) { return SCRIPTS[k].name.toLowerCase(); }));
+    var positive = strength ? "I bring " + strength + ", and " : "";
     if (keys.length === SCRIPT_KEYS.length) {
-      return "I gave " + names + " the same rating; I'm exploring how these patterns show up in my investment decisions.";
+      return "I gave " + names + " the same rating; " + positive + "I'm exploring how these patterns show up in my investment decisions.";
     }
     var watches = keys.map(function (k) { return SCRIPTS[k].watch; });
     var patterns = watches.length === 2 ? watches[0] + ", as well as " + watches[1] : joinItems(watches);
-    return "I relate most to " + names + "; in a long-term investment, I'm watching for " + patterns + ".";
+    return "I relate most to " + names + "; " + positive + "in a long-term investment, I'm watching for " + patterns + ".";
   }
 
   function renderResult() {
@@ -603,6 +629,17 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     });
   }
 
+  /* ---------- strengths reflection ---------- */
+  var strengthEl = $("strength");
+  strengthEl.value = S.strength;
+  strengthEl.addEventListener("input", function () { S.strength = strengthEl.value; persist(); refresh(); grow(strengthEl); });
+
+  function renderStrength() {
+    var keys = matchingScripts();
+    $("strength-prompt").textContent = keys.length > 1 ? "What have these patterns helped me do well?" : "What has this pattern helped me do well?";
+    $("strength-edit-note").hidden = !(cleanStrength(S.strength) && S.edits.s2 !== null);
+  }
+
   /* ---------- step 3 ---------- */
   var wantEl = $("want");
   wantEl.value = S.want;
@@ -641,7 +678,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       persist();
       $(k + "-edited").hidden = false;
       $("rebuild").hidden = false;
-      if (k === "s2") renderResult();
+      if (k === "s2") { renderResult(); renderStrength(); }
       renderShare();
       grow(ta);
     });
@@ -672,6 +709,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 
   function refresh() {
     renderResult();
+    renderStrength();
     renderSentences();
     renderShare();
   }
@@ -679,7 +717,10 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   /* ---------- copy, save, rebuild, clear ---------- */
   function statementText() {
     var c = current();
-    return [c.s1, c.s2, c.s3].map(function (s) { return s.trim(); }).filter(Boolean).join("\n");
+    var lines = [c.s1, c.s2, c.s3].map(function (s) { return s.trim(); }).filter(Boolean);
+    var strength = cleanStrength(S.strength);
+    if (strength && S.edits.s2 !== null) lines.push("A strength I bring: " + strength + ".");
+    return lines.join("\n");
   }
   function setStatus(id, msg) {
     var el = $(id);
@@ -761,12 +802,14 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignore */ }
     document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.checked = false; });
     wantEl.value = "";
+    strengthEl.value = "";
     ["s1", "s2", "s3"].forEach(function (k) { $(k).value = ""; });
     $("clear-confirm").hidden = true;
     $("fallback-all").hidden = true;
     $("fallback-s3").hidden = true;
     refresh();
     grow(wantEl);
+    grow(strengthEl);
     setStatus("status-clear", "Cleared.");
     $("clear").focus();
   });
@@ -777,7 +820,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   } catch (e) { $("today").textContent = ""; }
   refresh();
   grow(wantEl);
-  window.addEventListener("resize", function () { ["want", "s1", "s2", "s3"].forEach(function (k) { grow($(k)); }); });
+  grow(strengthEl);
+  window.addEventListener("resize", function () { ["want", "strength", "s1", "s2", "s3"].forEach(function (k) { grow($(k)); }); });
 })();
 </script>
 </body>
