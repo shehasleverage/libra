@@ -592,7 +592,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     if (keys.length > 1) {
       var note = document.createElement("p");
       note.className = "result__more";
-      note.textContent = (keys.length === 2 ? "Both scripts are" : "All " + keys.length + " scripts are") + " included in your statement below.";
+      note.textContent = S.edits.s2 !== null ? "Your edited statement is preserved. Choose Rebuild from my answers to include these tied scripts automatically." : (keys.length === 2 ? "Both scripts are" : "All " + keys.length + " scripts are") + " included in your statement below.";
       el.appendChild(note);
     }
     keys.forEach(function (k) {
@@ -641,6 +641,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
       persist();
       $(k + "-edited").hidden = false;
       $("rebuild").hidden = false;
+      if (k === "s2") renderResult();
       renderShare();
       grow(ta);
     });
