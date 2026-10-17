@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Capital Identity Snapshot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600&family=Spectral:ital,wght@0,600;1,400;1,600&display=swap">
+<style>
+/* Layout: one narrow tool column on the She Has Leverage grid; bands alternate white, lilac and plum, one step per band.
+   Single light theme by choice: the She Has Leverage system defines light values only. */
+:root {
+  --color-plum: #2a2133;
+  --color-violet: #5b3a8c;
+  --color-lavender: #b9a3d9;
+  --color-white: #ffffff;
+  --color-lilac: #f3eff8;
+  --color-paper: #fcfafe;
+  --color-mauve-ink: #7e5f89;
+  --color-lavender-ink: #7a6a90;
+  --color-on-dark: #ffffff;
+  --color-on-dark-lede: #e8def5;
+  --color-on-dark-muted: rgb(233 222 245 / 0.6);
+  --color-line: rgb(42 33 51 / 0.12);
+  --rule-soft: rgb(42 33 51 / 0.16);
+  --input-border: rgb(91 58 140 / 0.35);
+  --color-focus-ring: rgb(91 58 140 / 0.18);
+  --hero-gradient: radial-gradient(120% 130% at 15% 0%, rgb(91 58 140 / 0.3) 0%, transparent 55%), linear-gradient(160deg, #2a2133 0%, #3d2b5a 55%, #5b3a8c 130%);
+  --font-display: Spectral, Georgia, serif;
+  --font-body: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius-card: 16px;
+  --radius-control: 10px;
+  --card-shadow: 0 24px 48px -36px rgb(42 33 51 / 0.45);
+  --wrap: 960px;
+  --gutter: 22px;
+  --space-section: 56px;
+  --touch: 44px;
+  color-scheme: light;
+}
+@media (min-width: 720px) { :root { --gutter: 48px; --space-section: 88px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  background: var(--color-white);
+  color: var(--color-plum);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
+p { margin: 0; }
+button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--color-violet); outline-offset: 2px; border-radius: 3px; }
+.on-dark :focus-visible { outline-color: var(--color-lavender); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.band { position: relative; overflow: hidden; }
+.band > .wrap { position: relative; padding-block: var(--space-section); }
+.band--white { background: var(--color-white); }
+.band--lilac { background: var(--color-lilac); }
+.band--plum { background: var(--color-plum); color: var(--color-on-dark); }
+.grain { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgb(255 255 255 / 0.07) 1px, transparent 1px); background-size: 4px 4px; }
+.rail { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(to right, rgb(185 163 217 / 0.2) 0 1px, rgb(185 163 217 / 0) 1px 120px); }
+
+/* Header */
+.header { border-bottom: 1px solid rgb(42 33 51 / 0.18); background: var(--color-white); }
+.header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; flex-wrap: wrap; padding-block: 10px; }
+.wordmark { font-family: var(--font-display); font-weight: 600; font-size: 21px; letter-spacing: -0.022em; color: var(--color-plum); white-space: nowrap; }
+.header__brands { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.header__separator { flex: none; font-size: 21px; line-height: 1; color: var(--color-lavender-ink); }
+.header__logo { display: block; flex: none; width: 160px; height: auto; }
+.header__meta { flex: 1 1 280px; max-width: 360px; font-size: 15px; font-weight: 500; color: var(--color-mauve-ink); }
+@media (max-width: 719px) {
+  .header .wrap { gap: 10px; padding-block: 14px; }
+  .header .wordmark { font-size: 18px; }
+  .header__logo { width: 136px; }
+  .header__meta { max-width: none; font-size: 14px; }
+}
+@media (max-width: 379px) {
+  .header .wordmark { font-size: 16px; }
+  .header__logo { width: 112px; }
+}
+
+/* Section head */
+.label { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.label__rule { flex: none; width: 48px; height: 2px; background: var(--color-violet); }
+.label__text { font-size: 15px; font-weight: 600; line-height: 1.3; color: var(--color-violet); }
+.on-dark .label__rule { background: var(--color-lavender); }
+.on-dark .label__text { color: var(--color-lavender); }
+@media (min-width: 720px) { .label { gap: 18px; } .label__rule { width: 56px; } .label__text { font-size: 16px; } }
+.title { font-size: clamp(32px, 4.4vw, 46px); color: var(--color-plum); }
+.title em { font-style: italic; color: var(--color-violet); }
+.on-dark .title { color: var(--color-on-dark); }
+.on-dark .title em { color: var(--color-lavender); }
+.lede { margin-top: 20px; font-size: 17px; line-height: 1.62; color: var(--color-mauve-ink); text-wrap: pretty; }
+@media (min-width: 720px) { .lede { font-size: 19px; } }
+.on-dark .lede { color: var(--color-lavender); }
+.quiet { font-size: 14px; line-height: 1.6; color: var(--color-mauve-ink); }
+.to-content { margin-top: 40px; }
+
+/* Hero */
+.hero { background: var(--hero-gradient); color: var(--color-on-dark); }
+.hero .wrap { padding-block: 64px 72px; }
+@media (min-width: 720px) { .hero .wrap { padding-block: 96px 104px; } }
+.hero h1 { font-size: clamp(40px, 6.4vw, 72px); line-height: 1.04; color: var(--color-on-dark); }
+.hero h1 em { display: block; font-style: italic; color: var(--color-lavender); }
+.hero .lede { color: var(--color-on-dark-lede); font-size: 18px; }
+@media (min-width: 720px) { .hero .lede { font-size: 21px; } }
+.hero__private { margin-top: 16px; font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 17px; line-height: 1.4; color: var(--color-on-dark-lede); }
+.plan { margin: 40px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr; border-top: 1px solid rgb(185 163 217 / 0.35); }
+.plan li { display: flex; justify-content: space-between; gap: 16px; padding-block: 12px; border-bottom: 1px solid rgb(185 163 217 / 0.25); font-size: 16px; color: var(--color-on-dark); }
+.plan li span:last-child { color: var(--color-on-dark-lede); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.plan li.plan__optional { color: var(--color-on-dark-lede); }
+@media (min-width: 720px) { .plan { grid-template-columns: 1fr 1fr; column-gap: 48px; } }
+
+/* Step 1: origin cards */
+.choices { display: grid; grid-template-columns: 1fr; gap: 12px; border: 0; padding: 0; margin: 0; min-width: 0; }
+@media (min-width: 720px) { .choices { grid-template-columns: 1fr 1fr; gap: 16px; } }
+.sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.choice { position: relative; display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 20px 22px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-paper); cursor: pointer; transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s; }
+.choice:hover { border-color: var(--input-border); }
+.choice__name { font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -0.022em; line-height: 1.2; color: var(--color-plum); }
+.choice__text { font-size: 15px; line-height: 1.55; color: var(--color-mauve-ink); }
+.choice input:checked + .choice__body .choice__name { color: var(--color-violet); }
+.choice:has(input:checked) { border-color: var(--color-violet); box-shadow: inset 0 0 0 1px var(--color-violet); background: var(--color-lilac); }
+.choice:has(input:focus-visible) { outline: 2px solid var(--color-violet); outline-offset: 2px; }
+.choice__body { display: flex; flex-direction: column; gap: 8px; }
+.choice__check { position: absolute; top: 18px; right: 18px; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--input-border); background: var(--color-white); }
+.choice:has(input:checked) .choice__check { border: 6px solid var(--color-violet); }
+.choice__name { padding-right: 32px; }
+
+/* Step 2: script rows */
+.scripts { display: flex; flex-direction: column; gap: 14px; }
+.script { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 22px; border-radius: var(--radius-card); background: var(--color-white); border: 1px solid var(--color-line); margin: 0; min-width: 0; }
+@media (min-width: 820px) { .script { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 28px; padding: 24px 28px; } }
+.script legend { padding: 0; float: left; width: 100%; }
+.script__head { min-width: 0; }
+.script__name { font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -0.022em; line-height: 1.2; }
+.script__desc { margin-top: 6px; font-size: 15px; line-height: 1.55; color: var(--color-mauve-ink); }
+.scale { display: flex; flex-direction: column; gap: 6px; }
+.scale__row { display: flex; gap: 6px; }
+.scale__opt { position: relative; }
+.scale__opt span { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: var(--radius-control); border: 1px solid var(--input-border); background: var(--color-paper); font-weight: 600; font-size: 17px; color: var(--color-plum); cursor: pointer; font-variant-numeric: tabular-nums; transition: background-color 0.15s, color 0.15s; }
+.scale__opt span:hover { background: var(--color-lilac); }
+.scale__opt input:checked + span { background: var(--color-violet); border-color: var(--color-violet); color: var(--color-white); }
+.scale__opt input:focus-visible + span { outline: 2px solid var(--color-violet); outline-offset: 2px; }
+.scale__ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--color-mauve-ink); }
+.result { margin-top: 24px; padding: 20px 24px; border-radius: var(--radius-card); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--card-shadow); }
+.result__lead { font-size: 17px; line-height: 1.55; }
+.result__lead b { color: var(--color-violet); font-weight: 600; }
+.result__more { margin-top: 6px; font-size: 15px; color: var(--color-mauve-ink); }
+.tie { margin: 14px 0 0; padding: 0; border: 0; min-width: 0; }
+.tie legend { padding: 0; font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+.tie__row { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { position: relative; }
+.pill span { display: inline-flex; align-items: center; min-height: var(--touch); padding: 0 16px; border-radius: var(--radius-control); border: 1px solid var(--input-border); background: var(--color-paper); font-size: 15px; font-weight: 600; cursor: pointer; }
+.pill input:checked + span { background: var(--color-violet); border-color: var(--color-violet); color: var(--color-white); }
+.pill input:focus-visible + span { outline: 2px solid var(--color-violet); outline-offset: 2px; }
+
+/* Step 3 */
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--color-plum); }
+.prefixed { display: flex; flex-direction: column; border: 1px solid var(--input-border); border-radius: var(--radius-control); background: var(--color-paper); transition: box-shadow 0.15s, border-color 0.15s; }
+.prefixed:focus-within { border-color: var(--color-violet); box-shadow: 0 0 0 3px var(--color-focus-ring); }
+.prefixed__lead { padding: 14px 18px 0; font-size: 18px; font-weight: 600; color: var(--color-violet); }
+.prefixed textarea { border: 0; background: transparent; outline: none; }
+textarea {
+  width: 100%; min-height: 56px; resize: none; overflow: hidden;
+  padding: 10px 18px 16px; font-family: var(--font-body); font-size: 18px; line-height: 1.5; color: var(--color-plum);
+}
+textarea::placeholder { color: var(--color-mauve-ink); }
+.examples { margin-top: 14px; }
+
+/* Step 4: statement */
+.statement { padding: 28px 22px; border-radius: var(--radius-card); background: var(--color-white); box-shadow: var(--card-shadow); border: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 22px; }
+@media (min-width: 720px) { .statement { padding: 40px 44px; } }
+.statement__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; padding-bottom: 18px; border-bottom: 1px solid var(--rule-soft); }
+.statement__title { font-size: clamp(24px, 3vw, 30px); letter-spacing: -0.022em; }
+.statement__date { font-size: 14px; color: var(--color-mauve-ink); font-variant-numeric: tabular-nums; }
+.sentence { display: flex; flex-direction: column; gap: 8px; }
+.sentence textarea { border: 1px solid var(--color-line); border-radius: var(--radius-control); background: var(--color-paper); padding: 14px 16px; font-size: 18px; min-height: 0; }
+.sentence textarea:focus { border-color: var(--color-violet); box-shadow: 0 0 0 3px var(--color-focus-ring); outline: none; }
+.sentence__edited { font-weight: 400; color: var(--color-mauve-ink); }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 32px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 0 30px; border: 0; border-radius: var(--radius-control); background: var(--color-violet); color: var(--color-white); font-size: 16px; font-weight: 600; line-height: 1.2; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
+.btn:hover { background: var(--color-plum); }
+.btn--on-dark { background: var(--color-lavender); color: var(--color-plum); }
+.btn--on-dark:hover { background: var(--color-white); }
+.link { display: inline-flex; align-items: center; min-height: var(--touch); padding: 0; border: 0; background: none; font-size: 17px; font-weight: 600; color: var(--color-violet); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 7px; cursor: pointer; }
+.link:hover { color: var(--color-plum); }
+.status { min-height: 1.5em; margin-top: 14px; font-size: 15px; font-weight: 600; color: var(--color-violet); }
+.status:empty { margin-top: 0; }
+.notice { margin-top: 14px; border-left: 2px solid var(--color-violet); padding-left: 12px; font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--color-violet); }
+.fallback { margin-top: 14px; }
+.fallback textarea { border: 1px solid var(--input-border); border-radius: var(--radius-control); background: var(--color-paper); padding: 14px 16px; font-size: 15px; min-height: 120px; overflow: auto; }
+.confirm { margin-top: 14px; padding: 16px 18px; border-left: 2px solid var(--color-violet); background: var(--color-paper); display: flex; flex-direction: column; gap: 10px; }
+.confirm p { font-weight: 600; }
+.confirm__row { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; }
+.btn--small { min-height: var(--touch); padding: 0 20px; font-size: 15px; }
+
+/* Step 5: share on plum */
+.share-box { margin-top: 32px; padding: 22px 24px; border: 1px solid rgb(185 163 217 / 0.55); border-radius: var(--radius-card); background: rgb(255 255 255 / 0.06); font-size: 19px; line-height: 1.55; color: var(--color-on-dark); }
+.share-box.is-empty { color: var(--color-lavender); font-family: var(--font-display); font-style: italic; font-weight: 400; }
+.on-dark .status { color: var(--color-lavender); }
+.on-dark .fallback textarea { background: rgb(255 255 255 / 0.07); border-color: rgb(185 163 217 / 0.55); color: var(--color-on-dark); }
+.on-dark .notice { border-left-color: var(--color-lavender); color: var(--color-on-dark); }
+
+/* About */
+.prose { display: flex; flex-direction: column; gap: 14px; font-size: 17px; line-height: 1.65; }
+.sources { margin-top: 32px; }
+.sources .label__text { margin-bottom: 8px; }
+.sources a, .prose a { color: var(--color-violet); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.sources a:hover { color: var(--color-plum); }
+.sources p { font-size: 15px; line-height: 1.6; color: var(--color-mauve-ink); }
+
+/* Footer */
+.footer { border-top: 1px solid var(--rule-soft); background: var(--color-white); }
+.footer .wrap { padding-block: 48px 40px; display: flex; flex-direction: column; gap: 20px; }
+.footer__wordmark { font-family: var(--font-display); font-weight: 600; font-size: clamp(34px, 5vw, 52px); letter-spacing: -0.035em; line-height: 0.98; }
+.footer__small { display: flex; flex-direction: column; gap: 6px; padding-top: 20px; border-top: 1px solid var(--rule-soft); font-size: 13px; line-height: 1.62; color: var(--color-mauve-ink); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap">
+    <div class="header__brands">
+      <span class="wordmark">She Has Leverage</span>
+      <span class="header__separator" aria-hidden="true">×</span>
+      <img class="header__logo" src="data:image/webp;base64,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" width="1174" height="369" alt="Libra Leaders" decoding="async">
+    </div>
+    <span class="header__meta">She Has Leverage x Libra Leaders LP Community Education Series</span>
+  </div>
+</header>
+
+<section class="hero on-dark" aria-labelledby="hero-title">
+  <div class="wrap">
+    <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Capital Identity Snapshot, Week 1</span></div>
+    <h1 id="hero-title">Your capital identity, <em>in three sentences.</em></h1>
+    <p class="lede">Twelve minutes, four short steps. You'll finish with three sentences about how you're wired around money and why venture might belong in your portfolio.</p>
+    <p class="hero__private">Your answers save only in this browser, on this device. Nothing is sent to me or to Libra.</p>
+    <ol class="plan" aria-label="Exercise steps and timing">
+      <li><span>Step 1: Where your capital comes from</span><span>2 min</span></li>
+      <li><span>Step 2: Your money script</span><span>3 min</span></li>
+      <li><span>Step 3: What you want your capital to do</span><span>3 min</span></li>
+      <li><span>Step 4: Your three sentences</span><span>3 min</span></li>
+      <li class="plan__optional"><span>Optional: share one sentence in the chat</span><span>1 min</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band band--white" aria-labelledby="s1-title">
+  <div class="wrap">
+    <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 1</span></div>
+    <h2 class="title" id="s1-title">Where your capital comes from</h2>
+    <p class="lede">How your money arrived in your life shapes your blind spots before any spreadsheet does. Pick the one that fits best.</p>
+    <fieldset class="choices to-content" id="origins">
+      <legend class="sr">Where your capital comes from</legend>
+    </fieldset>
+  </div>
+</section>
+
+<section class="band band--lilac" aria-labelledby="s2-title">
+  <div class="rail" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 2</span></div>
+    <h2 class="title" id="s2-title">Your money script</h2>
+    <p class="lede">Rate how much each of the four money scripts sounds like you today, from 1 (not me at all) to 5 (very much me). There are no right answers.</p>
+    <div class="scripts to-content" id="scripts"></div>
+    <div class="result" id="result" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="band band--white" aria-labelledby="s3-title">
+  <div class="wrap">
+    <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 3</span></div>
+    <h2 class="title" id="s3-title">What you want your capital to do</h2>
+    <p class="lede">What do I want my capital to do that my stock portfolio doesn't?</p>
+    <div class="field to-content">
+      <label class="field__label" for="want">Finish the sentence</label>
+      <div class="prefixed">
+        <span class="prefixed__lead" aria-hidden="true">I want my capital to</span>
+        <textarea id="want" rows="1" aria-describedby="want-examples" placeholder="own a stake in companies before they go public"></textarea>
+      </div>
+      <p class="quiet examples" id="want-examples">For example: own a stake in companies before they go public, back women building in healthcare, or put money behind the kind of founders I want to see more of.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band band--lilac" aria-labelledby="s4-title">
+  <div class="wrap">
+    <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 4</span></div>
+    <h2 class="title" id="s4-title">Your three sentences</h2>
+    <p class="lede">Your answers fill these in as you go. Edit any sentence until it sounds like you.</p>
+    <div class="statement to-content">
+      <div class="statement__head">
+        <h3 class="statement__title">My capital identity</h3>
+        <span class="statement__date" id="today"></span>
+      </div>
+      <div class="sentence">
+        <label class="field__label" for="s1">Where my capital comes from <span class="sentence__edited" id="s1-edited" hidden>(edited)</span></label>
+        <textarea id="s1" rows="2" placeholder="My capital is [where it comes from], so I'm watching for [its blind spot]."></textarea>
+      </div>
+      <div class="sentence">
+        <label class="field__label" for="s2">How I'm wired <span class="sentence__edited" id="s2-edited" hidden>(edited)</span></label>
+        <textarea id="s2" rows="2" placeholder="My dominant money script is [script]; in a 10-year investment, that could show up as [behavior]."></textarea>
+      </div>
+      <div class="sentence">
+        <label class="field__label" for="s3">Why venture <span class="sentence__edited" id="s3-edited" hidden>(edited)</span></label>
+        <textarea id="s3" rows="2" placeholder="I'm exploring venture because I want my capital to [your answer from step 3]."></textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" type="button" id="copy-all">Copy my statement</button>
+      <button class="link" type="button" id="save-file">Save as a file</button>
+      <button class="link" type="button" id="rebuild" hidden>Rebuild from my answers</button>
+    </div>
+    <div class="confirm" id="rebuild-confirm" hidden>
+      <p>Replace your edits with sentences rebuilt from your answers?</p>
+      <div class="confirm__row">
+        <button class="btn btn--small" type="button" id="rebuild-yes">Rebuild</button>
+        <button class="link" type="button" id="rebuild-no">Keep my edits</button>
+      </div>
+    </div>
+    <p class="status" id="status-all" role="status" aria-live="polite"></p>
+    <div class="fallback" id="fallback-all" hidden>
+      <label class="field__label" for="fallback-all-text">Copying isn't available here. Your statement is selected below; press Ctrl+C or Cmd+C.</label>
+      <textarea id="fallback-all-text" readonly></textarea>
+    </div>
+  </div>
+</section>
+
+<section class="band band--plum on-dark" aria-labelledby="s5-title">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Optional</span></div>
+    <h2 class="title" id="s5-title">Share <em>one sentence.</em></h2>
+    <p class="lede">If you'd like, post only your third sentence in the Zoom chat. The first two are yours to keep.</p>
+    <p class="share-box is-empty" id="share-box">Your third sentence appears here once you finish step 3.</p>
+    <div class="actions">
+      <button class="btn btn--on-dark" type="button" id="copy-s3">Copy sentence 3</button>
+    </div>
+    <p class="status" id="status-s3" role="status" aria-live="polite"></p>
+    <div class="fallback" id="fallback-s3" hidden>
+      <label class="field__label" for="fallback-s3-text" style="color: var(--color-lavender)">Copying isn't available here. Your sentence is selected below; press Ctrl+C or Cmd+C.</label>
+      <textarea id="fallback-s3-text" readonly></textarea>
+    </div>
+  </div>
+</section>
+
+<section class="band band--lilac" aria-labelledby="about-title">
+  <div class="wrap">
+    <h2 class="title" id="about-title">About this exercise</h2>
+    <div class="prose" style="margin-top: 20px">
+      <p>This is the Week 1 exercise of the Aligned LP Community Series from Libra Leaders and She Has Leverage. Your three sentences become the first page of your Aligned LP Profile.</p>
+      <p>It's a short version of the Capital Identity Statement Builder from my Aligned Capital Program. The four money scripts come from research by Brad Klontz and colleagues. The descriptions on this page are my own summaries.</p>
+      <p>Nothing here asks for amounts, account details or net worth, and nothing you type leaves this browser unless you copy or save it yourself.</p>
+    </div>
+    <div class="sources">
+      <p class="label__text">Sources</p>
+      <p>Klontz, B., Britt, S. L., Mentzer, J., and Klontz, T. (2011). Money beliefs and financial behaviors: development of the Klontz Money Script Inventory. <i>Journal of Financial Therapy</i>, 2(1). <a href="https://qanr.usu.edu/fcse/files/money-beliefs-and-financial-behaviors-development-the-klontz-money-script-inventory-jft-2011.pdf" target="_blank" rel="noopener">Read the paper</a></p>
+    </div>
+    <div class="actions" style="margin-top: 28px">
+      <button class="link" type="button" id="clear">Clear my answers</button>
+    </div>
+    <div class="confirm" id="clear-confirm" hidden>
+      <p>Clear all four steps on this device?</p>
+      <div class="confirm__row">
+        <button class="btn btn--small" type="button" id="clear-yes">Clear my answers</button>
+        <button class="link" type="button" id="clear-no">Keep them</button>
+      </div>
+    </div>
+    <p class="status" id="status-clear" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <p class="footer__wordmark">She Has Leverage</p>
+    <div class="footer__small">
+      <p>Libra Leaders × She Has Leverage, Aligned LP Community Series</p>
+      <p>For educational and informational purposes only. She Has Leverage does not provide investment advice or recommend securities or investment strategies.</p>
+      <p>© 2026 She Has Leverage LLC. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var ORIGINS = {
+    first: {
+      name: "First-generation wealth",
+      text: "You earned what you have. The blind spot is often hesitance to deploy, because holding cash can feel like safety.",
+      phrase: "first-generation",
+      watch: "holding cash longer than I should because it feels like safety"
+    },
+    inherited: {
+      name: "Inherited wealth",
+      text: "Your capital was passed to you rather than built by you. The blind spot is often separating what's yours from what was handed down.",
+      phrase: "inherited",
+      watch: "decisions that echo what was handed down to me instead of my own judgment"
+    },
+    partnered: {
+      name: "Partnered wealth",
+      text: "You hold capital jointly with a spouse or partner. The blind spot is often unclear authority: whose decision is this, really?",
+      phrase: "partnered, held with my spouse or partner",
+      watch: "unclear authority over whose decision each commitment really is"
+    },
+    mixed: {
+      name: "Mixed",
+      text: "Some of it earned, some inherited or shared. Most people are here. The blind spot is knowing which thread is speaking when you hesitate.",
+      phrase: "mixed, part earned and part inherited or shared",
+      watch: "which thread is speaking when I hesitate or reach"
+    }
+  };
+
+  var SCRIPTS = {
+    avoidance: {
+      name: "Money avoidance",
+      desc: "Money is corrupting. I don't deserve wealth. Wealth creates problems. Often shows up as hesitance to invest and leaving money in cash.",
+      behavior: "undercommitting, avoiding private markets, or pulling back at the first sign of underperformance"
+    },
+    worship: {
+      name: "Money worship",
+      desc: "There's never enough. More money will solve my problems. Often shows up as overcommitting or putting work ahead of relationships.",
+      behavior: "overcommitting, chasing returns, or taking outsized risks looking for the home run"
+    },
+    status: {
+      name: "Money status",
+      desc: "Net worth equals self-worth. I make decisions to impress others. Often shows up as status investments or trophy allocations.",
+      behavior: "investing for prestige rather than fit, or choosing a fund for its brand name"
+    },
+    vigilance: {
+      name: "Money vigilance",
+      desc: "Money is private. Be very careful. Save, save, save. Healthy in small doses; in excess it becomes anxiety and never feeling secure.",
+      behavior: "overanalyzing, demanding impossible certainty, or never deciding at all"
+    }
+  };
+  var SCRIPT_KEYS = ["avoidance", "worship", "status", "vigilance"];
+  var STORE_KEY = "libra-shl-capital-identity-snapshot-v1";
+
+  function blank() {
+    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, tiePick: null, want: "", edits: { s1: null, s2: null, s3: null } };
+  }
+  var S = blank();
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      var saved = JSON.parse(raw);
+      if (saved && typeof saved === "object") {
+        S.origin = ORIGINS[saved.origin] ? saved.origin : null;
+        SCRIPT_KEYS.forEach(function (k) {
+          var v = saved.scores && saved.scores[k];
+          S.scores[k] = (v >= 1 && v <= 5) ? v : null;
+        });
+        S.tiePick = SCRIPTS[saved.tiePick] ? saved.tiePick : null;
+        S.want = typeof saved.want === "string" ? saved.want : "";
+        ["s1", "s2", "s3"].forEach(function (k) {
+          S.edits[k] = (saved.edits && typeof saved.edits[k] === "string") ? saved.edits[k] : null;
+        });
+      }
+    }
+  } catch (e) { /* storage unavailable: start fresh */ }
+
+  function persist() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* ignore */ }
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ---------- build step 1 ---------- */
+  var originsEl = $("origins");
+  Object.keys(ORIGINS).forEach(function (k) {
+    var o = ORIGINS[k];
+    var label = document.createElement("label");
+    label.className = "choice";
+    label.setAttribute("for", "origin-" + k);
+    label.innerHTML =
+      '<input class="sr" type="radio" name="origin" id="origin-' + k + '" value="' + k + '">' +
+      '<span class="choice__body"><span class="choice__name"></span><span class="choice__text"></span></span>' +
+      '<span class="choice__check" aria-hidden="true"></span>';
+    label.querySelector(".choice__name").textContent = o.name;
+    label.querySelector(".choice__text").textContent = o.text;
+    var input = label.querySelector("input");
+    if (S.origin === k) input.checked = true;
+    input.addEventListener("change", function () {
+      if (input.checked) { S.origin = k; persist(); refresh(); }
+    });
+    originsEl.appendChild(label);
+  });
+
+  /* ---------- build step 2 ---------- */
+  var scriptsEl = $("scripts");
+  SCRIPT_KEYS.forEach(function (k) {
+    var sc = SCRIPTS[k];
+    var fs = document.createElement("div");
+    fs.className = "script";
+    fs.setAttribute("role", "radiogroup");
+    fs.setAttribute("aria-labelledby", "sn-" + k);
+    fs.setAttribute("aria-describedby", "sd-" + k);
+    var opts = "";
+    for (var i = 1; i <= 5; i++) {
+      opts += '<label class="scale__opt" for="sc-' + k + '-' + i + '">' +
+        '<input class="sr" type="radio" name="sc-' + k + '" id="sc-' + k + '-' + i + '" value="' + i + '">' +
+        '<span>' + i + '</span></label>';
+    }
+    fs.innerHTML =
+      '<div class="script__head"><h3 class="script__name" id="sn-' + k + '"></h3><p class="script__desc" id="sd-' + k + '"></p></div>' +
+      '<div class="scale"><div class="scale__row">' + opts + '</div>' +
+      '<div class="scale__ends" aria-hidden="true"><span>Not me</span><span>Very me</span></div></div>';
+    fs.querySelector(".script__name").textContent = sc.name;
+    fs.querySelector(".script__desc").textContent = sc.desc;
+    fs.querySelectorAll("input").forEach(function (inp) {
+      if (S.scores[k] === Number(inp.value)) inp.checked = true;
+      inp.addEventListener("change", function () {
+        if (inp.checked) { S.scores[k] = Number(inp.value); persist(); refresh(); }
+      });
+    });
+    scriptsEl.appendChild(fs);
+  });
+
+  function topScripts() {
+    var rated = SCRIPT_KEYS.filter(function (k) { return S.scores[k] !== null; });
+    if (!rated.length) return { max: null, keys: [] };
+    var max = Math.max.apply(null, rated.map(function (k) { return S.scores[k]; }));
+    return { max: max, keys: rated.filter(function (k) { return S.scores[k] === max; }) };
+  }
+  function dominant() {
+    var t = topScripts();
+    if (!t.keys.length) return null;
+    if (t.keys.length === 1) return t.keys[0];
+    return t.keys.indexOf(S.tiePick) >= 0 ? S.tiePick : null;
+  }
+
+  function renderResult() {
+    var el = $("result");
+    var t = topScripts();
+    var rated = SCRIPT_KEYS.filter(function (k) { return S.scores[k] !== null; }).length;
+    el.innerHTML = "";
+    if (!t.keys.length) {
+      var p0 = document.createElement("p");
+      p0.className = "result__more";
+      p0.textContent = "Rate all four scripts and your dominant one appears here.";
+      el.appendChild(p0);
+      return;
+    }
+    var dom = dominant();
+    if (dom) {
+      var lead = document.createElement("p");
+      lead.className = "result__lead";
+      lead.append("Your dominant script is ");
+      var b = document.createElement("b");
+      b.textContent = SCRIPTS[dom].name.toLowerCase();
+      lead.appendChild(b);
+      lead.append(" (" + S.scores[dom] + " of 5).");
+      var more = document.createElement("p");
+      more.className = "result__more";
+      more.textContent = "In private markets it can show up as " + SCRIPTS[dom].behavior + ".";
+      el.appendChild(lead);
+      el.appendChild(more);
+    }
+    if (t.keys.length > 1) {
+      var fs = document.createElement("fieldset");
+      fs.className = "tie";
+      var lg = document.createElement("legend");
+      lg.textContent = (t.keys.length === 2 ? "Two" : t.keys.length === 3 ? "Three" : "Four") + " scripts are tied at " + t.max + ". Pick the one that feels most true:";
+      fs.appendChild(lg);
+      var row = document.createElement("div");
+      row.className = "tie__row";
+      t.keys.forEach(function (k) {
+        var lab = document.createElement("label");
+        lab.className = "pill";
+        lab.setAttribute("for", "tie-" + k);
+        lab.innerHTML = '<input class="sr" type="radio" name="tie" id="tie-' + k + '" value="' + k + '"><span></span>';
+        lab.querySelector("span").textContent = SCRIPTS[k].name;
+        var inp = lab.querySelector("input");
+        if (S.tiePick === k) inp.checked = true;
+        inp.addEventListener("change", function () {
+          if (inp.checked) { S.tiePick = k; persist(); refresh(); var again = $("tie-" + k); if (again) again.focus(); }
+        });
+        row.appendChild(lab);
+      });
+      fs.appendChild(row);
+      el.appendChild(fs);
+    }
+    if (rated < 4) {
+      var pr = document.createElement("p");
+      pr.className = "result__more";
+      pr.textContent = "You've rated " + rated + " of 4. Rate the rest to be sure.";
+      el.appendChild(pr);
+    }
+  }
+
+  /* ---------- step 3 ---------- */
+  var wantEl = $("want");
+  wantEl.value = S.want;
+  wantEl.addEventListener("input", function () { S.want = wantEl.value; persist(); refresh(); grow(wantEl); });
+
+  function cleanWant(v) {
+    var t = (v || "").replace(/\s+/g, " ").trim();
+    t = t.replace(/^i want my capital to\s*/i, "");
+    t = t.replace(/[.!\s]+$/, "");
+    if (t.length > 1 && /^[A-Z][a-z]/.test(t)) t = t.charAt(0).toLowerCase() + t.slice(1);
+    return t;
+  }
+
+  /* ---------- sentences ---------- */
+  function built() {
+    var dom = dominant();
+    var want = cleanWant(S.want);
+    return {
+      s1: S.origin ? "My capital is " + ORIGINS[S.origin].phrase + ", so I'm watching for " + ORIGINS[S.origin].watch + "." : "",
+      s2: dom ? "My dominant money script is " + SCRIPTS[dom].name.toLowerCase() + "; in a 10-year investment, that could show up as " + SCRIPTS[dom].behavior + "." : "",
+      s3: want ? "I'm exploring venture because I want my capital to " + want + "." : ""
+    };
+  }
+  function current() {
+    var b = built();
+    return {
+      s1: S.edits.s1 !== null ? S.edits.s1 : b.s1,
+      s2: S.edits.s2 !== null ? S.edits.s2 : b.s2,
+      s3: S.edits.s3 !== null ? S.edits.s3 : b.s3
+    };
+  }
+
+  ["s1", "s2", "s3"].forEach(function (k) {
+    var ta = $(k);
+    ta.addEventListener("input", function () {
+      S.edits[k] = ta.value;
+      persist();
+      $(k + "-edited").hidden = false;
+      $("rebuild").hidden = false;
+      renderShare();
+      grow(ta);
+    });
+  });
+
+  function renderSentences() {
+    var c = current();
+    ["s1", "s2", "s3"].forEach(function (k) {
+      var ta = $(k);
+      if (document.activeElement !== ta && ta.value !== c[k]) ta.value = c[k];
+      $(k + "-edited").hidden = S.edits[k] === null;
+      grow(ta);
+    });
+    $("rebuild").hidden = !(S.edits.s1 !== null || S.edits.s2 !== null || S.edits.s3 !== null);
+  }
+
+  function renderShare() {
+    var s3 = current().s3.trim();
+    var box = $("share-box");
+    if (s3) { box.textContent = s3; box.classList.remove("is-empty"); }
+    else { box.textContent = "Your third sentence appears here once you finish step 3."; box.classList.add("is-empty"); }
+  }
+
+  function grow(ta) {
+    ta.style.height = "auto";
+    ta.style.height = ta.scrollHeight + 2 + "px";
+  }
+
+  function refresh() {
+    renderResult();
+    renderSentences();
+    renderShare();
+  }
+
+  /* ---------- copy, save, rebuild, clear ---------- */
+  function statementText() {
+    var c = current();
+    return [c.s1, c.s2, c.s3].map(function (s) { return s.trim(); }).filter(Boolean).join("\n");
+  }
+  function setStatus(id, msg) {
+    var el = $(id);
+    el.textContent = "";
+    if (msg) setTimeout(function () { el.textContent = msg; }, 30);
+  }
+  function copyWithFallback(text, statusId, fallbackId) {
+    var fb = $(fallbackId);
+    fb.hidden = true;
+    var showFallback = function () {
+      fb.hidden = false;
+      var ta = fb.querySelector("textarea");
+      ta.value = text;
+      ta.focus();
+      ta.select();
+      setStatus(statusId, "");
+    };
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) { showFallback(); return; }
+      navigator.clipboard.writeText(text).then(function () {
+        setStatus(statusId, "Copied.");
+      }, showFallback);
+    } catch (e) { showFallback(); }
+  }
+
+  $("copy-all").addEventListener("click", function () {
+    var text = statementText();
+    if (!text) { setStatus("status-all", "Finish at least one step to build your statement."); return; }
+    copyWithFallback(text, "status-all", "fallback-all");
+  });
+  $("copy-s3").addEventListener("click", function () {
+    var s3 = current().s3.trim();
+    if (!s3) { setStatus("status-s3", "Finish step 3 first."); return; }
+    copyWithFallback(s3, "status-s3", "fallback-s3");
+  });
+
+  $("save-file").addEventListener("click", function () {
+    var text = statementText();
+    if (!text) { setStatus("status-all", "Finish at least one step to build your statement."); return; }
+    var body = "My capital identity\n" + $("today").textContent + "\n\n" + text +
+      "\n\nCapital Identity Snapshot, Aligned LP Community Series (Libra Leaders × She Has Leverage)\n" +
+      "For educational and informational purposes only. She Has Leverage does not provide investment advice or recommend securities or investment strategies.\n";
+    var url = null;
+    var link = null;
+    try {
+      var blob = new Blob([body], { type: "text/plain;charset=utf-8" });
+      url = URL.createObjectURL(blob);
+      link = document.createElement("a");
+      link.href = url;
+      link.download = "Capital-Identity-Snapshot.txt";
+      link.hidden = true;
+      document.body.appendChild(link);
+      link.click();
+      setStatus("status-all", "Download started.");
+    } catch (e) {
+      setStatus("status-all", "Saving isn't available here. Use Copy my statement instead.");
+    } finally {
+      if (link && link.parentNode) link.parentNode.removeChild(link);
+      if (url) setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+  });
+
+  $("rebuild").addEventListener("click", function () { $("rebuild-confirm").hidden = false; $("rebuild-yes").focus(); });
+  $("rebuild-no").addEventListener("click", function () { $("rebuild-confirm").hidden = true; $("rebuild").focus(); });
+  $("rebuild-yes").addEventListener("click", function () {
+    S.edits = { s1: null, s2: null, s3: null };
+    persist();
+    $("rebuild-confirm").hidden = true;
+    ["s1", "s2", "s3"].forEach(function (k) { $(k).value = ""; });
+    refresh();
+    setStatus("status-all", "Rebuilt from your answers.");
+    $("copy-all").focus();
+  });
+
+  $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
+  $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
+  $("clear-yes").addEventListener("click", function () {
+    S = blank();
+    try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignore */ }
+    document.querySelectorAll('input[type="radio"]').forEach(function (r) { r.checked = false; });
+    wantEl.value = "";
+    ["s1", "s2", "s3"].forEach(function (k) { $(k).value = ""; });
+    $("clear-confirm").hidden = true;
+    $("fallback-all").hidden = true;
+    $("fallback-s3").hidden = true;
+    refresh();
+    grow(wantEl);
+    setStatus("status-clear", "Cleared.");
+    $("clear").focus();
+  });
+
+  /* ---------- start ---------- */
+  try {
+    $("today").textContent = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  } catch (e) { $("today").textContent = ""; }
+  refresh();
+  grow(wantEl);
+  window.addEventListener("resize", function () { ["want", "s1", "s2", "s3"].forEach(function (k) { grow($(k)); }); });
+})();
+</script>
+</body>
+</html>
