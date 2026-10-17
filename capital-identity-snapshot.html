@@ -248,11 +248,11 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   <div class="wrap">
     <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Capital Identity Snapshot, Week 1</span></div>
     <h1 id="hero-title">Your capital identity, <em>in three sentences.</em></h1>
-    <p class="lede">In four short steps you'll finish with three sentences about how you're wired around money and why venture might belong in your portfolio.</p>
+    <p class="lede">In four short steps you'll finish with three sentences about how you relate to money and why venture might belong in your portfolio.</p>
     <p class="hero__private">Your answers save only in this browser, on this device. Nothing is sent to me or to Libra.</p>
     <ol class="plan" aria-label="Exercise steps and timing">
       <li><span>Step 1: Where your capital comes from</span><span>2 min</span></li>
-      <li><span>Step 2: Your money script</span><span>3 min</span></li>
+      <li><span>Step 2: Your money scripts</span><span>3 min</span></li>
       <li><span>Step 3: What you want your capital to do</span><span>3 min</span></li>
       <li><span>Step 4: Your three sentences</span><span>3 min</span></li>
       <li class="plan__optional"><span>Optional: share one sentence in the chat</span><span>1 min</span></li>
@@ -275,7 +275,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
   <div class="rail" aria-hidden="true"></div>
   <div class="wrap">
     <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 2</span></div>
-    <h2 class="title" id="s2-title">Your money script</h2>
+    <h2 class="title" id="s2-title">Your money scripts</h2>
     <p class="lede">Rate how much each of the four money scripts resonates with you, from 1 (not me at all) to 5 (very much me). There are no right answers.</p>
     <div class="scripts to-content" id="scripts"></div>
     <div class="result" id="result" aria-live="polite"></div>
@@ -313,8 +313,8 @@ textarea::placeholder { color: var(--color-mauve-ink); }
         <textarea id="s1" rows="2" placeholder="My capital is [where it comes from], so I'm watching for [its blind spot]."></textarea>
       </div>
       <div class="sentence">
-        <label class="field__label" for="s2">How I'm wired <span class="sentence__edited" id="s2-edited" hidden>(edited)</span></label>
-        <textarea id="s2" rows="2" placeholder="My dominant money script is [script]; in a 10-year investment, that could show up as [behavior]."></textarea>
+        <label class="field__label" for="s2">How I relate to money <span class="sentence__edited" id="s2-edited" hidden>(edited)</span></label>
+        <textarea id="s2" rows="2" placeholder="I relate most to [money script or scripts]; in a long-term investment, I'm watching for [patterns to notice]."></textarea>
       </div>
       <div class="sentence">
         <label class="field__label" for="s3">Why venture <span class="sentence__edited" id="s3-edited" hidden>(edited)</span></label>
@@ -431,29 +431,33 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     avoidance: {
       name: "Money avoidance",
       desc: "Money is corrupting. I don't deserve wealth. Wealth creates problems. Often shows up as hesitance to invest and leaving money in cash.",
-      behavior: "undercommitting, avoiding private markets, or pulling back at the first sign of underperformance"
+      behavior: "undercommitting, avoiding private markets, or pulling back at the first sign of underperformance",
+      watch: "avoiding commitments or pulling back when uncertainty rises"
     },
     worship: {
       name: "Money worship",
       desc: "There's never enough. More money will solve my problems. Often shows up as overcommitting or putting work ahead of relationships.",
-      behavior: "overcommitting, chasing returns, or taking outsized risks looking for the home run"
+      behavior: "overcommitting, chasing returns, or taking outsized risks looking for the home run",
+      watch: "overcommitting or chasing outsized returns"
     },
     status: {
       name: "Money status",
       desc: "Net worth equals self-worth. I make decisions to impress others. Often shows up as status investments or trophy allocations.",
-      behavior: "investing for prestige rather than fit, or choosing a fund for its brand name"
+      behavior: "investing for prestige rather than fit, or choosing a fund for its brand name",
+      watch: "choosing investments for prestige rather than personal fit"
     },
     vigilance: {
       name: "Money vigilance",
       desc: "Money is private. Be very careful. Save, save, save. Healthy in small doses; in excess it becomes anxiety and never feeling secure.",
-      behavior: "overanalyzing, demanding impossible certainty, or never deciding at all"
+      behavior: "overanalyzing, demanding impossible certainty, or never deciding at all",
+      watch: "overanalyzing or seeking complete certainty"
     }
   };
   var SCRIPT_KEYS = ["vigilance", "avoidance", "worship", "status"];
   var STORE_KEY = "libra-shl-capital-identity-snapshot-v1";
 
   function blank() {
-    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, tiePick: null, want: "", edits: { s1: null, s2: null, s3: null } };
+    return { origin: null, scores: { avoidance: null, worship: null, status: null, vigilance: null }, want: "", edits: { s1: null, s2: null, s3: null } };
   }
   var S = blank();
   try {
@@ -466,7 +470,6 @@ textarea::placeholder { color: var(--color-mauve-ink); }
           var v = saved.scores && saved.scores[k];
           S.scores[k] = (v >= 1 && v <= 5) ? v : null;
         });
-        S.tiePick = SCRIPTS[saved.tiePick] ? saved.tiePick : null;
         S.want = typeof saved.want === "string" ? saved.want : "";
         ["s1", "s2", "s3"].forEach(function (k) {
           S.edits[k] = (saved.edits && typeof saved.edits[k] === "string") ? saved.edits[k] : null;
@@ -538,11 +541,27 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     var max = Math.max.apply(null, rated.map(function (k) { return S.scores[k]; }));
     return { max: max, keys: rated.filter(function (k) { return S.scores[k] === max; }) };
   }
-  function dominant() {
-    var t = topScripts();
-    if (!t.keys.length) return null;
-    if (t.keys.length === 1) return t.keys[0];
-    return t.keys.indexOf(S.tiePick) >= 0 ? S.tiePick : null;
+  function matchingScripts() {
+    var complete = SCRIPT_KEYS.every(function (k) { return S.scores[k] !== null; });
+    return complete ? topScripts().keys : [];
+  }
+
+  function joinItems(items) {
+    if (items.length < 2) return items.join("");
+    if (items.length === 2) return items[0] + " and " + items[1];
+    return items.slice(0, -1).join(", ") + ", and " + items[items.length - 1];
+  }
+
+  function moneyStatement() {
+    var keys = matchingScripts();
+    if (!keys.length) return "";
+    var names = joinItems(keys.map(function (k) { return SCRIPTS[k].name.toLowerCase(); }));
+    if (keys.length === SCRIPT_KEYS.length) {
+      return "I gave " + names + " the same rating; I'm exploring how these patterns show up in my investment decisions.";
+    }
+    var watches = keys.map(function (k) { return SCRIPTS[k].watch; });
+    var patterns = watches.length === 2 ? watches[0] + ", as well as " + watches[1] : joinItems(watches);
+    return "I relate most to " + names + "; in a long-term investment, I'm watching for " + patterns + ".";
   }
 
   function renderResult() {
@@ -550,58 +569,38 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     var t = topScripts();
     var rated = SCRIPT_KEYS.filter(function (k) { return S.scores[k] !== null; }).length;
     el.innerHTML = "";
-    if (!t.keys.length) {
+    var keys = matchingScripts();
+    if (!keys.length) {
       var p0 = document.createElement("p");
       p0.className = "result__more";
-      p0.textContent = "Rate all four scripts and your dominant one appears here.";
+      p0.textContent = rated ? "You've rated " + rated + " of 4. Rate the remaining scripts to see your strongest matches." : "Rate all four scripts to see which patterns resonate most.";
       el.appendChild(p0);
       return;
     }
-    var dom = dominant();
-    if (dom) {
-      var lead = document.createElement("p");
-      lead.className = "result__lead";
-      lead.append("Your dominant script is ");
+    var lead = document.createElement("p");
+    lead.className = "result__lead";
+    if (keys.length === SCRIPT_KEYS.length) {
+      lead.textContent = "All four scripts are tied at " + t.max + " of 5.";
+    } else {
+      lead.append(keys.length === 1 ? "Your strongest match is " : "Your strongest matches are ");
       var b = document.createElement("b");
-      b.textContent = SCRIPTS[dom].name.toLowerCase();
+      b.textContent = joinItems(keys.map(function (k) { return SCRIPTS[k].name.toLowerCase(); }));
       lead.appendChild(b);
-      lead.append(" (" + S.scores[dom] + " of 5).");
+      lead.append(" (" + (keys.length === 2 ? "both " : keys.length > 2 ? "each " : "") + t.max + " of 5).");
+    }
+    el.appendChild(lead);
+    if (keys.length > 1) {
+      var note = document.createElement("p");
+      note.className = "result__more";
+      note.textContent = (keys.length === 2 ? "Both scripts are" : "All " + keys.length + " scripts are") + " included in your statement below.";
+      el.appendChild(note);
+    }
+    keys.forEach(function (k) {
       var more = document.createElement("p");
       more.className = "result__more";
-      more.textContent = "In private markets it can show up as " + SCRIPTS[dom].behavior + ".";
-      el.appendChild(lead);
+      more.textContent = SCRIPTS[k].name + ": " + SCRIPTS[k].behavior + ".";
       el.appendChild(more);
-    }
-    if (t.keys.length > 1) {
-      var fs = document.createElement("fieldset");
-      fs.className = "tie";
-      var lg = document.createElement("legend");
-      lg.textContent = (t.keys.length === 2 ? "Two" : t.keys.length === 3 ? "Three" : "Four") + " scripts are tied at " + t.max + ". Pick the one that feels most true:";
-      fs.appendChild(lg);
-      var row = document.createElement("div");
-      row.className = "tie__row";
-      t.keys.forEach(function (k) {
-        var lab = document.createElement("label");
-        lab.className = "pill";
-        lab.setAttribute("for", "tie-" + k);
-        lab.innerHTML = '<input class="sr" type="radio" name="tie" id="tie-' + k + '" value="' + k + '"><span></span>';
-        lab.querySelector("span").textContent = SCRIPTS[k].name;
-        var inp = lab.querySelector("input");
-        if (S.tiePick === k) inp.checked = true;
-        inp.addEventListener("change", function () {
-          if (inp.checked) { S.tiePick = k; persist(); refresh(); var again = $("tie-" + k); if (again) again.focus(); }
-        });
-        row.appendChild(lab);
-      });
-      fs.appendChild(row);
-      el.appendChild(fs);
-    }
-    if (rated < 4) {
-      var pr = document.createElement("p");
-      pr.className = "result__more";
-      pr.textContent = "You've rated " + rated + " of 4. Rate the rest to be sure.";
-      el.appendChild(pr);
-    }
+    });
   }
 
   /* ---------- step 3 ---------- */
@@ -619,11 +618,10 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 
   /* ---------- sentences ---------- */
   function built() {
-    var dom = dominant();
     var want = cleanWant(S.want);
     return {
       s1: S.origin ? "My capital is " + ORIGINS[S.origin].phrase + ", so I'm watching for " + ORIGINS[S.origin].watch + "." : "",
-      s2: dom ? "My dominant money script is " + SCRIPTS[dom].name.toLowerCase() + "; in a 10-year investment, that could show up as " + SCRIPTS[dom].behavior + "." : "",
+      s2: moneyStatement(),
       s3: want ? "I'm exploring venture because I want my capital to " + want + "." : ""
     };
   }
