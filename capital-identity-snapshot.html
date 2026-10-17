@@ -208,7 +208,6 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 .strength-option[aria-pressed="true"] .strength-option__mark { border-color: var(--color-violet); background: var(--color-violet); color: var(--color-white); }
 
 /* Step 4: statement */
-.wrap--result { max-width: 1280px; }
 .result-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
 .statement { padding: 28px 22px; border-radius: var(--radius-card); background: var(--color-white); box-shadow: var(--card-shadow); border: 1px solid var(--color-line); display: flex; flex-direction: column; gap: 22px; }
 @media (min-width: 720px) { .statement { padding: 40px 44px; } }
@@ -219,11 +218,6 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 .sentence textarea { border: 1px solid var(--color-line); border-radius: var(--radius-control); background: var(--color-paper); padding: 14px 16px; font-size: 18px; min-height: 0; }
 .sentence textarea:focus { border-color: var(--color-violet); box-shadow: 0 0 0 3px var(--color-focus-ring); outline: none; }
 .sentence__edited { font-weight: 400; color: var(--color-mauve-ink); }
-@media (min-width: 1100px) {
-  .result-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .result-layout > .statement { padding: 28px; }
-  .result-layout .sentence textarea { font-size: 16px; line-height: 1.55; }
-}
 .result-layout > * { min-width: 0; }
 .summary-card { border-color: var(--input-border); }
 .summary-card .sentence textarea { font-size: 17px; line-height: 1.6; }
@@ -378,7 +372,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
 </section>
 
 <section class="band band--lilac" aria-labelledby="s4-title">
-  <div class="wrap wrap--result">
+  <div class="wrap">
     <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Step 4</span></div>
     <h2 class="title" id="s4-title">Your Capital Identity Statement</h2>
     <p class="lede">Refine each part, then read them together as a statement about how you approach putting your money to work.</p>
@@ -588,31 +582,37 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     risk: {
       name: "Risk and potential losses",
       desc: "What could I lose, and what drives the risk?",
+      question: "What could lead to losses in this fund, and how does the manager assess those risks?",
       phrases: ["the risks and potential losses"]
     },
     liquidity: {
       name: "Time horizon and access to my money",
       desc: "How long could my money be committed?",
+      question: "How long should I expect my money to be committed, and what happens if I need access sooner?",
       phrases: ["how long my money could be committed", "when I could access it"]
     },
     calls: {
       name: "Capital calls",
-      desc: "When might I need to contribute capital?",
+      desc: "What notice would I receive, and how can I prepare?",
+      question: "How much notice would I receive before a capital call, and how should I prepare?",
       phrases: ["how capital calls work", "when I may need to contribute"]
     },
     manager: {
       name: "Choosing a fund manager",
       desc: "How would I evaluate the team and its strategy?",
+      question: "What should I look for when evaluating a fund manager beyond their pitch?",
       phrases: ["how to evaluate a fund manager and strategy"]
     },
     fees: {
       name: "Fees and returns",
       desc: "What fees apply, and how do they affect what I receive?",
+      question: "Which fees and expenses would I pay, and how would they affect my returns?",
       phrases: ["how fees affect what I receive"]
     },
     fit: {
       name: "Fit with my overall portfolio",
       desc: "What size commitment could fit my goals and other needs?",
+      question: "What role would venture play alongside the investments I already hold?",
       phrases: ["how a commitment could fit my broader portfolio and cash needs"]
     }
   };
@@ -967,7 +967,7 @@ textarea::placeholder { color: var(--color-mauve-ink); }
     var fallback = "Choose one question from your statement to explore at the next session.";
     if (S.edits.s3 !== null || S.summaryEdit !== null) return fallback;
     var selected = LEARNING_KEYS.filter(function (k) { return S.learningTopics.indexOf(k) !== -1; });
-    if (selected.length) return "One question you could bring: " + LEARNING_TOPICS[selected[0]].desc;
+    if (selected.length) return "One question you could bring: " + LEARNING_TOPICS[selected[0]].question;
     var own = cleanLearning(S.learningCustom);
     return own ? "A topic you named: " + own + "." : fallback;
   }
