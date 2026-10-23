@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thesis Sketch | She Has Leverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600&family=Spectral:ital,wght@0,600;1,400;1,600&display=swap">
+<style>
+:root {
+  --plum: #2a2133;
+  --violet: #5b3a8c;
+  --lavender: #b9a3d9;
+  --white: #ffffff;
+  --lilac: #f3eff8;
+  --paper: #fcfafe;
+  --mauve-ink: #7e5f89;
+  --line: rgb(42 33 51 / 0.12);
+  --rule: rgb(42 33 51 / 0.16);
+  --input-border: rgb(91 58 140 / 0.35);
+  --focus-ring: rgb(91 58 140 / 0.18);
+  --display: Spectral, Georgia, serif;
+  --body: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--white); color: var(--plum); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; } }
+
+.wrap { width: 100%; max-width: 760px; margin-inline: auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .wrap { padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); } }
+
+.header { border-bottom: 1px solid rgb(42 33 51 / 0.18); }
+.header .wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; min-height: 76px; padding-block: 12px; }
+.wordmark { font-family: var(--display); font-weight: 600; font-size: 21px; letter-spacing: -0.022em; color: var(--plum); white-space: nowrap; }
+.wordmark span { color: var(--violet); }
+.header .x { font-size: 18px; color: var(--mauve-ink); }
+.header .co { font-size: 15px; font-weight: 600; color: var(--mauve-ink); }
+
+.intro { background: var(--lilac); }
+.intro .wrap { padding-block: 48px 44px; }
+@media (min-width: 720px) { .intro .wrap { padding-block: 64px 56px; } }
+.label { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.label__rule { width: 48px; height: 2px; background: var(--violet); flex: none; }
+.label__text { font-size: 15px; font-weight: 600; color: var(--violet); }
+.intro h1 { font-size: clamp(34px, 6vw, 50px); }
+.intro h1 em { font-style: italic; color: var(--violet); }
+.lede { margin-top: 16px; font-size: 18px; line-height: 1.6; color: var(--mauve-ink); }
+.note { margin-top: 12px; font-family: var(--display); font-style: italic; font-weight: 400; font-size: 17px; color: var(--mauve-ink); }
+
+.from-week1 { margin-top: 36px; padding: 18px 20px; border-left: 2px solid var(--violet); background: var(--paper); }
+.from-week1 h2 { font-size: 18px; margin-bottom: 8px; }
+.from-week1 p { font-size: 16px; color: var(--plum); white-space: pre-line; }
+.from-week1 .quiet { margin-top: 6px; }
+
+.steps { display: flex; flex-direction: column; gap: 40px; padding-block: 44px 24px; }
+.step { display: flex; flex-direction: column; gap: 12px; }
+.step__num { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--violet); letter-spacing: 0.02em; }
+.step h2 { font-size: clamp(24px, 4vw, 30px); }
+.step__why { font-size: 16px; color: var(--mauve-ink); }
+.step__eg { font-family: var(--display); font-style: italic; font-weight: 400; font-size: 17px; color: var(--mauve-ink); padding: 10px 14px; background: var(--lilac); border-radius: 8px; }
+.step__eg b { font-style: normal; font-weight: 600; color: var(--violet); font-family: var(--body); font-size: 13px; display: block; margin-bottom: 4px; letter-spacing: 0.02em; }
+.stem { font-size: 14px; font-weight: 600; color: var(--plum); }
+textarea { width: 100%; font-family: var(--body); font-size: 17px; color: var(--plum); background: var(--paper); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px 16px; outline: none; min-height: 96px; resize: vertical; line-height: 1.5; transition: border-color 0.15s, box-shadow 0.15s; }
+textarea:focus { border-color: var(--violet); box-shadow: 0 0 0 3px var(--focus-ring); }
+textarea::placeholder { color: var(--mauve-ink); }
+.prompts { display: flex; flex-wrap: wrap; gap: 8px; }
+.prompts span { font-size: 13px; color: var(--mauve-ink); padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; }
+
+.together { background: var(--plum); color: var(--white); }
+.together .wrap { padding-block: 48px 56px; }
+.together .label__rule { background: var(--lavender); }
+.together .label__text { color: var(--lavender); }
+.together h2 { font-size: clamp(26px, 4.5vw, 34px); color: var(--white); }
+.together h2 em { font-style: italic; color: var(--lavender); }
+.read { margin-top: 24px; display: flex; flex-direction: column; gap: 18px; }
+.read p { font-family: var(--display); font-size: clamp(19px, 3vw, 23px); line-height: 1.45; color: var(--white); }
+.read p.empty { color: var(--lavender); font-style: italic; font-size: 17px; }
+.read p .stem-dark { display: block; font-family: var(--body); font-size: 13px; font-weight: 600; color: var(--lavender); letter-spacing: 0.02em; margin-bottom: 4px; }
+.check { margin-top: 24px; font-size: 16px; color: var(--lavender); }
+.actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px; border: 0; border-radius: 10px; background: var(--lavender); color: var(--plum); font-family: var(--body); font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.15s; }
+.btn:hover { background: var(--white); }
+.btn--ghost { background: transparent; color: var(--lavender); border: 1px solid var(--lavender); }
+.btn--ghost:hover { background: rgb(255 255 255 / 0.08); color: var(--white); }
+.status { font-size: 14px; color: var(--lavender); min-height: 1.4em; }
+.fallback { margin-top: 12px; }
+.fallback textarea { background: var(--white); color: var(--plum); }
+.confirm { margin-top: 10px; display: flex; gap: 10px; align-items: center; font-size: 15px; color: var(--lavender); }
+.confirm button { min-height: 40px; padding: 0 16px; }
+
+.quiet { font-size: 14px; color: var(--mauve-ink); }
+.after { padding-block: 40px 56px; }
+.after h2 { font-size: clamp(22px, 4vw, 28px); margin-bottom: 10px; }
+.after p { font-size: 16px; color: var(--mauve-ink); }
+
+.footer { border-top: 1px solid var(--rule); }
+.footer .wrap { padding-block: 28px 36px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.62; color: var(--mauve-ink); }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="wrap">
+    <span class="wordmark">She Has <span>Leverage</span></span>
+    <span class="x" aria-hidden="true">×</span>
+    <span class="co">Libra Leaders</span>
+  </div>
+</header>
+
+<main>
+  <section class="intro" aria-labelledby="title">
+    <div class="wrap">
+      <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Session 2 exercise</span></div>
+      <h1 id="title">Your <em>Thesis Sketch</em></h1>
+      <p class="lede">Three sentences you can say out loud without notes. What I believe. Where I look. What I say no to. Ten minutes, and they only need to be true, not polished.</p>
+      <p class="note">Everything you type stays in this browser on this device. Nothing is sent to She Has Leverage or Libra Leaders.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <aside class="from-week1" id="week1" hidden aria-labelledby="week1-title">
+      <h2 id="week1-title">From your Week 1 Snapshot</h2>
+      <p id="week1-text"></p>
+      <p class="quiet">Found on this device. Use it as a starting point for sentence 1, or ignore it.</p>
+    </aside>
+
+    <div class="steps">
+      <section class="step" aria-labelledby="s1-title">
+        <p class="step__num">Sentence 1 of 3, about 3 minutes</p>
+        <h2 id="s1-title">What I believe</h2>
+        <p class="step__why">A change in the world you are confident about and most investors still underrate. The strongest version comes from something you lived, at work or at home, for years.</p>
+        <div class="step__eg"><b>An example, deliberately not yours</b>I believe employers will pay for women’s health because it keeps their people at work.</div>
+        <div class="prompts" aria-label="Prompts"><span>What did you see up close that people with money ignored?</span><span>What would you bet on with your own name attached?</span></div>
+        <label class="stem" for="s1">I believe…</label>
+        <textarea id="s1" placeholder="I believe"></textarea>
+      </section>
+
+      <section class="step" aria-labelledby="s2-title">
+        <p class="step__num">Sentence 2 of 3, about 3 minutes</p>
+        <h2 id="s2-title">Where I look</h2>
+        <p class="step__why">The stage, the kind of company and the kind of manager that fit the belief above. “Early stage” and “a manager who has sold into that buyer” are both answers; so is “I don’t know the stage yet.”</p>
+        <div class="step__eg"><b>An example, deliberately not yours</b>So I look at early-stage funds run by people who have sold into that buyer themselves.</div>
+        <div class="prompts" aria-label="Prompts"><span>Which stage: the idea, the first customers, or growth?</span><span>What kind of person do you trust to pick the companies?</span></div>
+        <label class="stem" for="s2">So I look at…</label>
+        <textarea id="s2" placeholder="So I look at"></textarea>
+      </section>
+
+      <section class="step" aria-labelledby="s3-title">
+        <p class="step__num">Sentence 3 of 3, about 3 minutes</p>
+        <h2 id="s3-title">What I say no to</h2>
+        <p class="step__why">The investment that would be fine for someone else and is not for you. At least one thing, said plainly. A thesis without a “no” is a wish list, and a fund deck will never ask you this.</p>
+        <div class="step__eg"><b>An example, deliberately not yours</b>And I pass on anything I couldn’t explain to my daughter.</div>
+        <div class="prompts" aria-label="Prompts"><span>What would you not want your name next to, even if it made money?</span><span>What have you already turned down, and why?</span></div>
+        <label class="stem" for="s3">And I say no to…</label>
+        <textarea id="s3" placeholder="And I say no to"></textarea>
+      </section>
+    </div>
+  </div>
+
+  <section class="together" aria-labelledby="together-title">
+    <div class="wrap">
+      <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Read it together, 1 minute</span></div>
+      <h2 id="together-title">Does this sound like <em>you</em>?</h2>
+      <div class="read" id="read" aria-live="polite"></div>
+      <p class="check">If a sentence sounds like something you read rather than something you think, go back and change it. The one you will be asked to share out loud is any of the three.</p>
+      <div class="actions">
+        <button class="btn" type="button" id="copy">Copy my three sentences</button>
+        <button class="btn btn--ghost" type="button" id="clear">Clear this device</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+      <div class="confirm" id="clear-confirm" hidden>
+        <span>Delete your sketch from this device?</span>
+        <button class="btn" type="button" id="clear-yes">Yes, delete</button>
+        <button class="btn btn--ghost" type="button" id="clear-no">Keep it</button>
+      </div>
+      <div class="fallback" id="fallback" hidden>
+        <label class="stem" for="fallback-text" style="color: var(--lavender)">Copying isn’t available here. Your sentences are selected below; press Ctrl+C or Cmd+C.</label>
+        <textarea id="fallback-text" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="after">
+      <h2>Bring it to Week 3</h2>
+      <p>Your sketch stays here on this device. In Week 3 we put it next to a real fund and ask five questions about the fund’s thesis. If you want it somewhere safer than a browser, copy it into your notes now.</p>
+      <p class="quiet" style="margin-top:12px">This is a sketch. The full method for building an investment thesis, and the tools that go with it, are part of the She Has Leverage program.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>Libra Leaders × She Has Leverage, Aligned LP Community Series</p>
+    <p>For educational and informational purposes only. She Has Leverage does not provide investment advice or recommend securities or investment strategies. Example sentences are illustrative, not recommendations.</p>
+    <p>© 2026 She Has Leverage LLC. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "libra-shl-thesis-sketch-v1";
+  var SNAPSHOT_KEY = "libra-shl-capital-identity-snapshot-v1";
+  var ids = ["s1", "s2", "s3"];
+  var stems = { s1: "What I believe", s2: "Where I look", s3: "What I say no to" };
+  var $ = function (id) { return document.getElementById(id); };
+  var S = { s1: "", s2: "", s3: "" };
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var saved = JSON.parse(raw);
+        ids.forEach(function (k) { if (typeof saved[k] === "string") S[k] = saved[k]; });
+      }
+    } catch (e) { /* storage unavailable or blocked; page still works */ }
+  }
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ }
+  }
+  function week1() {
+    try {
+      var raw = localStorage.getItem(SNAPSHOT_KEY);
+      if (!raw) return;
+      var snap = JSON.parse(raw);
+      var parts = [];
+      if (snap && typeof snap.want === "string" && snap.want.trim()) parts.push("What I want my money to do: " + snap.want.trim());
+      if (snap && snap.edits && typeof snap.edits.s3 === "string" && snap.edits.s3.trim()) parts.push("The role I’m exploring for venture: " + snap.edits.s3.trim());
+      if (!parts.length) return;
+      $("week1-text").textContent = parts.join("\n\n");
+      $("week1").hidden = false;
+    } catch (e) { /* ignore */ }
+  }
+  function grow(el) { el.style.height = "auto"; el.style.height = Math.max(96, el.scrollHeight + 2) + "px"; }
+  function render() {
+    var read = $("read");
+    read.textContent = "";
+    ids.forEach(function (k) {
+      var p = document.createElement("p");
+      var stem = document.createElement("span");
+      stem.className = "stem-dark";
+      stem.textContent = stems[k];
+      p.appendChild(stem);
+      var text = S[k].trim();
+      if (text) { p.appendChild(document.createTextNode(text)); }
+      else { p.className = "empty"; p.appendChild(document.createTextNode("Not written yet.")); }
+      read.appendChild(p);
+    });
+  }
+  function composed() {
+    return ids.filter(function (k) { return S[k].trim(); })
+      .map(function (k) { return stems[k] + "\n" + S[k].trim(); }).join("\n\n");
+  }
+  function setStatus(text) { $("status").textContent = text; }
+
+  load();
+  ids.forEach(function (k) {
+    var el = $(k);
+    el.value = S[k];
+    grow(el);
+    el.addEventListener("input", function () { S[k] = el.value; persist(); render(); grow(el); });
+  });
+  render();
+  week1();
+
+  $("copy").addEventListener("click", function () {
+    var text = composed();
+    if (!text) { setStatus("Write at least one sentence first."); return; }
+    var fb = $("fallback");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { fb.hidden = true; setStatus("Copied."); })
+        .catch(function () { fb.hidden = false; $("fallback-text").value = text; $("fallback-text").select(); setStatus(""); });
+    } else {
+      fb.hidden = false; $("fallback-text").value = text; $("fallback-text").select(); setStatus("");
+    }
+  });
+
+  $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
+  $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
+  $("clear-yes").addEventListener("click", function () {
+    S = { s1: "", s2: "", s3: "" };
+    try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+    ids.forEach(function (k) { $(k).value = ""; grow($(k)); });
+    $("clear-confirm").hidden = true;
+    $("fallback").hidden = true;
+    render();
+    setStatus("Cleared from this device.");
+    $("s1").focus();
+  });
+})();
+</script>
+</body>
+</html>
