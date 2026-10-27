@@ -80,6 +80,8 @@ textarea::placeholder { color: var(--mauve-ink); }
 input[type="text"] { width: 100%; height: 50px; font-family: var(--body); font-size: 17px; color: var(--plum); background: var(--paper); border: 1px solid var(--input-border); border-radius: 10px; padding: 0 16px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
 input[type="text"]:focus { border-color: var(--violet); box-shadow: 0 0 0 3px var(--focus-ring); }
 input[type="text"]::placeholder { color: var(--mauve-ink); }
+.whole { margin-top: 28px; }
+.whole textarea { background: var(--white); color: var(--plum); font-family: var(--display); font-size: 19px; line-height: 1.5; min-height: 140px; }
 .read .values { font-family: var(--body); font-size: 16px; color: var(--lavender); }
 .read .values b { color: var(--white); font-weight: 600; }
 .prompts { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -198,9 +200,22 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
       <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Read it together, 1 minute</span></div>
       <h2 id="together-title">Does this sound like <em>you</em>?</h2>
       <div class="read" id="read" aria-live="polite"></div>
-      <p class="check">If a sentence sounds like something you read rather than something you think, go back and change it. Can you find your values inside the three sentences? If one is missing, it either belongs in a sentence or it isn’t a value you invest on. The one you will be asked to share out loud is any of the three.</p>
+      <p class="check">If a sentence sounds like something you read rather than something you think, go back and change it. Can you find your values inside the three sentences? If one is missing, it either belongs in a sentence or it isn’t a value you invest on.</p>
+      <div class="whole">
+        <label class="stem" for="final" style="color: var(--lavender)">Your thesis, in one piece. Edit it until it flows; it is yours to change.</label>
+        <textarea id="final"></textarea>
+        <div class="actions" style="margin-top: 10px">
+          <button class="btn btn--ghost" type="button" id="rebuild">Rebuild from my sentences</button>
+          <span class="status" id="rebuild-status" role="status"></span>
+        </div>
+        <div class="confirm" id="rebuild-confirm" hidden>
+          <span>Replace your edited version with the three sentences as written?</span>
+          <button class="btn" type="button" id="rebuild-yes">Yes, rebuild</button>
+          <button class="btn btn--ghost" type="button" id="rebuild-no">Keep my edits</button>
+        </div>
+      </div>
       <div class="actions">
-        <button class="btn" type="button" id="copy">Copy my three sentences</button>
+        <button class="btn" type="button" id="copy">Copy my thesis</button>
         <button class="btn btn--ghost" type="button" id="clear">Clear this device</button>
         <span class="status" id="status" role="status"></span>
       </div>
@@ -219,7 +234,7 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   <div class="wrap">
     <section class="after">
       <h2>Bring it to Week 3</h2>
-      <p>Your sketch stays here on this device. In Week 3 we put it next to a real fund and ask five questions about the fund’s thesis. If you want it somewhere safer than a browser, copy it into your notes now.</p>
+      <p>Your thesis stays here on this device. In Week 3 we put it next to a real fund and ask five questions about the fund’s thesis. If you want it somewhere safer than a browser, copy it into your notes now.</p>
       <p class="quiet" style="margin-top:12px">This is a sketch. The full method for building an investment thesis, and the tools that go with it, are part of the She Has Leverage program.</p>
     </section>
   </div>
@@ -241,7 +256,7 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   var ids = ["s1", "s2", "s3"];
   var stems = { s1: "What I believe", s2: "Where I look", s3: "What I say no to" };
   var $ = function (id) { return document.getElementById(id); };
-  var S = { s1: "", s2: "", s3: "", values: [], valuesOther: "" };
+  var S = { s1: "", s2: "", s3: "", values: [], valuesOther: "", final: null };
   var chips = Array.prototype.slice.call(document.querySelectorAll(".chip input"));
 
   function load() {
@@ -252,6 +267,7 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
         ids.forEach(function (k) { if (typeof saved[k] === "string") S[k] = saved[k]; });
         if (Array.isArray(saved.values)) S.values = saved.values.filter(function (v) { return typeof v === "string"; });
         if (typeof saved.valuesOther === "string") S.valuesOther = saved.valuesOther;
+        if (typeof saved.final === "string") S.final = saved.final;
       }
     } catch (e) { /* storage unavailable or blocked; page still works */ }
   }
@@ -277,6 +293,34 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
     if (S.valuesOther.trim()) list.push(S.valuesOther.trim());
     return list;
   }
+  function sentence(k) {
+    var t = S[k].trim();
+    if (!t) return "";
+    var low = t.toLowerCase();
+    if (k === "s1" && low.indexOf("i believe") !== 0) t = "I believe " + t;
+    if (k === "s2") {
+      if (low.indexOf("so ") === 0) { /* keep */ }
+      else if (low.indexOf("i look") === 0 || low.indexOf("i back") === 0) t = "So " + t.charAt(0).toLowerCase() + t.slice(1);
+      else t = "So I look at " + t;
+    }
+    if (k === "s3") {
+      if (low.indexOf("and ") === 0) { /* keep */ }
+      else if (low.indexOf("i say no") === 0 || low.indexOf("i pass") === 0 || low.indexOf("i avoid") === 0) t = "And " + t;
+      else t = "And I say no to " + t;
+    }
+    if (!/[.!?]$/.test(t)) t += ".";
+    return t;
+  }
+  function stitched() {
+    return ids.map(sentence).filter(Boolean).join(" ");
+  }
+  function finalText() {
+    return S.final !== null ? S.final : stitched();
+  }
+  function renderFinal() {
+    var el = $("final");
+    if (document.activeElement !== el) { el.value = finalText(); grow(el); }
+  }
   function render() {
     var read = $("read");
     read.textContent = "";
@@ -301,12 +345,12 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
       else { p.className = "empty"; p.appendChild(document.createTextNode("Not written yet.")); }
       read.appendChild(p);
     });
+    renderFinal();
   }
   function composed() {
     var vals = valueList();
     var head = vals.length ? "Values: " + vals.join(", ") + "\n\n" : "";
-    return head + ids.filter(function (k) { return S[k].trim(); })
-      .map(function (k) { return stems[k] + "\n" + S[k].trim(); }).join("\n\n");
+    return head + finalText().trim();
   }
   function setStatus(text) { $("status").textContent = text; }
 
@@ -326,6 +370,16 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   });
   $("v-other").value = S.valuesOther;
   $("v-other").addEventListener("input", function () { S.valuesOther = $("v-other").value; persist(); render(); });
+  $("final").addEventListener("input", function () { S.final = $("final").value; persist(); grow($("final")); });
+  $("rebuild").addEventListener("click", function () {
+    if (S.final === null) { $("rebuild-status").textContent = "Already built from your sentences."; return; }
+    $("rebuild-confirm").hidden = false; $("rebuild-yes").focus();
+  });
+  $("rebuild-no").addEventListener("click", function () { $("rebuild-confirm").hidden = true; $("rebuild").focus(); });
+  $("rebuild-yes").addEventListener("click", function () {
+    S.final = null; persist(); $("rebuild-confirm").hidden = true; renderFinal();
+    $("rebuild-status").textContent = "Rebuilt from your sentences."; $("final").focus();
+  });
   render();
   week1();
 
@@ -344,7 +398,8 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
   $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
   $("clear-yes").addEventListener("click", function () {
-    S = { s1: "", s2: "", s3: "", values: [], valuesOther: "" };
+    S = { s1: "", s2: "", s3: "", values: [], valuesOther: "", final: null };
+    $("rebuild-confirm").hidden = true; $("rebuild-status").textContent = "";
     try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
     ids.forEach(function (k) { $(k).value = ""; grow($(k)); });
     chips.forEach(function (c) { c.checked = false; });
