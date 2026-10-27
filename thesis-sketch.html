@@ -70,6 +70,18 @@ p { margin: 0; }
 textarea { width: 100%; font-family: var(--body); font-size: 17px; color: var(--plum); background: var(--paper); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px 16px; outline: none; min-height: 96px; resize: vertical; line-height: 1.5; transition: border-color 0.15s, box-shadow 0.15s; }
 textarea:focus { border-color: var(--violet); box-shadow: 0 0 0 3px var(--focus-ring); }
 textarea::placeholder { color: var(--mauve-ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--input-border); border-radius: 999px; background: var(--paper); font-size: 15px; font-weight: 600; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
+.chip span:hover { background: var(--lilac); }
+.chip input:checked + span { background: var(--violet); border-color: var(--violet); color: var(--white); }
+.chip input:focus-visible + span { outline: 2px solid var(--violet); outline-offset: 2px; }
+input[type="text"] { width: 100%; height: 50px; font-family: var(--body); font-size: 17px; color: var(--plum); background: var(--paper); border: 1px solid var(--input-border); border-radius: 10px; padding: 0 16px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+input[type="text"]:focus { border-color: var(--violet); box-shadow: 0 0 0 3px var(--focus-ring); }
+input[type="text"]::placeholder { color: var(--mauve-ink); }
+.read .values { font-family: var(--body); font-size: 16px; color: var(--lavender); }
+.read .values b { color: var(--white); font-weight: 600; }
 .prompts { display: flex; flex-wrap: wrap; gap: 8px; }
 .prompts span { font-size: 13px; color: var(--mauve-ink); padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; }
 
@@ -131,12 +143,30 @@ textarea::placeholder { color: var(--mauve-ink); }
     </aside>
 
     <div class="steps">
+      <section class="step" aria-labelledby="v-title">
+        <p class="step__num">Before the sentences, about 1 minute</p>
+        <h2 id="v-title">The values you want in your thesis</h2>
+        <p class="step__why">Pick the ones that are yours, or write your own. These are not criteria and nobody scores them; they are the words you should be able to find inside your three sentences when you read them back.</p>
+        <div class="chips" role="group" aria-label="Values">
+          <label class="chip"><input type="checkbox" value="Access"><span>Access</span></label>
+          <label class="chip"><input type="checkbox" value="Health"><span>Health</span></label>
+          <label class="chip"><input type="checkbox" value="Safety"><span>Safety</span></label>
+          <label class="chip"><input type="checkbox" value="Fairness"><span>Fairness</span></label>
+          <label class="chip"><input type="checkbox" value="Dignity at work"><span>Dignity at work</span></label>
+          <label class="chip"><input type="checkbox" value="Independence"><span>Independence</span></label>
+          <label class="chip"><input type="checkbox" value="Community"><span>Community</span></label>
+          <label class="chip"><input type="checkbox" value="Legacy"><span>Legacy</span></label>
+        </div>
+        <label class="stem" for="v-other">Your own words</label>
+        <input type="text" id="v-other" placeholder="One or two values of your own, in your words">
+      </section>
+
       <section class="step" aria-labelledby="s1-title">
         <p class="step__num">Sentence 1 of 3, about 3 minutes</p>
         <h2 id="s1-title">What I believe</h2>
         <p class="step__why">A change in the world you are confident about and most investors still underrate. The strongest version comes from something you lived, at work or at home, for years.</p>
         <div class="step__eg"><b>An example, deliberately not yours</b>I believe employers will pay for women’s health because it keeps their people at work.</div>
-        <div class="prompts" aria-label="Prompts"><span>What did you see up close that people with money ignored?</span><span>What would you bet on with your own name attached?</span></div>
+        <div class="prompts" aria-label="Prompts"><span>The health decisions you made for your family</span><span>The people you hired and managed</span><span>The compliance rules you worked under</span><span>The risk you were accountable for</span><span>Something else you lived for years</span></div>
         <label class="stem" for="s1">I believe…</label>
         <textarea id="s1" placeholder="I believe"></textarea>
       </section>
@@ -168,7 +198,7 @@ textarea::placeholder { color: var(--mauve-ink); }
       <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Read it together, 1 minute</span></div>
       <h2 id="together-title">Does this sound like <em>you</em>?</h2>
       <div class="read" id="read" aria-live="polite"></div>
-      <p class="check">If a sentence sounds like something you read rather than something you think, go back and change it. The one you will be asked to share out loud is any of the three.</p>
+      <p class="check">If a sentence sounds like something you read rather than something you think, go back and change it. Can you find your values inside the three sentences? If one is missing, it either belongs in a sentence or it isn’t a value you invest on. The one you will be asked to share out loud is any of the three.</p>
       <div class="actions">
         <button class="btn" type="button" id="copy">Copy my three sentences</button>
         <button class="btn btn--ghost" type="button" id="clear">Clear this device</button>
@@ -211,7 +241,8 @@ textarea::placeholder { color: var(--mauve-ink); }
   var ids = ["s1", "s2", "s3"];
   var stems = { s1: "What I believe", s2: "Where I look", s3: "What I say no to" };
   var $ = function (id) { return document.getElementById(id); };
-  var S = { s1: "", s2: "", s3: "" };
+  var S = { s1: "", s2: "", s3: "", values: [], valuesOther: "" };
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".chip input"));
 
   function load() {
     try {
@@ -219,6 +250,8 @@ textarea::placeholder { color: var(--mauve-ink); }
       if (raw) {
         var saved = JSON.parse(raw);
         ids.forEach(function (k) { if (typeof saved[k] === "string") S[k] = saved[k]; });
+        if (Array.isArray(saved.values)) S.values = saved.values.filter(function (v) { return typeof v === "string"; });
+        if (typeof saved.valuesOther === "string") S.valuesOther = saved.valuesOther;
       }
     } catch (e) { /* storage unavailable or blocked; page still works */ }
   }
@@ -239,9 +272,24 @@ textarea::placeholder { color: var(--mauve-ink); }
     } catch (e) { /* ignore */ }
   }
   function grow(el) { el.style.height = "auto"; el.style.height = Math.max(96, el.scrollHeight + 2) + "px"; }
+  function valueList() {
+    var list = S.values.slice();
+    if (S.valuesOther.trim()) list.push(S.valuesOther.trim());
+    return list;
+  }
   function render() {
     var read = $("read");
     read.textContent = "";
+    var vals = valueList();
+    if (vals.length) {
+      var vp = document.createElement("p");
+      vp.className = "values";
+      vp.appendChild(document.createTextNode("Values: "));
+      var b = document.createElement("b");
+      b.textContent = vals.join(", ");
+      vp.appendChild(b);
+      read.appendChild(vp);
+    }
     ids.forEach(function (k) {
       var p = document.createElement("p");
       var stem = document.createElement("span");
@@ -255,7 +303,9 @@ textarea::placeholder { color: var(--mauve-ink); }
     });
   }
   function composed() {
-    return ids.filter(function (k) { return S[k].trim(); })
+    var vals = valueList();
+    var head = vals.length ? "Values: " + vals.join(", ") + "\n\n" : "";
+    return head + ids.filter(function (k) { return S[k].trim(); })
       .map(function (k) { return stems[k] + "\n" + S[k].trim(); }).join("\n\n");
   }
   function setStatus(text) { $("status").textContent = text; }
@@ -267,6 +317,15 @@ textarea::placeholder { color: var(--mauve-ink); }
     grow(el);
     el.addEventListener("input", function () { S[k] = el.value; persist(); render(); grow(el); });
   });
+  chips.forEach(function (c) {
+    c.checked = S.values.indexOf(c.value) !== -1;
+    c.addEventListener("change", function () {
+      S.values = chips.filter(function (x) { return x.checked; }).map(function (x) { return x.value; });
+      persist(); render();
+    });
+  });
+  $("v-other").value = S.valuesOther;
+  $("v-other").addEventListener("input", function () { S.valuesOther = $("v-other").value; persist(); render(); });
   render();
   week1();
 
@@ -285,9 +344,11 @@ textarea::placeholder { color: var(--mauve-ink); }
   $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
   $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
   $("clear-yes").addEventListener("click", function () {
-    S = { s1: "", s2: "", s3: "" };
+    S = { s1: "", s2: "", s3: "", values: [], valuesOther: "" };
     try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
     ids.forEach(function (k) { $(k).value = ""; grow($(k)); });
+    chips.forEach(function (c) { c.checked = false; });
+    $("v-other").value = "";
     $("clear-confirm").hidden = true;
     $("fallback").hidden = true;
     render();
