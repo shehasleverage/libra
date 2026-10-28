@@ -82,6 +82,8 @@ input[type="text"]:focus { border-color: var(--violet); box-shadow: 0 0 0 3px va
 input[type="text"]::placeholder { color: var(--mauve-ink); }
 .whole { margin-top: 28px; }
 .whole textarea { background: var(--white); color: var(--plum); font-family: var(--display); font-size: 19px; line-height: 1.5; min-height: 140px; }
+.stages { display: flex; flex-direction: column; gap: 10px; }
+.stage-why { min-height: 2.9em; padding: 10px 14px; border-radius: 8px; background: var(--lilac); font-size: 15px; line-height: 1.45; color: var(--plum); }
 .read .values { font-family: var(--body); font-size: 16px; color: var(--lavender); }
 .read .values b { color: var(--white); font-weight: 600; }
 .prompts { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -158,6 +160,8 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
           <label class="chip"><input type="checkbox" value="Independence"><span>Independence</span></label>
           <label class="chip"><input type="checkbox" value="Community"><span>Community</span></label>
           <label class="chip"><input type="checkbox" value="Legacy"><span>Legacy</span></label>
+          <label class="chip"><input type="checkbox" value="Underrepresented founders"><span>Underrepresented founders</span></label>
+          <label class="chip"><input type="checkbox" value="Positive change"><span>Positive change</span></label>
         </div>
         <label class="stem" for="v-other">Your own words</label>
         <input type="text" id="v-other" placeholder="One or two values of your own, in your words">
@@ -178,7 +182,18 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
         <h2 id="s2-title">Where I look</h2>
         <p class="step__why">The stage, the kind of company and the kind of manager that fit the belief above. “Early stage” and “a manager who has sold into that buyer” are both answers; so is “I don’t know the stage yet.”</p>
         <div class="step__eg"><b>An example, deliberately not yours</b>So I look at early-stage funds run by people who have sold into that buyer themselves.</div>
-        <div class="prompts" aria-label="Prompts"><span>Which stage: the idea, the first customers, or growth?</span><span>What kind of person do you trust to pick the companies?</span><span>A first-time manager, or one on her third fund or later?</span></div>
+        <div class="stages" role="group" aria-label="Stage">
+          <p class="stem">Which stage? Pick any that fit. Tap or hover to see what you are betting on.</p>
+          <div class="chips">
+            <label class="chip chip--stage"><input type="checkbox" value="Pre-seed" data-why="A team and an idea. Little or no revenue. You are betting on the people."><span>Pre-seed</span></label>
+            <label class="chip chip--stage"><input type="checkbox" value="Seed" data-why="A product and first customers. Early signs someone will pay. You are betting the signs are real."><span>Seed</span></label>
+            <label class="chip chip--stage"><input type="checkbox" value="Series A" data-why="Repeatable sales. Demand is proven; now building the machine. You are betting it scales."><span>Series A</span></label>
+            <label class="chip chip--stage"><input type="checkbox" value="Series B" data-why="Scaling what works. Growth with numbers behind it. You are betting on execution."><span>Series B</span></label>
+            <label class="chip chip--stage"><input type="checkbox" value="Series C and beyond" data-why="Expansion, then an exit. New markets, acquisitions, IPO prep. You are betting on the price."><span>Series C and beyond</span></label>
+          </div>
+          <p class="stage-why" id="stage-why" aria-live="polite">Earlier means more companies fail, bigger wins when they don’t, and the longest wait. Later means more evidence, and you pay for it.</p>
+        </div>
+        <div class="prompts" aria-label="Prompts"><span>What kind of person do you trust to pick the companies?</span><span>A first-time manager, or one on her third fund or later?</span></div>
         <label class="stem" for="s2">So I look at…</label>
         <textarea id="s2" placeholder="So I look at"></textarea>
       </section>
@@ -256,8 +271,10 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   var ids = ["s1", "s2", "s3"];
   var stems = { s1: "What I believe", s2: "Where I look", s3: "What I say no to" };
   var $ = function (id) { return document.getElementById(id); };
-  var S = { s1: "", s2: "", s3: "", values: [], valuesOther: "", final: null };
-  var chips = Array.prototype.slice.call(document.querySelectorAll(".chip input"));
+  var S = { s1: "", s2: "", s3: "", values: [], valuesOther: "", stages: [], final: null };
+  var stageInputs = Array.prototype.slice.call(document.querySelectorAll(".chip--stage input"));
+  var STAGE_DEFAULT = "Earlier means more companies fail, bigger wins when they don’t, and the longest wait. Later means more evidence, and you pay for it.";
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".chip:not(.chip--stage) input"));
 
   function load() {
     try {
@@ -268,6 +285,7 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
         if (Array.isArray(saved.values)) S.values = saved.values.filter(function (v) { return typeof v === "string"; });
         if (typeof saved.valuesOther === "string") S.valuesOther = saved.valuesOther;
         if (typeof saved.final === "string") S.final = saved.final;
+        if (Array.isArray(saved.stages)) S.stages = saved.stages.filter(function (v) { return typeof v === "string"; });
       }
     } catch (e) { /* storage unavailable or blocked; page still works */ }
   }
@@ -334,6 +352,15 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
       vp.appendChild(b);
       read.appendChild(vp);
     }
+    if (S.stages.length) {
+      var sp = document.createElement("p");
+      sp.className = "values";
+      sp.appendChild(document.createTextNode("Stage: "));
+      var sb = document.createElement("b");
+      sb.textContent = S.stages.join(", ");
+      sp.appendChild(sb);
+      read.appendChild(sp);
+    }
     ids.forEach(function (k) {
       var p = document.createElement("p");
       var stem = document.createElement("span");
@@ -349,7 +376,8 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   }
   function composed() {
     var vals = valueList();
-    var head = vals.length ? "Values: " + vals.join(", ") + "\n\n" : "";
+    var head = (vals.length ? "Values: " + vals.join(", ") + "\n" : "") + (S.stages.length ? "Stage: " + S.stages.join(", ") + "\n" : "");
+    if (head) head += "\n";
     return head + finalText().trim();
   }
   function setStatus(text) { $("status").textContent = text; }
@@ -368,6 +396,29 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
       persist(); render();
     });
   });
+  function showWhy() {
+    var hovered = document.querySelector(".chip--stage:hover input");
+    var focused = document.activeElement && document.activeElement.closest ? document.activeElement.closest(".chip--stage") : null;
+    var src = hovered || (focused ? focused.querySelector("input") : null);
+    if (!src) {
+      var checked = stageInputs.filter(function (x) { return x.checked; });
+      src = checked.length ? checked[checked.length - 1] : null;
+    }
+    $("stage-why").textContent = src ? src.value + ": " + src.getAttribute("data-why") : STAGE_DEFAULT;
+  }
+  stageInputs.forEach(function (c) {
+    c.checked = S.stages.indexOf(c.value) !== -1;
+    var lab = c.parentNode;
+    lab.addEventListener("mouseenter", showWhy);
+    lab.addEventListener("mouseleave", showWhy);
+    c.addEventListener("focus", showWhy);
+    c.addEventListener("blur", showWhy);
+    c.addEventListener("change", function () {
+      S.stages = stageInputs.filter(function (x) { return x.checked; }).map(function (x) { return x.value; });
+      persist(); render(); showWhy();
+    });
+  });
+  showWhy();
   $("v-other").value = S.valuesOther;
   $("v-other").addEventListener("input", function () { S.valuesOther = $("v-other").value; persist(); render(); });
   $("final").addEventListener("input", function () { S.final = $("final").value; persist(); grow($("final")); });
@@ -398,7 +449,8 @@ input[type="text"]::placeholder { color: var(--mauve-ink); }
   $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
   $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
   $("clear-yes").addEventListener("click", function () {
-    S = { s1: "", s2: "", s3: "", values: [], valuesOther: "", final: null };
+    S = { s1: "", s2: "", s3: "", values: [], valuesOther: "", stages: [], final: null };
+    stageInputs.forEach(function (c) { c.checked = false; }); showWhy();
     $("rebuild-confirm").hidden = true; $("rebuild-status").textContent = "";
     try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
     ids.forEach(function (k) { $(k).value = ""; grow($(k)); });
