@@ -89,7 +89,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
 .q textarea { min-height: 56px; font-size: 15px; }
 .tie-inputs { display: flex; flex-direction: column; gap: 10px; }
 .tie-inputs input { font-size: 16px; height: 46px; }
-#tie { min-height: 120px; font-family: var(--display); font-size: 18px; }
+#tie { min-height: 170px; font-family: var(--display); font-size: 18px; }
 .own { display: flex; flex-direction: column; gap: 8px; }
 .summary { background: var(--plum); color: var(--white); }
 .summary .wrap { padding-block: 48px 56px; }
@@ -338,13 +338,9 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
   function tieQuestion() {
     var a = cleanBelieve(S.tieBelieve || ""), b = cleanNo(S.tieNo || "");
     if (!a && !b) return "";
-    var q = "My own thesis says ";
-    if (a) q += "I believe " + a;
-    if (a && b) q += ", and ";
-    if (b) q += "I say no to " + b;
-    q += ". ";
-    if (a) q += "Where in your portfolio would I see that belief at work? ";
-    if (b) q += "Have you ever come close to backing something I would say no to, and what did you decide?";
+    var q = "";
+    if (a) q += "I believe " + a + ". Which of your companies is proof of that, and how did it come to you? ";
+    if (b) q += "I won’t back " + b + ". Have you ever been close to investing in something like that, and what did you decide?";
     return q.trim();
   }
   function sectorPhrase(S) {
@@ -412,21 +408,24 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
 
   function tieCard() {
     var card = el("div", "q q--tie");
-    card.appendChild(el("p", "q__fact", "Your alignment question"));
-    card.appendChild(el("p", "hint", "Two lines from your Thesis Sketch. If you did the Sketch on this phone they are filled in; if not, write them now in a few words, or open the full Sketch at shehasleverage.github.io/libra/thesis-sketch.html."));
+    card.appendChild(el("p", "q__fact", "Does this fund fit your thesis?"));
+    card.appendChild(el("p", "q__text", "This is the one question only you can write. It puts your Week 2 thesis next to the manager’s portfolio and asks her to show you the overlap."));
+    card.appendChild(el("p", "hint", "Finish the two lines below. They fill in from your Thesis Sketch if it is on this phone; if not, a few words is enough. Full Sketch: shehasleverage.github.io/libra/thesis-sketch.html"));
     var box = el("div", "tie-inputs");
-    var b = document.createElement("input"); b.type = "text"; b.id = "tie-believe"; b.placeholder = "I believe…"; b.value = S.tieBelieve; b.setAttribute("aria-label", "What I believe");
-    var n = document.createElement("input"); n.type = "text"; n.id = "tie-no"; n.placeholder = "I say no to…"; n.value = S.tieNo; n.setAttribute("aria-label", "What I say no to");
-    box.appendChild(b); box.appendChild(n); card.appendChild(box);
-    var lab = el("label", "stem", "The question, written for you. Edit it until it sounds like you."); lab.setAttribute("for", "tie"); card.appendChild(lab);
-    var ta = el("textarea"); ta.id = "tie"; ta.placeholder = "My thesis says I believe… and I say no to… Where would I see that in your portfolio?";
+    var b = document.createElement("input"); b.type = "text"; b.id = "tie-believe"; b.placeholder = "for example: women will run the teams that buy AI"; b.value = S.tieBelieve; b.setAttribute("aria-label", "What I believe");
+    var n = document.createElement("input"); n.type = "text"; n.id = "tie-no"; n.placeholder = "for example: anything I couldn’t explain to my daughter"; n.value = S.tieNo; n.setAttribute("aria-label", "What I say no to");
+    var lb = el("label", "stem", "I believe…"); lb.setAttribute("for", "tie-believe");
+    var ln = el("label", "stem", "I say no to…"); ln.setAttribute("for", "tie-no");
+    box.appendChild(lb); box.appendChild(b); box.appendChild(ln); box.appendChild(n); card.appendChild(box);
+    var lab = el("label", "stem", "Your question, built from those two lines. Say it in your own words if it doesn’t sound like you."); lab.setAttribute("for", "tie"); card.appendChild(lab);
+    var ta = el("textarea"); ta.id = "tie"; ta.placeholder = "Fill in the two lines above and the question appears here. It will read: I believe [your belief]. Which of your companies is proof of that? I won’t back [your no]. Have you ever been close to investing in something like that?";
     ta.value = S.tieText !== null ? S.tieText : tieQuestion();
     card.appendChild(ta);
     function regen() { if (S.tieText === null) ta.value = tieQuestion(); }
     b.addEventListener("input", function () { S.tieBelieve = b.value; persist(); regen(); renderSummary(); });
     n.addEventListener("input", function () { S.tieNo = n.value; persist(); regen(); renderSummary(); });
     ta.addEventListener("input", function () { S.tieText = ta.value; persist(); renderSummary(); });
-    var tip = { good: "She points to a specific company and a specific decision, not “we’re very aligned.”", again: "The answer is about you being a good fit for them. You asked whether they fit you." };
+    var tip = { good: "She names a specific company for your belief and a specific decision for your “no,” without rephrasing either.", again: "“We’re very aligned.” That is about you fitting them; you asked whether they fit you." };
     card.appendChild(listenFor(tip));
     card.appendChild(statusRow("tie"));
     card.appendChild(noteBox("tie"));
