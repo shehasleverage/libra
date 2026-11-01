@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fund Check | She Has Leverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600&family=Spectral:ital,wght@0,600;1,400;1,600&display=swap">
+<style>
+:root {
+  --plum: #2a2133; --violet: #5b3a8c; --lavender: #b9a3d9; --white: #ffffff; --lilac: #f3eff8; --paper: #fcfafe; --mauve-ink: #7e5f89;
+  --teal: #08b7aa; --line: rgb(42 33 51 / 0.12); --rule: rgb(42 33 51 / 0.16); --input-border: rgb(91 58 140 / 0.35); --focus-ring: rgb(91 58 140 / 0.18);
+  --display: Spectral, Georgia, serif; --body: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif; color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--white); color: var(--plum); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; } }
+.wrap { width: 100%; max-width: 760px; margin-inline: auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .wrap { padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); } }
+.header { border-bottom: 1px solid rgb(42 33 51 / 0.18); }
+.header .wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; min-height: 76px; padding-block: 12px; }
+.wordmark { font-family: var(--display); font-weight: 600; font-size: 21px; letter-spacing: -0.022em; color: var(--plum); white-space: nowrap; }
+.wordmark span { color: var(--violet); }
+.header .x { font-size: 18px; color: var(--mauve-ink); }
+.header .co { font-size: 15px; font-weight: 600; color: var(--mauve-ink); }
+.intro { background: var(--lilac); }
+.intro .wrap { padding-block: 48px 44px; }
+@media (min-width: 720px) { .intro .wrap { padding-block: 64px 56px; } }
+.label { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.label__rule { width: 48px; height: 2px; background: var(--violet); flex: none; }
+.label__text { font-size: 15px; font-weight: 600; color: var(--violet); }
+.intro h1 { font-size: clamp(34px, 6vw, 50px); }
+.intro h1 em { font-style: italic; color: var(--violet); }
+.lede { margin-top: 16px; font-size: 18px; line-height: 1.6; color: var(--mauve-ink); }
+.note { margin-top: 12px; font-family: var(--display); font-style: italic; font-weight: 400; font-size: 17px; color: var(--mauve-ink); }
+.fund { margin-top: 36px; display: flex; flex-direction: column; gap: 8px; }
+.stem { font-size: 14px; font-weight: 600; color: var(--plum); }
+input[type="text"], textarea { width: 100%; font-family: var(--body); font-size: 17px; color: var(--plum); background: var(--paper); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px 16px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+input[type="text"] { height: 50px; }
+textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+input[type="text"]:focus, textarea:focus { border-color: var(--violet); box-shadow: 0 0 0 3px var(--focus-ring); }
+input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
+.checks { display: flex; flex-direction: column; gap: 44px; padding-block: 40px 24px; }
+.check { display: flex; flex-direction: column; gap: 14px; }
+.check__num { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--violet); letter-spacing: 0.02em; }
+.check h2 { font-size: clamp(24px, 4vw, 30px); }
+.check__why { font-size: 16px; color: var(--mauve-ink); }
+.q { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+.q--tie { border: 2px solid var(--violet); background: var(--white); }
+.q__text { font-size: 17px; line-height: 1.5; color: var(--plum); }
+.q__hint { font-size: 14px; color: var(--mauve-ink); }
+.q__row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.status { display: flex; gap: 6px; }
+.status label { position: relative; }
+.status input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.status span { display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border: 1px solid var(--input-border); border-radius: 999px; background: var(--white); font-size: 13px; font-weight: 600; cursor: pointer; }
+.status input:checked + span { background: var(--violet); border-color: var(--violet); color: var(--white); }
+.status input[value="open"]:checked + span { background: #b4452c; border-color: #b4452c; }
+.status input[value="partly"]:checked + span { background: var(--mauve-ink); border-color: var(--mauve-ink); }
+.status input:focus-visible + span { outline: 2px solid var(--violet); outline-offset: 2px; }
+.q textarea { min-height: 56px; font-size: 15px; }
+#tie { min-height: 120px; }
+.own { display: flex; flex-direction: column; gap: 8px; }
+.summary { background: var(--plum); color: var(--white); }
+.summary .wrap { padding-block: 48px 56px; }
+.summary .label__rule { background: var(--lavender); }
+.summary .label__text { color: var(--lavender); }
+.summary h2 { font-size: clamp(26px, 4.5vw, 34px); color: var(--white); }
+.summary h2 em { font-style: italic; color: var(--lavender); }
+.tally { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
+.tally span { font-size: 15px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--lavender); color: var(--white); }
+.openlist { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+.openlist p { font-family: var(--display); font-size: 18px; line-height: 1.45; color: var(--white); padding-left: 14px; border-left: 2px solid var(--lavender); }
+.openlist p.empty { color: var(--lavender); font-style: italic; border: 0; padding: 0; }
+.actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px; border: 0; border-radius: 10px; background: var(--lavender); color: var(--plum); font-family: var(--body); font-size: 16px; font-weight: 600; cursor: pointer; }
+.btn:hover { background: var(--white); }
+.btn--ghost { background: transparent; color: var(--lavender); border: 1px solid var(--lavender); }
+.btn--ghost:hover { background: rgb(255 255 255 / 0.08); color: var(--white); }
+.statusline { font-size: 14px; color: var(--lavender); min-height: 1.4em; }
+.confirm { margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 15px; color: var(--lavender); }
+.confirm .btn { min-height: 40px; padding: 0 16px; }
+.fallback { margin-top: 12px; }
+.fallback textarea { background: var(--white); color: var(--plum); }
+.quiet { font-size: 14px; color: var(--mauve-ink); }
+.after { padding-block: 40px 56px; }
+.after h2 { font-size: clamp(22px, 4vw, 28px); margin-bottom: 10px; }
+.after p { font-size: 16px; color: var(--mauve-ink); }
+.footer { border-top: 1px solid var(--rule); }
+.footer .wrap { padding-block: 28px 36px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.62; color: var(--mauve-ink); }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="wrap">
+    <span class="wordmark">She Has <span>Leverage</span></span>
+    <span class="x" aria-hidden="true">×</span>
+    <span class="co">Libra Leaders</span>
+  </div>
+</header>
+
+<main>
+  <section class="intro" aria-labelledby="title">
+    <div class="wrap">
+      <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Session 3 exercise</span></div>
+      <h1 id="title">Your <em>Fund Check</em></h1>
+      <p class="lede">Five things to check before you commit to any fund, with the questions that check them. Pick the ones you would ask, add your own, and mark what you hear as the manager answers.</p>
+      <p class="note">Everything you type stays in this browser on this device. Nothing is sent to She Has Leverage, Libra Leaders or anyone else.</p>
+      <div class="fund">
+        <label class="stem" for="fund">The fund you are checking</label>
+        <input type="text" id="fund" placeholder="Libra Fund I, or any fund whose deck you have seen">
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="checks" id="checks"></div>
+  </div>
+
+  <section class="summary" aria-labelledby="sum-title">
+    <div class="wrap">
+      <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">After the answers</span></div>
+      <h2 id="sum-title">What is <em>still open</em>?</h2>
+      <div class="tally" id="tally" aria-live="polite"></div>
+      <div class="openlist" id="openlist" aria-live="polite"></div>
+      <p class="quiet" style="color: var(--lavender); margin-top: 18px">An open question is not a verdict on the fund. It is the thing you check next, yourself, before you decide. That is this week’s homework.</p>
+      <div class="actions">
+        <button class="btn" type="button" id="copy">Copy my fund check</button>
+        <button class="btn btn--ghost" type="button" id="clear">Clear this device</button>
+        <span class="statusline" id="status" role="status"></span>
+      </div>
+      <div class="confirm" id="clear-confirm" hidden>
+        <span>Delete your fund check from this device?</span>
+        <button class="btn" type="button" id="clear-yes">Yes, delete</button>
+        <button class="btn btn--ghost" type="button" id="clear-no">Keep it</button>
+      </div>
+      <div class="fallback" id="fallback" hidden>
+        <label class="stem" for="fallback-text" style="color: var(--lavender)">Copying isn’t available here. Your fund check is selected below; press Ctrl+C or Cmd+C.</label>
+        <textarea id="fallback-text" readonly></textarea>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="after">
+      <h2>What this is, and isn’t</h2>
+      <p>Five plain checks and the questions behind them. There is no score, because a fund is not a quiz; there is only what you have verified and what you haven’t. The full diligence method, with the scorecard and the document walk-through, is part of the She Has Leverage program.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>Libra Leaders × She Has Leverage, Aligned LP Community Series</p>
+    <p>For educational and informational purposes only. She Has Leverage does not provide investment, legal or tax advice, or recommend securities or investment strategies.</p>
+    <p>© 2026 She Has Leverage LLC. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "libra-shl-fund-check-v1";
+  var SKETCH_KEY = "libra-shl-thesis-sketch-v1";
+  var $ = function (id) { return document.getElementById(id); };
+
+  var CHECKS = [
+    { id: "defs", title: "The definitions", why: "Ask what every word in the thesis means in practice. A fund’s label and your idea of it can be two different portfolios.",
+      qs: [
+        { id: "d1", text: "Define each word in your thesis for me. What counts as [your sector], and what is a company that would not qualify?", hint: "Listen for a boundary, not a slogan." },
+        { id: "d2", text: "Which company in your portfolio best shows the thesis, and which one stretches it?", hint: "Every portfolio has a stretch. The question is whether she names it." }
+      ] },
+    { id: "record", title: "The record", why: "What this team did before, with names and dates, and what the people who worked with them say when the manager is not in the room.",
+      qs: [
+        { id: "r1", text: "What did each partner do before this fund, and which of those outcomes can I verify myself?", hint: "“Verify” is the word that matters." },
+        { id: "r2", text: "Tell me about an investment that went wrong. What did you do, and what would you do differently?", hint: "A manager with no bad story has not been doing this long enough to have one." },
+        { id: "r3", text: "May I speak to two founders you backed and one you passed on, and one investor who took time to say yes?", hint: "Then call someone they didn’t list." }
+      ] },
+    { id: "math", title: "The math", why: "Fund size, check size, number of companies and money held back for follow-ons have to add up to the belief on the first slide.",
+      qs: [
+        { id: "m1", text: "Walk me through the arithmetic: fund size, first check, how many companies, and how much is reserved for follow-on rounds.", hint: "If it doesn’t add up, the thesis is a brochure." },
+        { id: "m2", text: "How many companies need to succeed, and at what size of outcome, for this fund to return investors’ money?", hint: "Last week’s power law, asked out loud." }
+      ] },
+    { id: "money", title: "The money", why: "Fee, carry and term, read from the limited partnership agreement rather than the deck.",
+      qs: [
+        { id: "y1", text: "What are the management fee, the carry and the fund term, and when does the fee step down? Where do they sit against the Carta medians of 2% and 20%?", hint: "Above the medians is not wrong; it needs a reason you can repeat." },
+        { id: "y2", text: "Is any return number you have shown me gross or net, cash or paper, and from this fund or an earlier one?", hint: "Three questions for any return number." },
+        { id: "y3", text: "What is the minimum commitment, how are capital calls scheduled, and what happens if I miss one?", hint: "Practical, and rarely in the deck." }
+      ] },
+    { id: "people", title: "The people who decide", why: "Who makes the call, what happens if she leaves, and how you will hear from them once your money is in.",
+      qs: [
+        { id: "p1", text: "Who votes on each investment, and can one person be overruled?", hint: "You are investing in a decision process, not a person." },
+        { id: "p2", text: "What happens to the fund if you leave? What does the agreement say?", hint: "The key-person clause, in plain words." },
+        { id: "p3", text: "How often will I hear from you, and what will it say? Can I see a past investor update?", hint: "A manager who is hard to reach now will be harder later." }
+      ] }
+  ];
+  var STATUSES = [["answered", "Answered"], ["partly", "Partly"], ["open", "Still open"]];
+
+  var S = { fund: "", status: {}, notes: {}, own: {}, tieText: "" };
+
+  function load() {
+    try { var raw = localStorage.getItem(KEY); if (raw) { var s = JSON.parse(raw);
+      if (typeof s.fund === "string") S.fund = s.fund;
+      if (s.status && typeof s.status === "object") S.status = s.status;
+      if (s.notes && typeof s.notes === "object") S.notes = s.notes;
+      if (s.own && typeof s.own === "object") S.own = s.own;
+      if (typeof s.tieText === "string") S.tieText = s.tieText; } } catch (e) { /* ignore */ }
+  }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
+
+  function sketch() {
+    try { var raw = localStorage.getItem(SKETCH_KEY); if (!raw) return null; var s = JSON.parse(raw);
+      var t = { s1: (s.s1 || "").trim(), s3: (s.s3 || "").trim(), final: typeof s.final === "string" ? s.final.trim() : "" };
+      return (t.s1 || t.s3 || t.final) ? t : null; } catch (e) { return null; }
+  }
+  function tieQuestion() {
+    var t = sketch();
+    if (!t || !(t.s1 || t.s3)) return "";
+    var a = t.s1 ? t.s1.replace(/^i believe\s+/i, "") : "";
+    var b = t.s3 ? t.s3.replace(/^(and\s+)?i (say no to|pass on|avoid)\s+/i, "") : "";
+    var q = "My own thesis says ";
+    if (a) q += "I believe " + a.replace(/[.!?]$/, "");
+    if (a && b) q += ", and ";
+    if (b) q += "I say no to " + b.replace(/[.!?]$/, "");
+    q += ". ";
+    if (a) q += "Where in your portfolio do I see that belief at work? ";
+    if (b) q += "Have you ever come close to investing in something I would say no to, and what did you decide?";
+    return q.trim();
+  }
+
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+
+  function questionCard(q, tie) {
+    var card = el("div", "q" + (tie ? " q--tie" : ""));
+    if (tie) {
+      var lab = el("label", "stem", "Your alignment question, written from your Thesis Sketch. Edit it until it sounds like you.");
+      lab.setAttribute("for", "tie");
+      card.appendChild(lab);
+      var ta = el("textarea"); ta.id = "tie"; ta.value = S.tieText || tieQuestion(); ta.placeholder = "My thesis says I believe… and I say no to… Where do I see that in your portfolio?";
+      ta.addEventListener("input", function () { S.tieText = ta.value; persist(); });
+      card.appendChild(ta);
+      if (!sketch()) card.appendChild(el("p", "q__hint", "No Thesis Sketch found on this device. Open the Sketch on this phone first, or write the question by hand: my thesis says I believe X and I say no to Y; where do I see X in your portfolio, and have you ever come close to Y?"));
+    } else {
+      card.appendChild(el("p", "q__text", q.text));
+      if (q.hint) card.appendChild(el("p", "q__hint", q.hint));
+    }
+    var row = el("div", "q__row");
+    var st = el("div", "status"); st.setAttribute("role", "group"); st.setAttribute("aria-label", "What you heard");
+    STATUSES.forEach(function (pair) {
+      var l = el("label"); var inp = document.createElement("input"); inp.type = "radio"; inp.name = "st-" + q.id; inp.value = pair[0];
+      inp.checked = S.status[q.id] === pair[0];
+      inp.addEventListener("change", function () { S.status[q.id] = pair[0]; persist(); renderSummary(); });
+      l.appendChild(inp); l.appendChild(el("span", null, pair[1])); st.appendChild(l);
+    });
+    row.appendChild(st);
+    card.appendChild(row);
+    var note = el("textarea"); note.placeholder = "What you heard, in a few words"; note.value = S.notes[q.id] || "";
+    note.setAttribute("aria-label", "Notes on this question");
+    note.addEventListener("input", function () { S.notes[q.id] = note.value; persist(); renderSummary(); });
+    card.appendChild(note);
+    return card;
+  }
+
+  function render() {
+    var root = $("checks"); root.textContent = "";
+    CHECKS.forEach(function (c, i) {
+      var sec = el("section", "check");
+      sec.appendChild(el("p", "check__num", "Check " + (i + 1) + " of 5"));
+      sec.appendChild(el("h2", null, c.title));
+      sec.appendChild(el("p", "check__why", c.why));
+      c.qs.forEach(function (q) { sec.appendChild(questionCard(q, false)); });
+      if (c.id === "defs") sec.appendChild(questionCard({ id: "tie" }, true));
+      var own = el("div", "own");
+      var lab = el("label", "stem", "Your own question for this check"); lab.setAttribute("for", "own-" + c.id); own.appendChild(lab);
+      var inp = document.createElement("input"); inp.type = "text"; inp.id = "own-" + c.id; inp.value = S.own[c.id] || ""; inp.placeholder = "Write it the way you would say it";
+      inp.addEventListener("input", function () { S.own[c.id] = inp.value; persist(); renderSummary(); });
+      own.appendChild(inp);
+      sec.appendChild(own);
+      root.appendChild(sec);
+    });
+    $("fund").value = S.fund;
+    renderSummary();
+  }
+
+  function allQuestions() {
+    var out = [];
+    CHECKS.forEach(function (c) {
+      c.qs.forEach(function (q) { out.push({ id: q.id, check: c.title, text: q.text }); });
+      if (c.id === "defs") out.push({ id: "tie", check: c.title, text: (S.tieText || tieQuestion() || "Alignment question") });
+    });
+    return out;
+  }
+
+  function renderSummary() {
+    var counts = { answered: 0, partly: 0, open: 0 };
+    var open = [];
+    allQuestions().forEach(function (q) {
+      var s = S.status[q.id];
+      if (s && counts.hasOwnProperty(s)) counts[s] += 1;
+      if (s === "open" || s === "partly") open.push(q);
+    });
+    var t = $("tally"); t.textContent = "";
+    t.appendChild(el("span", null, counts.answered + " answered"));
+    t.appendChild(el("span", null, counts.partly + " partly"));
+    t.appendChild(el("span", null, counts.open + " still open"));
+    var ol = $("openlist"); ol.textContent = "";
+    if (!open.length) { ol.appendChild(el("p", "empty", "Nothing marked yet. As the manager answers, mark each question above.")); return; }
+    open.forEach(function (q) { ol.appendChild(el("p", null, q.text)); });
+  }
+
+  function composed() {
+    var lines = ["Fund Check" + (S.fund.trim() ? ": " + S.fund.trim() : ""), ""];
+    CHECKS.forEach(function (c, i) {
+      lines.push((i + 1) + ". " + c.title);
+      var qs = c.qs.slice();
+      if (c.id === "defs") qs.push({ id: "tie", text: S.tieText || tieQuestion() || "" });
+      qs.forEach(function (q) {
+        if (!q.text) return;
+        var s = S.status[q.id] ? " [" + S.status[q.id] + "]" : "";
+        lines.push("- " + q.text + s);
+        if ((S.notes[q.id] || "").trim()) lines.push("  Heard: " + S.notes[q.id].trim());
+      });
+      if ((S.own[c.id] || "").trim()) lines.push("- " + S.own[c.id].trim() + " [my question]");
+      lines.push("");
+    });
+    return lines.join("\n").trim();
+  }
+
+  load();
+  render();
+  $("fund").addEventListener("input", function () { S.fund = $("fund").value; persist(); });
+
+  $("copy").addEventListener("click", function () {
+    var text = composed(); var fb = $("fallback");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { fb.hidden = true; $("status").textContent = "Copied."; })
+        .catch(function () { fb.hidden = false; $("fallback-text").value = text; $("fallback-text").select(); });
+    } else { fb.hidden = false; $("fallback-text").value = text; $("fallback-text").select(); }
+  });
+  $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
+  $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
+  $("clear-yes").addEventListener("click", function () {
+    S = { fund: "", status: {}, notes: {}, own: {}, tieText: "" };
+    try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+    $("clear-confirm").hidden = true; $("fallback").hidden = true;
+    render(); $("status").textContent = "Cleared from this device."; $("fund").focus();
+  });
+})();
+</script>
+</body>
+</html>
