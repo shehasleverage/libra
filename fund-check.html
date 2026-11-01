@@ -19,6 +19,7 @@ html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--white); color: var(--plum); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
 p { margin: 0; }
+a { color: var(--violet); }
 :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; } }
 .wrap { width: 100%; max-width: 760px; margin-inline: auto; padding-left: max(22px, env(safe-area-inset-left, 0px)); padding-right: max(22px, env(safe-area-inset-right, 0px)); }
@@ -39,13 +40,22 @@ p { margin: 0; }
 .intro h1 em { font-style: italic; color: var(--violet); }
 .lede { margin-top: 16px; font-size: 18px; line-height: 1.6; color: var(--mauve-ink); }
 .note { margin-top: 12px; font-family: var(--display); font-style: italic; font-weight: 400; font-size: 17px; color: var(--mauve-ink); }
-.fund { margin-top: 36px; display: flex; flex-direction: column; gap: 8px; }
+.setup { margin-top: 32px; display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 8px; }
 .stem { font-size: 14px; font-weight: 600; color: var(--plum); }
+.hint { font-size: 14px; color: var(--mauve-ink); }
 input[type="text"], textarea { width: 100%; font-family: var(--body); font-size: 17px; color: var(--plum); background: var(--paper); border: 1px solid var(--input-border); border-radius: 10px; padding: 12px 16px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
 input[type="text"] { height: 50px; }
 textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
 input[type="text"]:focus, textarea:focus { border-color: var(--violet); box-shadow: 0 0 0 3px var(--focus-ring); }
 input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--input-border); border-radius: 999px; background: var(--paper); font-size: 15px; font-weight: 600; cursor: pointer; }
+.chip span:hover { background: var(--white); }
+.chip input:checked + span { background: var(--violet); border-color: var(--violet); color: var(--white); }
+.chip input:focus-visible + span { outline: 2px solid var(--violet); outline-offset: 2px; }
 .checks { display: flex; flex-direction: column; gap: 44px; padding-block: 40px 24px; }
 .check { display: flex; flex-direction: column; gap: 14px; }
 .check__num { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--violet); letter-spacing: 0.02em; }
@@ -53,8 +63,18 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
 .check__why { font-size: 16px; color: var(--mauve-ink); }
 .q { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
 .q--tie { border: 2px solid var(--violet); background: var(--white); }
-.q__text { font-size: 17px; line-height: 1.5; color: var(--plum); }
-.q__hint { font-size: 14px; color: var(--mauve-ink); }
+.q__fact { font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--teal); }
+.q__text { font-size: 17px; line-height: 1.5; color: var(--plum); font-family: var(--display); font-size: 19px; }
+.listen { border-top: 1px solid var(--line); padding-top: 10px; }
+.listen summary { font-size: 14px; font-weight: 600; color: var(--violet); cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; }
+.listen summary::-webkit-details-marker { display: none; }
+.listen summary::before { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--violet); border-bottom: 2px solid var(--violet); transform: rotate(-45deg); transition: transform 0.15s; }
+.listen[open] summary::before { transform: rotate(45deg); }
+.listen__body { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.5; }
+.listen__body p { padding-left: 12px; border-left: 2px solid var(--line); }
+.listen__body b { color: var(--plum); }
+.good b { color: #1f7a6a; }
+.again b { color: #b4452c; }
 .q__row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .status { display: flex; gap: 6px; }
 .status label { position: relative; }
@@ -65,7 +85,9 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
 .status input[value="partly"]:checked + span { background: var(--mauve-ink); border-color: var(--mauve-ink); }
 .status input:focus-visible + span { outline: 2px solid var(--violet); outline-offset: 2px; }
 .q textarea { min-height: 56px; font-size: 15px; }
-#tie { min-height: 120px; }
+.tie-inputs { display: flex; flex-direction: column; gap: 10px; }
+.tie-inputs input { font-size: 16px; height: 46px; }
+#tie { min-height: 120px; font-family: var(--display); font-size: 18px; }
 .own { display: flex; flex-direction: column; gap: 8px; }
 .summary { background: var(--plum); color: var(--white); }
 .summary .wrap { padding-block: 48px 56px; }
@@ -110,11 +132,28 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     <div class="wrap">
       <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Session 3 exercise</span></div>
       <h1 id="title">Your <em>Fund Check</em></h1>
-      <p class="lede">Five things to check before you commit to any fund, with the questions that check them. Pick the ones you would ask, add your own, and mark what you hear as the manager answers.</p>
+      <p class="lede">Five things to check before you commit to any fund, with the questions that check them, written the way you would say them. Pick the ones you want answered, and mark what you hear as the manager answers. Under each question, “What to listen for” tells you what a good answer tends to sound like.</p>
       <p class="note">Everything you type stays in this browser on this device. Nothing is sent to She Has Leverage, Libra Leaders or anyone else.</p>
-      <div class="fund">
-        <label class="stem" for="fund">The fund you are checking</label>
-        <input type="text" id="fund" placeholder="Libra Fund I, or any fund whose deck you have seen">
+      <div class="setup">
+        <div class="field">
+          <p class="stem">Which fund are you checking?</p>
+          <div class="chips" role="radiogroup" aria-label="Fund">
+            <label class="chip"><input type="radio" name="mode" value="libra"><span>Libra Fund I</span></label>
+            <label class="chip"><input type="radio" name="mode" value="other"><span>Another fund</span></label>
+          </div>
+          <input type="text" id="fund" placeholder="Name of the other fund" hidden>
+          <p class="hint" id="mode-hint"></p>
+        </div>
+        <div class="field" id="sector-field">
+          <p class="stem">Libra invests in four sectors. Which do you want to ask about?</p>
+          <div class="chips" role="group" aria-label="Sectors">
+            <label class="chip"><input type="checkbox" class="sector" value="healthcare"><span>Healthcare</span></label>
+            <label class="chip"><input type="checkbox" class="sector" value="workforce"><span>Workforce</span></label>
+            <label class="chip"><input type="checkbox" class="sector" value="fintech"><span>Fintech</span></label>
+            <label class="chip"><input type="checkbox" class="sector" value="cybersecurity"><span>Cybersecurity</span></label>
+          </div>
+          <p class="hint">Your picks are written into the first question.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -150,7 +189,8 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
   <div class="wrap">
     <section class="after">
       <h2>What this is, and isn’t</h2>
-      <p>Five plain checks and the questions behind them. There is no score, because a fund is not a quiz; there is only what you have verified and what you haven’t. The full diligence method, with the scorecard and the document walk-through, is part of the She Has Leverage program.</p>
+      <p>Five plain checks and the questions behind them. There is no score, because a fund is not a quiz; there is only what you have verified and what you haven’t. The “what to listen for” notes describe what strong and weak answers tend to sound like; they are not a judgment of any fund. The full diligence method, with the scorecard and the document walk-through, is part of the She Has Leverage program.</p>
+      <p class="quiet" style="margin-top: 12px">Libra figures on this page are from the Libra Fund I investor presentation (November 2026), shared with this group for the live session. They frame the questions only. Nothing here is an offer to sell or a solicitation to buy any security.</p>
     </section>
   </div>
 </main>
@@ -166,116 +206,229 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
 <script>
 (function () {
   "use strict";
-  var KEY = "libra-shl-fund-check-v1";
+  var KEY = "libra-shl-fund-check-v2";
   var SKETCH_KEY = "libra-shl-thesis-sketch-v1";
   var $ = function (id) { return document.getElementById(id); };
 
+  // Each question: generic text, optional Libra text, optional Libra fact line, and what to listen for.
   var CHECKS = [
     { id: "defs", title: "The definitions", why: "Ask what every word in the thesis means in practice. A fund’s label and your idea of it can be two different portfolios.",
       qs: [
-        { id: "d1", text: "Define each word in your thesis for me. What counts as [your sector], and what is a company that would not qualify?", hint: "Listen for a boundary, not a slogan." },
-        { id: "d2", text: "Which company in your portfolio best shows the thesis, and which one stretches it?", hint: "Every portfolio has a stretch. The question is whether she names it." }
+        { id: "d1",
+          text: "When you say you invest in [your sector], what does that actually include? Can you give me an example of a company you turned down because it didn’t fit?",
+          libra: function (S) { var sec = sectorPhrase(S); return "Your deck says healthcare, workforce, fintech and cybersecurity. When you say " + sec + ", what does that actually include? Can you give me an example of a company you turned down because it didn’t fit?"; },
+          fact: "Libra deck: four sectors, women-led, seed and seed-plus, US and Latin America",
+          good: "A clear edge to the category and a real company she said no to, with the reason.",
+          again: "A list of buzzwords, or “we stay flexible.” Flexible is another word for undefined." },
+        { id: "d2",
+          text: "Which company in your portfolio is the clearest example of your thesis, and which one is the biggest stretch?",
+          fact: "Libra deck: Allspice, Sunthetics, Mavida Health (acquired), Paladin, and Nth AI at term sheet",
+          good: "She names a stretch without hesitating and explains why it was still worth doing.",
+          again: "“None of them stretch it.” Every portfolio has one; not naming it tells you something." }
       ] },
     { id: "record", title: "The record", why: "What this team did before, with names and dates, and what the people who worked with them say when the manager is not in the room.",
       qs: [
-        { id: "r1", text: "What did each partner do before this fund, and which of those outcomes can I verify myself?", hint: "“Verify” is the word that matters." },
-        { id: "r2", text: "Tell me about an investment that went wrong. What did you do, and what would you do differently?", hint: "A manager with no bad story has not been doing this long enough to have one." },
-        { id: "r3", text: "May I speak to two founders you backed and one you passed on, and one investor who took time to say yes?", hint: "Then call someone they didn’t list." }
+        { id: "r1",
+          text: "Which of your past investments did you personally lead, and how much of that value has actually come back to investors in cash so far?",
+          libra: "The 1.85x across 48 investments is from the team’s earlier funds. Which of those deals did you personally lead, and how much of that value has actually been paid back to investors in cash so far?",
+          fact: "Libra deck: 48 investments, $92.5M invested, 1.85x blended MOIC, 7 exits or IPOs, as of June 2026, across two prior portfolios",
+          good: "Names and dates, and she separates cash returned from paper value without being asked twice.",
+          again: "The number stays blended, or “it’s all in the data room.” Mark it open and ask for the page." },
+        { id: "r2",
+          text: "Tell me about one investment that went wrong. What happened, and what did you do about it?",
+          good: "A specific company, what she got wrong, what she changed afterward.",
+          again: "The founder or the market gets all the blame, or she can’t think of one." },
+        { id: "r3",
+          text: "Could I talk to a couple of founders you’ve backed, and an investor who took a while to say yes to you?",
+          good: "Yes, with a name you didn’t ask for, and no conditions.",
+          again: "Only hand-picked references, or a pause. Then call someone they didn’t list." }
       ] },
     { id: "math", title: "The math", why: "Fund size, check size, number of companies and money held back for follow-ons have to add up to the belief on the first slide.",
       qs: [
-        { id: "m1", text: "Walk me through the arithmetic: fund size, first check, how many companies, and how much is reserved for follow-on rounds.", hint: "If it doesn’t add up, the thesis is a brochure." },
-        { id: "m2", text: "How many companies need to succeed, and at what size of outcome, for this fund to return investors’ money?", hint: "Last week’s power law, asked out loud." }
+        { id: "m1",
+          text: "Walk me through the arithmetic: fund size, first check, how many companies, and how much you hold back for follow-on rounds.",
+          libra: "$50 million, 25 companies, first checks of $300K to $1M. How much is set aside for follow-on rounds, and who gets it when one of the 25 raises a big Series A?",
+          fact: "Libra deck: $50M target, 25 seed companies, 10% ownership target, pro-rata follow-on through Series A",
+          good: "A reserve amount and a rule for who gets it. The numbers add up on a napkin.",
+          again: "“Case by case,” or the arithmetic doesn’t close. Then the plan on the slide is a brochure." },
+        { id: "m2",
+          text: "How many of your companies need to be big winners for this fund to return investors’ money, and how big do they need to be?",
+          libra: "You’re targeting 3 to 4x gross. How many of the 25 have to be big winners for that to happen, and what does one of those have to sell for?",
+          fact: "Libra deck: 3 to 4x gross MOIC target, preliminary base case; strategic acquirers active in all four sectors",
+          good: "She does the math out loud: a handful of winners, each returning the fund or more. That is last week’s power law.",
+          again: "“They’ll all do well.” Seed funds don’t work that way, and she knows it." }
       ] },
     { id: "money", title: "The money", why: "Fee, carry and term, read from the limited partnership agreement rather than the deck.",
       qs: [
-        { id: "y1", text: "What are the management fee, the carry and the fund term, and when does the fee step down? Where do they sit against the Carta medians of 2% and 20%?", hint: "Above the medians is not wrong; it needs a reason you can repeat." },
-        { id: "y2", text: "Is any return number you have shown me gross or net, cash or paper, and from this fund or an earlier one?", hint: "Three questions for any return number." },
-        { id: "y3", text: "What is the minimum commitment, how are capital calls scheduled, and what happens if I miss one?", hint: "Practical, and rarely in the deck." }
+        { id: "y1",
+          text: "What are the management fee, the carry and the fund term, and when does the fee step down? Where do you sit against the usual 2% and 20%?",
+          libra: "Your fee is 2.5% and the median is 2%. What does the extra half point pay for, and when does it step down?",
+          fact: "Libra deck: 2.5% management fee, 20% carry, 10-year term plus 2-year extension, 5-year investment period, 1% GP commitment",
+          good: "A specific cost the fee covers (team size at this fund size) and a step-down after the investment period.",
+          again: "“That’s standard for emerging managers.” It may be; ask what it pays for anyway." },
+        { id: "y2",
+          text: "When you say 3 to 4x, is that before or after fees? And when would I realistically see cash back rather than gains on paper?",
+          good: "She converts to a rough net figure and gives a timeline in years, usually the back half of the fund.",
+          again: "Only the gross number, repeated. Net is what reaches you." },
+        { id: "y3",
+          text: "You’re putting in 1% yourselves. How much of your own money is that, and is it cash?",
+          libra: "You’re putting in 1% yourselves. On $50 million that is $500,000. Is that cash from the partners, and how is it split?",
+          fact: "Libra deck: 1% GP commitment",
+          good: "A plain answer: cash, who, how much. Skin in the game is the point.",
+          again: "A fee offset or a loan instead of cash, with no explanation of why." },
+        { id: "y4",
+          text: "What’s the minimum commitment, how do capital calls work, and what happens if I can’t meet one?",
+          good: "A schedule you could put in a calendar, and the default terms explained without drama.",
+          again: "Vague on timing. You need to know when the money leaves your account." }
       ] },
     { id: "people", title: "The people who decide", why: "Who makes the call, what happens if she leaves, and how you will hear from them once your money is in.",
       qs: [
-        { id: "p1", text: "Who votes on each investment, and can one person be overruled?", hint: "You are investing in a decision process, not a person." },
-        { id: "p2", text: "What happens to the fund if you leave? What does the agreement say?", hint: "The key-person clause, in plain words." },
-        { id: "p3", text: "How often will I hear from you, and what will it say? Can I see a past investor update?", hint: "A manager who is hard to reach now will be harder later." }
+        { id: "p1",
+          text: "Who actually decides on an investment? If the partners disagree, what happens?",
+          libra: "Who actually decides on an investment? If you and Kennie disagree on a deal, what happens?",
+          fact: "Libra deck: two managing partners, Laura Moreno Lucas and Kennie Blanco, plus two investors",
+          good: "A clear process: who votes, who can say no, what a tie does.",
+          again: "“We’ve never disagreed.” Everyone disagrees; the question is what the process does with it." },
+        { id: "p2",
+          text: "What happens to the fund if you leave? Is that written into the agreement?",
+          good: "She names the key-person clause and what it triggers, usually a pause on new investments and an LP vote.",
+          again: "“I’m not going anywhere.” That is a hope, not a clause." },
+        { id: "p3",
+          text: "How often will I hear from you, and what will I get? Could I see an investor update from your previous fund?",
+          good: "Quarterly reports, an annual meeting, and she offers an example without being pushed.",
+          again: "“Whenever there’s news.” A manager who is hard to reach now will be harder later." }
       ] }
   ];
   var STATUSES = [["answered", "Answered"], ["partly", "Partly"], ["open", "Still open"]];
+  var SECTOR_LABEL = { healthcare: "healthcare", workforce: "workforce", fintech: "fintech", cybersecurity: "cybersecurity" };
 
-  var S = { fund: "", status: {}, notes: {}, own: {}, tieText: "" };
+  var S = { mode: "libra", fund: "", sectors: [], status: {}, notes: {}, own: {}, tieText: null, tieBelieve: "", tieNo: "" };
 
   function load() {
     try { var raw = localStorage.getItem(KEY); if (raw) { var s = JSON.parse(raw);
+      if (s.mode === "libra" || s.mode === "other") S.mode = s.mode;
       if (typeof s.fund === "string") S.fund = s.fund;
+      if (Array.isArray(s.sectors)) S.sectors = s.sectors.filter(function (v) { return SECTOR_LABEL[v]; });
       if (s.status && typeof s.status === "object") S.status = s.status;
       if (s.notes && typeof s.notes === "object") S.notes = s.notes;
       if (s.own && typeof s.own === "object") S.own = s.own;
-      if (typeof s.tieText === "string") S.tieText = s.tieText; } } catch (e) { /* ignore */ }
+      if (typeof s.tieText === "string") S.tieText = s.tieText;
+      if (typeof s.tieBelieve === "string") S.tieBelieve = s.tieBelieve;
+      if (typeof s.tieNo === "string") S.tieNo = s.tieNo; } } catch (e) { /* ignore */ }
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
 
   function sketch() {
     try { var raw = localStorage.getItem(SKETCH_KEY); if (!raw) return null; var s = JSON.parse(raw);
-      var t = { s1: (s.s1 || "").trim(), s3: (s.s3 || "").trim(), final: typeof s.final === "string" ? s.final.trim() : "" };
-      return (t.s1 || t.s3 || t.final) ? t : null; } catch (e) { return null; }
+      return { s1: (s.s1 || "").trim(), s3: (s.s3 || "").trim() }; } catch (e) { return null; }
   }
+  function cleanBelieve(t) { return t.replace(/^i believe\s+/i, "").replace(/[.!?]$/, "").trim(); }
+  function cleanNo(t) { return t.replace(/^(and\s+)?i (say no to|pass on|avoid)\s+/i, "").replace(/[.!?]$/, "").trim(); }
   function tieQuestion() {
-    var t = sketch();
-    if (!t || !(t.s1 || t.s3)) return "";
-    var a = t.s1 ? t.s1.replace(/^i believe\s+/i, "") : "";
-    var b = t.s3 ? t.s3.replace(/^(and\s+)?i (say no to|pass on|avoid)\s+/i, "") : "";
+    var a = cleanBelieve(S.tieBelieve || ""), b = cleanNo(S.tieNo || "");
+    if (!a && !b) return "";
     var q = "My own thesis says ";
-    if (a) q += "I believe " + a.replace(/[.!?]$/, "");
+    if (a) q += "I believe " + a;
     if (a && b) q += ", and ";
-    if (b) q += "I say no to " + b.replace(/[.!?]$/, "");
+    if (b) q += "I say no to " + b;
     q += ". ";
-    if (a) q += "Where in your portfolio do I see that belief at work? ";
-    if (b) q += "Have you ever come close to investing in something I would say no to, and what did you decide?";
+    if (a) q += "Where in your portfolio would I see that belief at work? ";
+    if (b) q += "Have you ever come close to backing something I would say no to, and what did you decide?";
     return q.trim();
   }
+  function sectorPhrase(S) {
+    var picked = S.sectors.map(function (k) { return SECTOR_LABEL[k]; });
+    if (!picked.length) return "healthcare, workforce, fintech or cybersecurity";
+    if (picked.length === 1) return picked[0];
+    return picked.slice(0, -1).join(", ") + " and " + picked[picked.length - 1];
+  }
+  function qText(q) {
+    if (S.mode === "libra" && q.libra) return typeof q.libra === "function" ? q.libra(S) : q.libra;
+    return q.text;
+  }
 
-  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
-  function questionCard(q, tie) {
-    var card = el("div", "q" + (tie ? " q--tie" : ""));
-    if (tie) {
-      var lab = el("label", "stem", "Your alignment question, written from your Thesis Sketch. Edit it until it sounds like you.");
-      lab.setAttribute("for", "tie");
-      card.appendChild(lab);
-      var ta = el("textarea"); ta.id = "tie"; ta.value = S.tieText || tieQuestion(); ta.placeholder = "My thesis says I believe… and I say no to… Where do I see that in your portfolio?";
-      ta.addEventListener("input", function () { S.tieText = ta.value; persist(); });
-      card.appendChild(ta);
-      if (!sketch()) card.appendChild(el("p", "q__hint", "No Thesis Sketch found on this device. Open the Sketch on this phone first, or write the question by hand: my thesis says I believe X and I say no to Y; where do I see X in your portfolio, and have you ever come close to Y?"));
-    } else {
-      card.appendChild(el("p", "q__text", q.text));
-      if (q.hint) card.appendChild(el("p", "q__hint", q.hint));
-    }
+  function listenFor(q) {
+    var d = el("details", "listen");
+    var sm = el("summary", null, "What to listen for"); d.appendChild(sm);
+    var body = el("div", "listen__body");
+    var g = el("p", "good"); g.appendChild(el("b", null, "A strong answer: ")); g.appendChild(document.createTextNode(q.good)); body.appendChild(g);
+    var a = el("p", "again"); a.appendChild(el("b", null, "Keep asking if: ")); a.appendChild(document.createTextNode(q.again)); body.appendChild(a);
+    d.appendChild(body);
+    return d;
+  }
+
+  function statusRow(id) {
     var row = el("div", "q__row");
     var st = el("div", "status"); st.setAttribute("role", "group"); st.setAttribute("aria-label", "What you heard");
     STATUSES.forEach(function (pair) {
-      var l = el("label"); var inp = document.createElement("input"); inp.type = "radio"; inp.name = "st-" + q.id; inp.value = pair[0];
-      inp.checked = S.status[q.id] === pair[0];
-      inp.addEventListener("change", function () { S.status[q.id] = pair[0]; persist(); renderSummary(); });
+      var l = el("label"); var inp = document.createElement("input"); inp.type = "radio"; inp.name = "st-" + id; inp.value = pair[0];
+      inp.checked = S.status[id] === pair[0];
+      inp.addEventListener("change", function () { S.status[id] = pair[0]; persist(); renderSummary(); });
       l.appendChild(inp); l.appendChild(el("span", null, pair[1])); st.appendChild(l);
     });
     row.appendChild(st);
-    card.appendChild(row);
-    var note = el("textarea"); note.placeholder = "What you heard, in a few words"; note.value = S.notes[q.id] || "";
+    return row;
+  }
+  function noteBox(id) {
+    var note = el("textarea"); note.placeholder = "What you heard, in a few words"; note.value = S.notes[id] || "";
     note.setAttribute("aria-label", "Notes on this question");
-    note.addEventListener("input", function () { S.notes[q.id] = note.value; persist(); renderSummary(); });
-    card.appendChild(note);
+    note.addEventListener("input", function () { S.notes[id] = note.value; persist(); renderSummary(); });
+    return note;
+  }
+
+  function questionCard(q) {
+    var card = el("div", "q");
+    if (S.mode === "libra" && q.fact) card.appendChild(el("p", "q__fact", q.fact));
+    var t = el("p", "q__text", qText(q)); t.id = "qt-" + q.id; card.appendChild(t);
+    card.appendChild(listenFor(q));
+    card.appendChild(statusRow(q.id));
+    card.appendChild(noteBox(q.id));
+    return card;
+  }
+
+  function tieCard() {
+    var card = el("div", "q q--tie");
+    card.appendChild(el("p", "q__fact", "Your alignment question"));
+    card.appendChild(el("p", "hint", "Two lines from your Thesis Sketch. If you did the Sketch on this phone they are filled in; if not, write them now in a few words, or open the full Sketch at shehasleverage.github.io/libra/thesis-sketch.html."));
+    var box = el("div", "tie-inputs");
+    var b = document.createElement("input"); b.type = "text"; b.id = "tie-believe"; b.placeholder = "I believe…"; b.value = S.tieBelieve; b.setAttribute("aria-label", "What I believe");
+    var n = document.createElement("input"); n.type = "text"; n.id = "tie-no"; n.placeholder = "I say no to…"; n.value = S.tieNo; n.setAttribute("aria-label", "What I say no to");
+    box.appendChild(b); box.appendChild(n); card.appendChild(box);
+    var lab = el("label", "stem", "The question, written for you. Edit it until it sounds like you."); lab.setAttribute("for", "tie"); card.appendChild(lab);
+    var ta = el("textarea"); ta.id = "tie"; ta.placeholder = "My thesis says I believe… and I say no to… Where would I see that in your portfolio?";
+    ta.value = S.tieText !== null ? S.tieText : tieQuestion();
+    card.appendChild(ta);
+    function regen() { if (S.tieText === null) ta.value = tieQuestion(); }
+    b.addEventListener("input", function () { S.tieBelieve = b.value; persist(); regen(); renderSummary(); });
+    n.addEventListener("input", function () { S.tieNo = n.value; persist(); regen(); renderSummary(); });
+    ta.addEventListener("input", function () { S.tieText = ta.value; persist(); renderSummary(); });
+    var tip = { good: "She points to a specific company and a specific decision, not “we’re very aligned.”", again: "The answer is about you being a good fit for them. You asked whether they fit you." };
+    card.appendChild(listenFor(tip));
+    card.appendChild(statusRow("tie"));
+    card.appendChild(noteBox("tie"));
     return card;
   }
 
   function render() {
+    // fund mode
+    document.querySelectorAll('input[name="mode"]').forEach(function (r) { r.checked = r.value === S.mode; });
+    $("fund").hidden = S.mode !== "other";
+    $("fund").value = S.fund;
+    $("sector-field").hidden = S.mode !== "libra";
+    document.querySelectorAll(".sector").forEach(function (c) { c.checked = S.sectors.indexOf(c.value) !== -1; });
+    $("mode-hint").textContent = S.mode === "libra"
+      ? "Questions are written for Libra, with the figure from its deck above each one."
+      : "Questions are written for any fund. Fill in the sector where you see brackets.";
     var root = $("checks"); root.textContent = "";
     CHECKS.forEach(function (c, i) {
       var sec = el("section", "check");
       sec.appendChild(el("p", "check__num", "Check " + (i + 1) + " of 5"));
       sec.appendChild(el("h2", null, c.title));
       sec.appendChild(el("p", "check__why", c.why));
-      c.qs.forEach(function (q) { sec.appendChild(questionCard(q, false)); });
-      if (c.id === "defs") sec.appendChild(questionCard({ id: "tie" }, true));
+      c.qs.forEach(function (q) { sec.appendChild(questionCard(q)); });
+      if (c.id === "defs") sec.appendChild(tieCard());
       var own = el("div", "own");
       var lab = el("label", "stem", "Your own question for this check"); lab.setAttribute("for", "own-" + c.id); own.appendChild(lab);
       var inp = document.createElement("input"); inp.type = "text"; inp.id = "own-" + c.id; inp.value = S.own[c.id] || ""; inp.placeholder = "Write it the way you would say it";
@@ -284,44 +437,34 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       sec.appendChild(own);
       root.appendChild(sec);
     });
-    $("fund").value = S.fund;
     renderSummary();
   }
 
   function allQuestions() {
     var out = [];
     CHECKS.forEach(function (c) {
-      c.qs.forEach(function (q) { out.push({ id: q.id, check: c.title, text: q.text }); });
-      if (c.id === "defs") out.push({ id: "tie", check: c.title, text: (S.tieText || tieQuestion() || "Alignment question") });
+      c.qs.forEach(function (q) { out.push({ id: q.id, text: qText(q) }); });
+      if (c.id === "defs") out.push({ id: "tie", text: (S.tieText !== null ? S.tieText : tieQuestion()) || "Alignment question" });
     });
     return out;
   }
-
   function renderSummary() {
-    var counts = { answered: 0, partly: 0, open: 0 };
-    var open = [];
-    allQuestions().forEach(function (q) {
-      var s = S.status[q.id];
-      if (s && counts.hasOwnProperty(s)) counts[s] += 1;
-      if (s === "open" || s === "partly") open.push(q);
-    });
+    var counts = { answered: 0, partly: 0, open: 0 }, open = [];
+    allQuestions().forEach(function (q) { var s = S.status[q.id]; if (s && counts.hasOwnProperty(s)) counts[s] += 1; if (s === "open" || s === "partly") open.push(q); });
     var t = $("tally"); t.textContent = "";
-    t.appendChild(el("span", null, counts.answered + " answered"));
-    t.appendChild(el("span", null, counts.partly + " partly"));
-    t.appendChild(el("span", null, counts.open + " still open"));
+    t.appendChild(el("span", null, counts.answered + " answered")); t.appendChild(el("span", null, counts.partly + " partly")); t.appendChild(el("span", null, counts.open + " still open"));
     var ol = $("openlist"); ol.textContent = "";
     if (!open.length) { ol.appendChild(el("p", "empty", "Nothing marked yet. As the manager answers, mark each question above.")); return; }
     open.forEach(function (q) { ol.appendChild(el("p", null, q.text)); });
   }
-
   function composed() {
-    var lines = ["Fund Check" + (S.fund.trim() ? ": " + S.fund.trim() : ""), ""];
+    var name = S.mode === "libra" ? "Libra Fund I" : (S.fund.trim() || "a fund");
+    var lines = ["Fund Check: " + name, ""];
     CHECKS.forEach(function (c, i) {
       lines.push((i + 1) + ". " + c.title);
-      var qs = c.qs.slice();
-      if (c.id === "defs") qs.push({ id: "tie", text: S.tieText || tieQuestion() || "" });
+      var qs = c.qs.map(function (q) { return { id: q.id, text: qText(q) }; });
+      if (c.id === "defs") { var tt = S.tieText !== null ? S.tieText : tieQuestion(); if (tt) qs.push({ id: "tie", text: tt }); }
       qs.forEach(function (q) {
-        if (!q.text) return;
         var s = S.status[q.id] ? " [" + S.status[q.id] + "]" : "";
         lines.push("- " + q.text + s);
         if ((S.notes[q.id] || "").trim()) lines.push("  Heard: " + S.notes[q.id].trim());
@@ -333,9 +476,23 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
   }
 
   load();
+  // Prefill the alignment lines from the Thesis Sketch once, if present and nothing typed yet.
+  var sk = sketch();
+  if (sk) { if (!S.tieBelieve && sk.s1) S.tieBelieve = sk.s1; if (!S.tieNo && sk.s3) S.tieNo = sk.s3; }
   render();
-  $("fund").addEventListener("input", function () { S.fund = $("fund").value; persist(); });
 
+  document.querySelectorAll('input[name="mode"]').forEach(function (r) {
+    r.addEventListener("change", function () { if (r.checked) { S.mode = r.value; persist(); render(); } });
+  });
+  $("fund").addEventListener("input", function () { S.fund = $("fund").value; persist(); });
+  document.querySelectorAll(".sector").forEach(function (c) {
+    c.addEventListener("change", function () {
+      S.sectors = Array.prototype.filter.call(document.querySelectorAll(".sector"), function (x) { return x.checked; }).map(function (x) { return x.value; });
+      persist();
+      var t = $("qt-d1"); if (t) t.textContent = qText(CHECKS[0].qs[0]);
+      renderSummary();
+    });
+  });
   $("copy").addEventListener("click", function () {
     var text = composed(); var fb = $("fallback");
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -346,10 +503,10 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
   $("clear").addEventListener("click", function () { $("clear-confirm").hidden = false; $("clear-yes").focus(); });
   $("clear-no").addEventListener("click", function () { $("clear-confirm").hidden = true; $("clear").focus(); });
   $("clear-yes").addEventListener("click", function () {
-    S = { fund: "", status: {}, notes: {}, own: {}, tieText: "" };
+    S = { mode: "libra", fund: "", sectors: [], status: {}, notes: {}, own: {}, tieText: null, tieBelieve: "", tieNo: "" };
     try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
     $("clear-confirm").hidden = true; $("fallback").hidden = true;
-    render(); $("status").textContent = "Cleared from this device."; $("fund").focus();
+    render(); $("status").textContent = "Cleared from this device.";
   });
 })();
 </script>
