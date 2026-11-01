@@ -146,6 +146,10 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
           <input type="text" id="fund" placeholder="Name of the other fund" hidden>
           <p class="hint" id="mode-hint"></p>
         </div>
+        <div class="field" id="terms-field" hidden>
+          <p class="stem">Terms you may hear, each linked to the glossary</p>
+          <p class="terms" id="terms-all"></p>
+        </div>
         <div class="field" id="sector-field">
           <p class="stem">Libra invests in four sectors. Which do you want to ask about?</p>
           <div class="chips" role="group" aria-label="Sectors">
@@ -227,7 +231,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
           text: "Which company in your portfolio is the clearest example of your thesis, and which one is the biggest stretch?",
           fact: "Libra deck: Allspice, Sunthetics, Mavida Health (acquired), Paladin, and Nth AI at term sheet",
           good: "She names a stretch without hesitating and explains why it was still worth doing.",
-          again: "“None of them stretch it.” Every portfolio has one; not naming it tells you something." }
+          again: "“None of them stretch it.” Every portfolio has one." }
       ] },
     { id: "record", title: "The record", why: "What this team did before, with names and dates, and what the people who worked with them say when the manager is not in the room.",
       qs: [
@@ -311,6 +315,13 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       ] }
   ];
   var STATUSES = [["answered", "Answered"], ["partly", "Partly"], ["open", "Still open"]];
+  var ALL_TERMS = [
+    ["MOIC", "moic-multiple-on-invested-capital"], ["DPI", "dpi-distributions-to-paid-in"], ["TVPI", "tvpi-total-value-to-paid-in"], ["IRR", "irr-internal-rate-of-return"],
+    ["Management fee", "management-fee"], ["Carried interest", "carried-interest-carry"], ["Hurdle rate", "hurdle-rate"], ["Clawback", "clawback"], ["GP commitment", "gp-commit-gp-commitment"],
+    ["LPA", "lpa-limited-partnership-agreement"], ["Subscription documents", "subscription-documents"], ["Side letter", "side-letter"], ["Capital call", "capital-call"], ["Distribution", "distribution"],
+    ["Pro-rata", "pro-rata"], ["Reserves", "reserves"], ["Ownership", "ownership"], ["Vintage year", "vintage-year"], ["J-curve", "j-curve"], ["Secondary", "secondary"],
+    ["Accredited investor", "accredited-investor"], ["Qualified purchaser", "qualified-purchaser-qp"]
+  ];
   var SECTOR_LABEL = { healthcare: "healthcare", workforce: "workforce", fintech: "fintech", cybersecurity: "cybersecurity" };
 
   var S = { mode: "libra", fund: "", sectors: [], status: {}, notes: {}, own: {}, tieText: null, tieBelieve: "", tieNo: "" };
@@ -438,6 +449,12 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     $("fund").hidden = S.mode !== "other";
     $("fund").value = S.fund;
     $("sector-field").hidden = S.mode !== "libra";
+    $("terms-field").hidden = S.mode !== "other";
+    var ta = $("terms-all"); ta.textContent = "";
+    ALL_TERMS.forEach(function (t, i) {
+      if (i) ta.appendChild(document.createTextNode(", "));
+      var a = el("a", null, t[0]); a.href = GLOSSARY + t[1]; a.target = "_blank"; a.rel = "noopener"; ta.appendChild(a);
+    });
     document.querySelectorAll(".sector").forEach(function (c) { c.checked = S.sectors.indexOf(c.value) !== -1; });
     $("mode-hint").textContent = S.mode === "libra"
       ? "Questions are written for Libra, with the figure from its deck above each one."
