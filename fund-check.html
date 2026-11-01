@@ -75,6 +75,8 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
 .listen__body b { color: var(--plum); }
 .good b { color: #1f7a6a; }
 .again b { color: #b4452c; }
+.terms { font-size: 14px; color: var(--mauve-ink); }
+.terms a { color: var(--violet); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 .q__row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .status { display: flex; gap: 6px; }
 .status label { position: relative; }
@@ -132,7 +134,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     <div class="wrap">
       <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Session 3 exercise</span></div>
       <h1 id="title">Your <em>Fund Check</em></h1>
-      <p class="lede">Five things to check before you commit to any fund, with the questions that check them, written the way you would say them. Pick the ones you want answered, and mark what you hear as the manager answers. Under each question, “What to listen for” tells you what a good answer tends to sound like.</p>
+      <p class="lede">Five things to check before you commit to any fund, with the questions that check them, written the way you would say them. Pick the ones you want answered, and mark what you hear as the manager answers. Under each question, “What to listen for” tells you what a good answer tends to sound like, and any term you don’t know links to the <a href="https://shehasleverage.com/glossary" target="_blank" rel="noopener">She Has Leverage glossary</a>.</p>
       <p class="note">Everything you type stays in this browser on this device. Nothing is sent to She Has Leverage, Libra Leaders or anyone else.</p>
       <div class="setup">
         <div class="field">
@@ -189,7 +191,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
   <div class="wrap">
     <section class="after">
       <h2>What this is, and isn’t</h2>
-      <p>Five plain checks and the questions behind them. There is no score, because a fund is not a quiz; there is only what you have verified and what you haven’t. The “what to listen for” notes describe what strong and weak answers tend to sound like; they are not a judgment of any fund. The full diligence method, with the scorecard and the document walk-through, is part of the She Has Leverage program.</p>
+      <p>Five plain checks and the questions behind them. There is no score, because a fund is not a quiz; there is only what you have verified and what you haven’t. The “what to listen for” notes describe what strong and weak answers tend to sound like; they are not a judgment of any fund. The full diligence method, with the scorecard and the document walk-through, is part of the She Has Leverage program. Every venture term used here, and about eighty more, is in the <a href="https://shehasleverage.com/glossary" target="_blank" rel="noopener">glossary</a>.</p>
       <p class="quiet" style="margin-top: 12px">Libra figures on this page are from the Libra Fund I investor presentation (November 2026), shared with this group for the live session. They frame the questions only. Nothing here is an offer to sell or a solicitation to buy any security.</p>
     </section>
   </div>
@@ -208,6 +210,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
   "use strict";
   var KEY = "libra-shl-fund-check-v2";
   var SKETCH_KEY = "libra-shl-thesis-sketch-v1";
+  var GLOSSARY = "https://shehasleverage.com/glossary/";
   var $ = function (id) { return document.getElementById(id); };
 
   // Each question: generic text, optional Libra text, optional Libra fact line, and what to listen for.
@@ -229,6 +232,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     { id: "record", title: "The record", why: "What this team did before, with names and dates, and what the people who worked with them say when the manager is not in the room.",
       qs: [
         { id: "r1",
+          terms: [{ t: "MOIC", slug: "moic-multiple-on-invested-capital" }, { t: "DPI", slug: "dpi-distributions-to-paid-in" }],
           text: "Which of your past investments did you personally lead, and how much of that value has actually come back to investors in cash so far?",
           libra: "The 1.85x across 48 investments is from the team’s earlier funds. Which of those deals did you personally lead, and how much of that value has actually been paid back to investors in cash so far?",
           fact: "Libra deck: 48 investments, $92.5M invested, 1.85x blended MOIC, 7 exits or IPOs, as of June 2026, across two prior portfolios",
@@ -246,12 +250,14 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     { id: "math", title: "The math", why: "Fund size, check size, number of companies and money held back for follow-ons have to add up to the belief on the first slide.",
       qs: [
         { id: "m1",
+          terms: [{ t: "Pro-rata", slug: "pro-rata" }],
           text: "Walk me through the arithmetic: fund size, first check, how many companies, and how much you hold back for follow-on rounds.",
           libra: "$50 million, 25 companies, first checks of $300K to $1M. How much is set aside for follow-on rounds, and who gets it when one of the 25 raises a big Series A?",
           fact: "Libra deck: $50M target, 25 seed companies, 10% ownership target, pro-rata follow-on through Series A",
           good: "A reserve amount and a rule for who gets it. The numbers add up on a napkin.",
           again: "“Case by case,” or the arithmetic doesn’t close. Then the plan on the slide is a brochure." },
         { id: "m2",
+          terms: [{ t: "MOIC", slug: "moic-multiple-on-invested-capital" }],
           text: "How many of your companies need to be big winners for this fund to return investors’ money, and how big do they need to be?",
           libra: "You’re targeting 3 to 4x gross. How many of the 25 have to be big winners for that to happen, and what does one of those have to sell for?",
           fact: "Libra deck: 3 to 4x gross MOIC target, preliminary base case; strategic acquirers active in all four sectors",
@@ -261,22 +267,26 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     { id: "money", title: "The money", why: "Fee, carry and term, read from the limited partnership agreement rather than the deck.",
       qs: [
         { id: "y1",
+          terms: [{ t: "Management fee", slug: "management-fee" }, { t: "Carried interest", slug: "carried-interest-carry" }, { t: "LPA", slug: "lpa-limited-partnership-agreement" }],
           text: "What are the management fee, the carry and the fund term, and when does the fee step down? Where do you sit against the usual 2% and 20%?",
           libra: "Your fee is 2.5% and the median is 2%. What does the extra half point pay for, and when does it step down?",
           fact: "Libra deck: 2.5% management fee, 20% carry, 10-year term plus 2-year extension, 5-year investment period, 1% GP commitment",
           good: "A specific cost the fee covers (team size at this fund size) and a step-down after the investment period.",
           again: "“That’s standard for emerging managers.” It may be; ask what it pays for anyway." },
         { id: "y2",
+          terms: [{ t: "MOIC", slug: "moic-multiple-on-invested-capital" }, { t: "DPI", slug: "dpi-distributions-to-paid-in" }, { t: "TVPI", slug: "tvpi-total-value-to-paid-in" }],
           text: "When you say 3 to 4x, is that before or after fees? And when would I realistically see cash back rather than gains on paper?",
           good: "She converts to a rough net figure and gives a timeline in years, usually the back half of the fund.",
           again: "Only the gross number, repeated. Net is what reaches you." },
         { id: "y3",
+          terms: [{ t: "GP commitment", slug: "gp-commit-gp-commitment" }],
           text: "You’re putting in 1% yourselves. How much of your own money is that, and is it cash?",
           libra: "You’re putting in 1% yourselves. On $50 million that is $500,000. Is that cash from the partners, and how is it split?",
           fact: "Libra deck: 1% GP commitment",
           good: "A plain answer: cash, who, how much. Skin in the game is the point.",
           again: "A fee offset or a loan instead of cash, with no explanation of why." },
         { id: "y4",
+          terms: [{ t: "Capital call", slug: "capital-call" }],
           text: "What’s the minimum commitment, how do capital calls work, and what happens if I can’t meet one?",
           good: "A schedule you could put in a calendar, and the default terms explained without drama.",
           again: "Vague on timing. You need to know when the money leaves your account." }
@@ -290,6 +300,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
           good: "A clear process: who votes, who can say no, what a tie does.",
           again: "“We’ve never disagreed.” Everyone disagrees; the question is what the process does with it." },
         { id: "p2",
+          terms: [{ t: "LPA", slug: "lpa-limited-partnership-agreement" }],
           text: "What happens to the fund if you leave? Is that written into the agreement?",
           good: "She names the key-person clause and what it triggers, usually a pause on new investments and an LP vote.",
           again: "“I’m not going anywhere.” That is a hope, not a clause." },
@@ -359,6 +370,16 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     return d;
   }
 
+  function termsRow(terms) {
+    var p = el("p", "terms");
+    p.appendChild(document.createTextNode("Terms: "));
+    terms.forEach(function (t, i) {
+      if (i) p.appendChild(document.createTextNode(", "));
+      var a = el("a", null, t.t); a.href = GLOSSARY + t.slug; a.target = "_blank"; a.rel = "noopener";
+      p.appendChild(a);
+    });
+    return p;
+  }
   function statusRow(id) {
     var row = el("div", "q__row");
     var st = el("div", "status"); st.setAttribute("role", "group"); st.setAttribute("aria-label", "What you heard");
@@ -383,6 +404,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     if (S.mode === "libra" && q.fact) card.appendChild(el("p", "q__fact", q.fact));
     var t = el("p", "q__text", qText(q)); t.id = "qt-" + q.id; card.appendChild(t);
     card.appendChild(listenFor(q));
+    if (q.terms) card.appendChild(termsRow(q.terms));
     card.appendChild(statusRow(q.id));
     card.appendChild(noteBox(q.id));
     return card;

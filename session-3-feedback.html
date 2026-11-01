@@ -109,7 +109,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     <div class="wrap">
       <div class="label"><span class="label__rule" aria-hidden="true"></span><span class="label__text">Session 3 feedback</span></div>
       <h1 id="title">Help shape <em>Week 4</em></h1>
-      <p class="lede">Two minutes, six short questions. Your answers have shaped every session so far; these shape the last one.</p>
+      <p class="lede">Two minutes, seven short questions. Your answers have shaped every session so far; these shape the last one.</p>
       <p class="note">Your answers go to me, Christine. Your name is optional.</p>
     </div>
   </section>
@@ -166,7 +166,13 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       </div>
 
       <div class="q">
-        <label class="q__title" for="name">6. Your name <span class="optional">(optional)</span></label>
+        <label class="q__title" for="quote">6. If this series has been useful to you, would you say so in a sentence we could quote? <span class="optional">(optional)</span></label>
+        <textarea id="quote" name="quote" placeholder="In your own words. What changed for you, or what you can do now that you couldn’t before."></textarea>
+        <label class="check"><input type="checkbox" name="quote_permission" value="yes" id="quote-permission"><span>You may use my name with this quote. Leave unticked and we will quote it without your name, or not at all if you prefer.</span></label>
+      </div>
+
+      <div class="q">
+        <label class="q__title" for="name">7. Your name <span class="optional">(optional)</span></label>
         <input type="text" id="name" name="name" autocomplete="name">
       </div>
 
@@ -236,11 +242,13 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       "Matters most for Week 4": next.join("; "),
       "Something else to cover": document.getElementById("next-other").value.trim(),
       "Anything else": document.getElementById("anything-else").value.trim(),
+      "Quote we may use": document.getElementById("quote").value.trim(),
+      "Name OK with quote": document.getElementById("quote-permission").checked ? "Yes" : "No",
       "Name": document.getElementById("name").value.trim()
     };
 
     var answered = payload["Today’s session was"] || payload["Ready to vet a fund (1 to 5)"] || payload["Most useful"] ||
-      payload["Matters most for Week 4"] || payload["Something else to cover"] || payload["Anything else"];
+      payload["Matters most for Week 4"] || payload["Something else to cover"] || payload["Anything else"] || payload["Quote we may use"];
     if (!answered) {
       showError("Answer at least one question before sending.");
       return;
