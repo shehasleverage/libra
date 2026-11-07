@@ -167,6 +167,10 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
         <label class="q__title" for="quote">6. Finish this for someone who is where you were four weeks ago: “Before this series I… Now I…” <span class="optional">(optional)</span></label>
         <p class="q__hint">Two or three sentences in your own words. What you could not do before, and what you can do now. If something specific changed, say what it was.</p>
         <textarea id="quote" name="quote" placeholder="Before this series I… Now I…"></textarea>
+        <label class="q__title" for="shl-is" style="font-size:19px;margin-top:6px">And in one line: “She Has Leverage is ________.” <span class="optional">(optional)</span></label>
+        <p class="q__hint">Finish the sentence however is true for you. Shape, not content: “the first place that…”, “the reason I…”, “where I finally…”.</p>
+        <input type="text" id="shl-is" name="shl_is" placeholder="She Has Leverage is…">
+        <p class="q__hint">The two boxes below cover both answers.</p>
         <div class="checks">
           <label class="check"><input type="checkbox" name="quote_web" value="yes" id="quote-web"><span>You may publish this on the She Has Leverage website and social channels.</span></label>
           <label class="check"><input type="checkbox" name="quote_permission" value="yes" id="quote-permission"><span>You may use my name and title with it. Leave unticked and it runs with first name only, or anonymously if you prefer; tell me below.</span></label>
@@ -246,6 +250,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       "Something else to cover": document.getElementById("next-other").value.trim(),
       "Anything else": document.getElementById("anything-else").value.trim(),
       "Quote we may use": document.getElementById("quote").value.trim(),
+      "She Has Leverage is": document.getElementById("shl-is").value.trim(),
       "OK to publish quote on website": document.getElementById("quote-web").checked ? "Yes" : "No",
       "Name OK with quote": document.getElementById("quote-permission").checked ? "Yes" : "No",
       "Title with quote": document.getElementById("quote-title").value.trim(),
@@ -253,7 +258,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
     };
 
     var answered = payload["Today’s session was"] || payload["Where are you today"] || payload["Most useful"] ||
-      payload["Wants next"] || payload["Something else to cover"] || payload["Anything else"] || payload["Quote we may use"];
+      payload["Wants next"] || payload["Something else to cover"] || payload["Anything else"] || payload["Quote we may use"] || payload["She Has Leverage is"];
     if (!answered) {
       showError("Answer at least one question before sending.");
       return;
