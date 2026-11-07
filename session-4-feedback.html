@@ -131,16 +131,14 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
         </div>
       </fieldset>
 
-      <fieldset class="q scale">
-        <legend class="q__title">2. Compared with Week 1, how clear are you on whether and how you would invest in a venture fund?</legend>
-        <div class="choices" role="radiogroup">
-          <label class="choice"><input type="radio" name="confidence" value="1" id="conf-1"><span>1</span></label>
-          <label class="choice"><input type="radio" name="confidence" value="2" id="conf-2"><span>2</span></label>
-          <label class="choice"><input type="radio" name="confidence" value="3" id="conf-3"><span>3</span></label>
-          <label class="choice"><input type="radio" name="confidence" value="4" id="conf-4"><span>4</span></label>
-          <label class="choice"><input type="radio" name="confidence" value="5" id="conf-5"><span>5</span></label>
+      <fieldset class="q">
+        <legend class="q__title">2. Where are you today? (Same question as the start of the session.)</legend>
+        <div class="checks">
+          <label class="check"><input type="radio" name="confidence" value="Not for me right now" id="conf-1"><span>Not for me right now</span></label>
+          <label class="check"><input type="radio" name="confidence" value="Curious, not ready" id="conf-2"><span>Curious, not ready</span></label>
+          <label class="check"><input type="radio" name="confidence" value="Ready to talk to my advisor about it" id="conf-3"><span>Ready to talk to my advisor about it</span></label>
+          <label class="check"><input type="radio" name="confidence" value="Ready to talk to a fund" id="conf-4"><span>Ready to talk to a fund</span></label>
         </div>
-        <div class="scale__ends" aria-hidden="true"><span>No clearer</span><span>I know my next step</span></div>
       </fieldset>
 
       <div class="q">
@@ -172,7 +170,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       </div>
 
       <div class="q">
-        <label class="q__title" for="name">7. Your name <span class="optional">(optional)</span></label>
+        <label class="q__title" for="name">7. Your name <span class="optional">(optional, but leave it if you would like me to follow up on question 4)</span></label>
         <input type="text" id="name" name="name" autocomplete="name">
       </div>
 
@@ -237,7 +235,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       subject: form.querySelector('input[name="subject"]').value,
       botcheck: form.querySelector('input[name="botcheck"]').checked,
       "Today’s session was": pace ? pace.value : "",
-      "Clearer than Week 1 (1 to 5)": confidence ? confidence.value : "",
+      "Where are you today": confidence ? confidence.value : "",
       "Most useful": document.getElementById("most-useful").value.trim(),
       "Wants next": next.join("; "),
       "Something else to cover": document.getElementById("next-other").value.trim(),
@@ -247,7 +245,7 @@ input::placeholder, textarea::placeholder { color: var(--mauve-ink); }
       "Name": document.getElementById("name").value.trim()
     };
 
-    var answered = payload["Today’s session was"] || payload["Clearer than Week 1 (1 to 5)"] || payload["Most useful"] ||
+    var answered = payload["Today’s session was"] || payload["Where are you today"] || payload["Most useful"] ||
       payload["Wants next"] || payload["Something else to cover"] || payload["Anything else"] || payload["Quote we may use"];
     if (!answered) {
       showError("Answer at least one question before sending.");
